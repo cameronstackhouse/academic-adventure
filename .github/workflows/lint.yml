@@ -1,36 +1,24 @@
 name: Lint
 
-on:
-  push:
-    branches:
-      -main
-  pull_request:
-    branches:
-      -main
-
-permissions:
-  checks: write
-  contents: write
+on: [push]
 
 jobs:
-  run-linters:
-    name: Run linters
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v2
+   build:
+      runs-on: ubuntu-latest
       
-      - name: Set up Python
-        uses: actions/setup-python@v1
-        with:
-          python-version: 3.8
+      steps:
+        - uses: actions/checkout@v2
+        - name: Set up Python
+          uses: actions/setup-python@v1
+          with:
+             python-version: 3.8
+        - name: Install dependencies
+          run: |
+             python -m pip install --upgrade pip
+             pip install pylint
+        - name: Run pylint on code
+          run: |
+             find . -name '*.py' -exec pylint {} \;
       
-      - name: Install Python dependencies
-        run: pip install black flake8
-        
-      - name: Run linters
-        uses: wearerequired/lint-action@v1.11.1
-        with:
-           black: true
-           flake8: true
+      
+
