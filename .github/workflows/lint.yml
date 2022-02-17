@@ -19,4 +19,4 @@ jobs:
              pip install django
         - name: Run pylint on code
           run: |
-             find . -name '*.py' -exec pylint {} \;
+             find . -name '*.py' -exec pylint --fail-under=8 {} \;
