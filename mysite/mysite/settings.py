@@ -31,7 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'academic_adventure.apps.AcademicAdventureConfig',
+    'register', 
+    'academic_adventure',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
