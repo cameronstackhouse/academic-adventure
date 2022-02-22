@@ -6,3 +6,14 @@ from django.contrib.auth.decorators import login_required #Used to reject user e
 def home(request):
     return render(request, 'academic_adventure/home.html')
 
+@login_required
+def leaderboard(request):
+    return render(request, 'academic_adventure/leaderboard.html')
+
+@login_required
+def map(request):
+    return render(request, 'academic_adventure/map.html')
+
+@login_required
+def scan(request):
+    return render(request, 'academic_adventure/scan.html')
