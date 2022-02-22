@@ -2,6 +2,12 @@
 
 {% load static %}
 
+{% if user.is_authenticated %}
+
+<meta http-equiv="Refresh" content="0; url={% url 'academic_adventure:home' %}">
+
+{% endif %}
+
 <html>
     <head>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -16,6 +22,7 @@
             {% csrf_token %}
             {{form.as_p}}
             <button type="submit" class="btn btn-success">Login</button>
+            <a href="{% url 'register:register' %}" class="btn btn-success">Register</a>
         </form>
     </body>
 </html>
