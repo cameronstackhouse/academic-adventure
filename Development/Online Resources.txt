@@ -1,0 +1,33 @@
+Attendance:
+https://docs.google.com/spreadsheets/d/1gOox3R6RzAV9pQENZpCXBOg_epCLqdxe1hLc7WCVf10/edit?usp=sharing
+
+Trello:
+https://trello.com/b/LhVN7c3f/kanban
+
+Trello Screenshot:
+https://docs.google.com/document/d/1wVklN4tmysL_EIDtixaLBgz4L9rP5u4Amrxuvp5yE5c/edit?usp=sharing
+
+MoSCoW:
+https://docs.google.com/document/d/1RMJyrxeBfR1E39jq-byMJXW2ye4gxschlcxlUTMWJFU/edit?usp=drivesdk
+
+Online ER diagram collaboration: 
+https://miro.com/welcomeonboard/eldac1ZzRmJLTnZtRlZhN0ZjUGJwZ2NIdUc4NWxGR2pJQmhqOVNiV2FFRUdGYTgycnhTQ1BHTUNhTEFTekRBdHwzMDc0NDU3MzU3MTg2OTIzODg1?invite_link_id=105030559940
+
+
+
+Helpful resources
+Djano for beginners
+https://youtu.be/sm1mokevMWk
+
+Creating the user objects, so we can use the built in django authentication and login systems alongside user attributes 
+https://cpadiernos.github.io/how-to-add-fields-to-the-user-model-in-django.html
+
+Tabs with bootstrap
+https://getbootstrap.com/docs/5.0/components/navs-tabs/
+
+Responsive Side Navigation Bar in HTML CSS And JavaScript | Dashboard Sidebar Menu
+https://www.youtube.com/watch?v=wEfaoAa99XY
+
+HTML & CSS tabs responsive | HTML CSS responsive tabs with animation | pure CSS tabs
+https://www.youtube.com/watch?v=zfRLyMYE8Xg
+

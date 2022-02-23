@@ -1,0 +1,32 @@
+Home:
+Login
+
+Map:
+Shows all event markers
+Clicking a marker gives event description and option to interact
+If interacted with, do the specified game
+
+Activity (Only if games themselves on the map have issues):
+Shows event interactions according to event type
+
+Events: 
+Lists all player relevant events
+Lists all nearby events user can interact with
+QR code scan
+Search for public events outside events relevant to player
+
+Inventory:
+Show avatar with stats beneath
+Show items (text) based
+After prototype:
+Items have icons, and slots as tabs
+Equiped item icons shown on avatar
+
+Shop:
+The Shop
+
+Leaderboard:
+Shows tabs with views divided by global or society
+
+Create:
+Game keepers can create events

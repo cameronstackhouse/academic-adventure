@@ -1,0 +1,165 @@
+Main Objectives:
+Fun and Dynamic
+Create a game for people at the University of Exeter to play around campus.
+Help them engage with the campus and the university community on a more playful level.
+Engage with University students, staff, facilities and resources along the way.
+
+Required:
+User profiles
+-Players can decide what to publicise
+Interactive map
+Method to identify locations
+
+Ideas
+Main:
+-Actual games hosted by game keepers
+--Scavenger Hunt
+--Raids
+--Capture the flag
+--Bounties
+
+Sign in to lectures and workshops allowing points or badges to be gained
+-Sign using attendance code or what ever we use to identify locations
+
+Avatar to mark player on the map
+-Imported imgs on pins at first
+
+Point and currency system
+-1 point = 1 currency where currency can be consumed? idk
+
+Shop system
+-Incentive to play
+-Use currency
+-Cosmetics
+-Lootboxes if implemented
+
+Societies and Groups
+-Separated by approved by the uni and not
+-Anyone can make a group
+
+Leaderboard and Rankings
+-Player may hide their names
+-University wide and localised leaderboards
+-University wide leaderboard points
+--University wide points give currency
+--From players/societies approved by the university
+--Limited points per day/week
+-Localised leaderboards
+--Show leaderboard according to group
+
+
+Secondary:
+Lecture Utilies
+-Access lecture materials
+-Day recap, and recap recordings shown from geographical locations
+
+Lecturer Utilies
+-Lecturer can give out extra points to players
+-Daily point cap
+
+Lootboxes
+-Profile cosmetics
+-Pin borders
+-Titles
+
+University wide game events
+-Points are actual points
+
+Player Stats
+-Stats are used in raids
+-Stat potions can be bought in shop to directly increase Stats
+--More expensive the higher the stat
+-Stats increase over time but get harder to increase
+-Attending lectures increases INT or WIS stat exp
+-Different society events increase different stat exp
+
+Trading System
+-Trade items from Lootboxes
+-Exchange currency
+
+Daily Utilies
+-Calender
+-Schedule
+-Emergency Button
+
+
+More stuff
+Extra Objective:
+Avoid disrupting normal studying
+-Block Game Features prior to lectures or scheduled events
+-Give game choices for player convenience
+
+Idea
+Throw all games into an RPG type System
+Requirements:
+Course studied
+
+University Quests
+-Global
+-Randomly appearing scavenger quests
+-Raid Quests
+-Battle Encounters that tend to require a party to fight
+--Battling in parties, increases affinity with players, giving bonuses when fighting together
+--Use BP to determine difficulty
+
+Daily Quests
+-Solo
+-Different difficulty quests can be bought from the store
+--Scavenger Hunt
+---Higher difficulty causes treasure to more likely appear in locations further from where course studied is based
+---Easier quests should be very close or on where user studies
+---Points, Items, Lootboxes, Materials etc as rewards
+
+Side Quests
+-Authorised users like lecturers or entrepreneur students can make quests
+-Society events appear in members quest logs
+-If player is near an event, the event will appear on the map
+-Players can browse for side quests outside their event notification radius
+-Browsed side quests can have priorites based around stuff like badges and skill level
+
+Emergency Quests
+-Emergency Button
+-Appear as priority quests
+-Huge Rewards
+-Show basic actions recommended for a player to take during quest
+-Add boolean for 1st aid training in player profile
+-Increased rewards for 1st aid trained or medical players
+
+All quests give player stat exp and maybe skill exp
+-Skill level is an vague indication of skill in said subject
+-Skill level can be used for emergencies or side quest requirements
+
+Badges
+-Player can choose which badges to show
+-Badges can have different asthetics
+-Modules/courses completed
+-Society memberships
+-Skill level on certain subjects
+
+Stats
+Player Level - Increased by all exp types
+BP (Battle Power) - Sum of all stats
+HP - Based on STA
+-Recovery is also based off the stat
+MP - Based on WIS
+DMG - Based off stats related to weapon used
+-Bows primary stat is DEX
+-Swords - STR
+-Tomes/Grimoires - INT
+STR, STA, DEX - Sports based stats
+INT, WIS - Studying based stats
+CHA (Charisma) - Increased by chatting
+LCK - Potions must be crafted or bought from the store
+-Increases lootbox rates
+
+Skill Levels/Professions
+-Can be gained from quests
+-Crafting using HP and MP points. Materials used here.
+-Alchemy - Used for ingame potions
+-Medical - Purely real life based, used for emergencies
+
+Crafting and shops etc can be used anywhere
+
+Solo encounters
+-Allows players to fight enemies anywhere but stamina is consumed
+-Keeps players engaged
