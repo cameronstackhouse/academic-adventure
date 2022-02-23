@@ -1,13 +1,13 @@
 from django.shortcuts import redirect, render
-from django.contrib.auth.forms import UserCreationForm
+from .forms import RegisterForm
 from django.contrib import messages
 
 def register(request):
     """View to register a user in the database
     """
-    form = UserCreationForm() #Default user creation form provided by django
+    form = RegisterForm() #Default user creation form provided by django
     if request.method == "POST": #Checks if POST request
-        credentials = UserCreationForm(request.POST) #If so gets users entered credentials
+        credentials = RegisterForm(request.POST) #If so gets users entered credentials
         if credentials.is_valid(): #Checks if the users password and username is valid
             credentials.save() #If so save the username and password to the database
             messages.success(request, "Account created") #Add a success message to the screen

@@ -4,7 +4,22 @@ from django.contrib.auth.decorators import login_required #Used to reject user e
 
 @login_required
 def home(request):
-    return render(request, 'academic_adventure/home.html')
+    """Homepage view"""
+
+    #Gets user attributes to pass into home.html file
+    username = request.user.username
+    intelligence = request.user.intelligence
+    sociability = request.user.sociability
+    athleticism = request.user.athleticism
+    score = request.user.score
+    gamekeeper = request.user.gamekeeper
+    context = {"username":username,
+               "intelligence": intelligence,
+               "sociability":sociability,
+               "athleticism":athleticism,
+               "score":score,
+               "gamekeeper":gamekeeper}
+    return render(request, 'academic_adventure/home.html', context)
 
 @login_required
 def leaderboard(request):

@@ -127,3 +127,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = "/academic-adventure/login/" #URL where login page is stored
 LOGIN_REDIRECT_URL = "academic_adventure:home" #Where to direct user after succesful login
 LOGOUT_REDIRECT_URL = "/academic-adventure/login/"
+AUTH_USER_MODEL = "academic_adventure.CustomUser"
