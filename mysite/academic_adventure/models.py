@@ -5,7 +5,6 @@ from django.contrib.auth.models import AbstractUser
 class CustomUser(AbstractUser):
 
     avatar = models.CharField(max_length=50)
-    score = models.FloatField(default=0)
     intelligence = models.IntegerField(default=0)
     sociability = models.IntegerField(default=0)
     athleticism = models.IntegerField(default=0)
@@ -14,6 +13,10 @@ class CustomUser(AbstractUser):
     ath_xp = models.FloatField(default=0)
     points = models.IntegerField(default=0)
     gamekeeper = models.BooleanField(default=False)
+
+    @property
+    def score(self):
+        return (self.intelligence + self.sociability + self.athleticism) / 3
 
     def __str__(self):
         return self.username
