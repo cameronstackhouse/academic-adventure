@@ -28,6 +28,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'academic_adventure:scan' %}">Scan</a>
                 </li>
+                {% if gamekeeper %}
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Create</a>
+                </li>
+                {% endif %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">Logout</a>
                 </li>
@@ -35,5 +40,10 @@
           </nav>
 
           <h1>Leaderboard</h1>
+
+          <div class="container">
+              <h3>Overall Points</h3>
+          </div>
+
     </body>
 </html>
