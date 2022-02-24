@@ -17,12 +17,15 @@
     </head>
 
     <body>
-        <h1>Login:</h1>
-        <form method="POST" class="form-group">
-            {% csrf_token %}
-            {{form.as_p}}
-            <button type="submit" class="btn btn-success">Login</button>
-            <a href="{% url 'register:register' %}" class="btn btn-success">Register</a>
-        </form>
+        <div>
+            <h1>Login:</h1>
+            <form method="POST" class="form-group">
+                {% csrf_token %}
+                {{form.as_p}}
+                <button type="submit" class="btn btn-success">Login</button>
+                <a href="{% url 'register:register' %}" class="btn btn-success">Register</a>
+            </form>
+        </div>
+
     </body>
 </html>

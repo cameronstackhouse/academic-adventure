@@ -15,6 +15,7 @@
             <h1>Register:</h1>
             <form method="POST" class="form-group">
                 {% csrf_token %}
+                
                 {{form.as_p}}
                 
                 {% if messages %}
