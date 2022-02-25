@@ -9,4 +9,6 @@ urlpatterns = [
     path('map/', views.map, name='map'),
     path('leaderboard/', views.leaderboard, name='leaderboard'),
     path('scan/', views.scan, name='scan'),
+    path('create/', views.create, name='create'),
+    path('create/<int:event_id>/', views.code, name='code')
 ]

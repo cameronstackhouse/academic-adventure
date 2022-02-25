@@ -6,7 +6,7 @@
     <head>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-        <title>Create</title>
+        <title>Code</title>
     </head>
 
     <body>
@@ -16,50 +16,34 @@
             </a>
 
             <ul class="navbar-nav">
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="{% url 'academic_adventure:home' %}">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'academic_adventure:map' %}">Map</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item active">
                     <a class="nav-link" href="{% url 'academic_adventure:leaderboard' %}">Leaderboard</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'academic_adventure:scan' %}">Scan</a>
                 </li>
-
                 {% if gamekeeper %}
                 <li class="nav-item">
                     <a class="nav-link" href="#">Create</a>
                 </li>
                 {% endif %}
-
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">Logout</a>
                 </li>
-            </ul>
-        </nav> 
+              </ul>
+          </nav>
 
-        <h1>Create</h1>
-        </br>
-        <form method="POST">
-            <fieldset>
-              {% csrf_token %}
-              {{ createform.as_p }}
-              <button type="submit" class="btn btn-primary">Create</button>
-            </fieldset>
-        </form>
+          {% load qr_code %}
 
-        {% for event in allevents %}
+          <h1>Event: {{event.name}} </h1>
 
-        {% if event.host == user %}
-
-        <a href="{% url 'academic_adventure:code' event_id=event.id %}">{{event.name}}</a></br>
-
-        {% endif %}
-
-        {% endfor %}
+          {% qr_from_text event.code size="L" %}
 
     </body>
 </html>
