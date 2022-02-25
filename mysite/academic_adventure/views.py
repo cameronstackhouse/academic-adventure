@@ -7,6 +7,8 @@ import string
 import random
 
 
+from .models import Event
+
 @login_required
 def home(request):
     """Homepage view"""
@@ -35,7 +37,8 @@ def leaderboard(request):
 @login_required
 def map(request):
     gamekeeper = request.user.gamekeeper
-    context = {"gamekeeper": gamekeeper}
+    context = {"gamekeeper": gamekeeper,
+                "events":Event.objects.all()}
     return render(request, 'academic_adventure/map.html', context)
 
 @login_required
