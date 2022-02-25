@@ -1,4 +1,7 @@
+import datetime
+
 from django.db import models
+from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
 
 
@@ -40,12 +43,19 @@ class Event(models.Model):
     longitude = models.DecimalField(decimal_places=20, max_digits=30)
     latitude = models.DecimalField(decimal_places=20, max_digits=30)
     name = models.CharField(max_length=100)
+    description = models.CharField(max_length=400)
     host = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     date = models.DateTimeField()
     duration = models.DecimalField(decimal_places=2, max_digits=6)
     code = models.CharField(max_length=100)
     type = models.CharField(max_length=40)
-    society = models.OneToOneField(Society, on_delete=models.CASCADE, blank=True)
+    society = models.OneToOneField(Society, on_delete=models.CASCADE, null=True, blank=True)
+
+    def recent(self):
+        """Function to determine if the event is a recent event
+        and should be displayed to the user"""
+        #Checks that the date of the event is after the current time and before 2 hours in the future
+        return timezone.now() <= self.date <= timezone.now() + datetime.timedelta(hours=2)
 
     def __str__(self):
         return self.name

@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required #Used to reject user entry to web page if not logged in
 
+from .models import Event
+
 @login_required
 def home(request):
     """Homepage view"""
@@ -27,7 +29,8 @@ def leaderboard(request):
 
 @login_required
 def map(request):
-    return render(request, 'academic_adventure/map.html')
+    context = {"events":Event.objects.all()}
+    return render(request, 'academic_adventure/map.html', context)
 
 @login_required
 def scan(request):
