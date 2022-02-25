@@ -12,11 +12,11 @@
 		<!--This styling is used to dictate the sizing of the map on the page-->
 		<style>
 			#map{
-				height: 100%;
+				height: 95%;
 			}
 			
 			html, body{
-				height: 100%;
+				height: 95%;
 				margin: 0;
 				padding: 0;
 			}
@@ -27,15 +27,36 @@
 		<!--Center used to look at the middle of campus-->
 		<script>
 			let map;
+            var markers = [];
 
 			function initMap() {
 			  map = new google.maps.Map(document.getElementById("map"), {
 				center: { lat: 50.736443, lng: -3.533165},
 				zoom: 17,
 			  });
-			}
+
+              /* Adds markers to the map for each event */
+              {% for event in events %}
+              //Calls the recent function on the event to only display upcoming events in the next 2 hours
+              {% if event.recent %}
+
+              var marker = new google.maps.Marker({ //Creates a new marker
+                  position: { lat: {{ event.latitude }}, lng: {{ event.longitude }}}, //Sets the markers position
+                  map,
+                  title: "{{ event.name }}", //Sets the title of the marker
+                  description: "{{ event.description }}", //Sets the description of the marker
+                  date: "{{ event.date }}", //Sets the date of the marker
+                  duration: {{ event.duration }}, //Sets the duration the marker is valid for
+                  type: "{{ event.type }}", //Sets the type of event
+              });
+
+              {% endif %}
+
+              {% endfor %}
+            }
+            
 		</script>
-		
+
 		<title>Map</title>
     </head>
 
