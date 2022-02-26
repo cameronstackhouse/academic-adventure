@@ -50,6 +50,10 @@ def scan(request):
 
 @login_required
 def create(request):
+    """Create view. This view allows for a gamekeeper to create
+    an activity and generate a QR code for the activity. Create
+    also keeps a list of previously generated event QR codes.
+    """
     gamekeeper = request.user.gamekeeper
     if request.method == "POST":
         createform = CreateForm(request.POST)
@@ -60,7 +64,7 @@ def create(request):
             newevent.code = ''.join(random.choice(string.ascii_uppercase + string.digits) for char in range(6))
             newevent.save()
     else:
-        createform = CreateForm()
+        createform = CreateForm(initial={'host':request.user})
     context = {'user': request.user,
                'createform': createform,
                'allevents': Event.objects.filter(host=request.user),
@@ -69,6 +73,7 @@ def create(request):
 
 @login_required
 def code(request, **kwargs):
+    """"""
     gamekeeper = request.user.gamekeeper
     event = Event.objects.get(pk=kwargs['event_id'])
     return render(request, 'academic_adventure/code.html', {"event":event, "gamekeeper":gamekeeper})
