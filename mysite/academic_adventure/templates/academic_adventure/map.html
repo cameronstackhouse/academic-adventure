@@ -39,6 +39,13 @@
 			      //Center on user location if allowed by user on browser
 				  var initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 				  map.setCenter(initialLocation);
+
+                  var marker = new google.maps.Marker({
+                      position: initialLocation,
+                      map,
+                      title: "Your location",
+                      label: "You",
+                  });
 			  }, function(positionError){
 			      //In the case the user doesn't allow their position to be accessed center the map on Exeter Uni campus
 			      map.setCenter(new google.maps.LatLng(50.736443, -3.533165));
