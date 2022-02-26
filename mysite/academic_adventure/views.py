@@ -14,6 +14,7 @@ def home(request):
     """Homepage view"""
 
     #Gets user attributes to pass into home.html file
+    
     username = request.user.username
     intelligence = request.user.intelligence
     sociability = request.user.sociability
