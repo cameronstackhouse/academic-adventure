@@ -30,9 +30,18 @@
             var markers = [];
 
 			function initMap() {
-			  map = new google.maps.Map(document.getElementById("map"), {
-				center: { lat: 50.736443, lng: -3.533165},
-				zoom: 17,
+			  //Creating the map and seeting its zoom
+			  map = new google.maps.Map(document.getElementById("map"));
+			  map.setZoom(17);
+			  
+			  //This attempts to access the users current position using the google maps api storing it in position
+			  navigator.geolocation.getCurrentPosition(function(position){
+			      //Center on user location if allowed by user on browser
+				  var initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+				  map.setCenter(initialLocation);
+			  }, function(positionError){
+			      //In the case the user doesn't allow their position to be accessed center the map on Exeter Uni campus
+			      map.setCenter(new google.maps.LatLng(50.736443, -3.533165));
 			  });
 
               /* Adds markers to the map for each event */
