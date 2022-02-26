@@ -2,11 +2,51 @@
 
 {% load static %}
 
+{% if not gamekeeper %}
+
+<meta http-equiv="Refresh" content="0; url={% url 'academic_adventure:home' %}">
+
+{% endif %}
+
 <html>
     <head>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+        <!--The polyfill is needed for displaying of the map-->
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
         <title>Create</title>
+
+        <style>
+            #map{
+				height: 50%;
+			}
+			
+			html, body{
+				height: 95%;
+				margin: 0;
+				padding: 0;
+			}
+        </style>
+
+        <script>
+            let map;
+
+            function initMap() {
+            //Creating the map and seeting its zoom
+                map = new google.maps.Map(document.getElementById("map"));
+                map.setZoom(17);
+                map.setCenter(new google.maps.LatLng(50.736443, -3.533165));
+
+                map.addListener("click", (mapsMouseEvent) => { //Listens for click event
+                    let coords = mapsMouseEvent.latLng;
+                    var lng = coords.lng();
+                    var lat = coords.lat(); //Gets coordinates of click
+                    //Sets the form text boxes to contain the coordinates
+                    document.getElementById("id_longitude").value = lng;
+                    document.getElementById("id_latitude").value = lat;
+                });
+            }
+        </script>
     </head>
 
     <body>
@@ -41,25 +81,41 @@
             </ul>
         </nav> 
 
-        <h1>Create</h1>
+        <h1>Create Event</h1>
         </br>
+
+        <div>
         <form method="POST">
-            <fieldset>
-              {% csrf_token %}
-              {{ createform.as_p }}
-              <button type="submit" class="btn btn-primary">Create</button>
-            </fieldset>
-        </form>
+                <fieldset>
+                {% csrf_token %}
+                {{ createform.as_p }}
+                <button type="submit" class="btn btn-primary">Create</button>
+                </fieldset>
+            </form>
+        </div>
 
-        {% for event in allevents %}
+        <h3>Select loaction from the map</h3>
+        <div id="map">
+            <script 
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDS7uNAAWZIIeVC3-GXZUx7hNdkLoY7I3E&callback=initMap&v=weekly"
+		        async
+		    ></script>
+        </div>
 
-        {% if event.host == user %}
+        <div id="events">
+            <h3>Events</h3>
 
-        <a href="{% url 'academic_adventure:code' event_id=event.id %}">{{event.name}}</a></br>
+            {% for event in allevents %}
 
-        {% endif %}
+            {% if event.host == user %}
 
-        {% endfor %}
+            <a href="{% url 'academic_adventure:code' event_id=event.id %}">{{event.name}}</a></br>
+
+            {% endif %}
+
+            {% endfor %}
+        
+        </div>
 
     </body>
 </html>
