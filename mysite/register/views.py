@@ -16,3 +16,6 @@ def register(request):
             messages.error(request, "Error, password or username invalid.") #Display error message
 
     return render(request, 'register/register.html', {'form':form}) #Displays register HTML form with generic Django user registration form
+    
+def privacy(request):
+    return render(request, 'register/privacy-policy.html')
