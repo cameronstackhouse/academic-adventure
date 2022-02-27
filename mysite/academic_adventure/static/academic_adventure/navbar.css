@@ -9,7 +9,7 @@ html, body
     float: left;
     padding: 10px;
     height: 100%;
-    width: 15%;
+    width: 110px;
 }
 
 #topContainer {
@@ -32,9 +32,9 @@ html, body
     background-color: lightgray !important;
 }
 
-#navbar {
+/* #navbar {
 
-}
+} */
 
 .navbar-toggler-icon {
     color: black !important;
