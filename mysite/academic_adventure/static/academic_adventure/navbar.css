@@ -1,0 +1,55 @@
+html, body
+{
+    height: 100%;
+}
+
+#navbarContainer {
+    background-image: linear-gradient(transparent, black);
+    z-index: 1;
+    float: left;
+    padding: 10px;
+    height: 100%;
+    width: 15%;
+}
+
+#topContainer {
+    background-color: lightblue;
+    z-index: 1;
+    float: top;
+    height: 70px;
+    width: 100%;
+}
+
+#logo {
+    width:150px;
+    height:90px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#navbarButton {
+    background-color: lightgray !important;
+}
+
+#navbar {
+
+}
+
+.navbar-toggler-icon {
+    color: black !important;
+}
+
+nav .navbar-nav button{
+    color: black !important;
+}
+
+nav .navbar-nav li a{
+    color: black !important;
+}
+
+.modal-content {
+
+    width: 100%;
+    height: 90%;
+}

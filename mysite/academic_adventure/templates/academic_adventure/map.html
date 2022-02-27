@@ -8,15 +8,15 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
         <!--The polyfill is needed for displaying of the map-->
 		<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-		
 		<!--This styling is used to dictate the sizing of the map on the page-->
+        <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/navbar.css' %}">
 		<style>
 			#map{
-				height: 95%;
+				height: 100%;
 			}
 			
 			html, body{
-				height: 95%;
+				height: 100%;
 				margin: 0;
 				padding: 0;
 			}
@@ -76,34 +76,47 @@
     </head>
 
     <body>
-        <nav class="navbar navbar-expand-sm navbar-light bg-light">
-            <a class="navbar-brand" href="#">
-                <img src="{% static 'academic_adventure/logo.png' %}"  alt="logo" style="width:110px; height:70px;">
-            </a>
-
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'academic_adventure:home' %}">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Map</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'academic_adventure:leaderboard' %}">Leaderboard</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'academic_adventure:scan' %}">Scan</a>
-                </li>
-                {% if gamekeeper %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'academic_adventure:create' %}">Create</a>
-                </li>
-                {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-                </li>
-              </ul>
-          </nav>
+        <div id="topContainer">
+            <img src="{% static 'academic_adventure/logo.png' %}"  id="logo">
+        </div>
+        <div id="navbarContainer" style="position: absolute;">
+            <nav class="navbar navbar-expand-lg navbar-light" style="top:40px;">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" id="navbarButton">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse show navbar-collapse" id="navbar">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{% url 'academic_adventure:home' %}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'academic_adventure:map' %}">Map</a>
+                        </li>
+                        <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#inventory" style="border: none; background: none; text-align: left;">
+                            Inventory
+                        </button>
+                        <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#events" style="border: none; background: none; text-align: left;">
+                            Events
+                        </button>
+                        <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#shop" style="border: none; background: none; text-align: left;">
+                            Shop
+                        </button>
+                        <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#leaderboard" style="border: none; background: none; text-align: left;">
+                            Leaderboard
+                        </button>
+                        {% if gamekeeper %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'academic_adventure:create' %}">Create</a>
+                        </li>
+                        {% endif %}
+        
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
 			
 		  <div id="map"></div>
 			
@@ -112,5 +125,74 @@
 		    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDS7uNAAWZIIeVC3-GXZUx7hNdkLoY7I3E&callback=initMap&v=weekly"
 		    async
 		  ></script>
+          <div class="modal fade" id="inventory" tabindex="-1" aria-labelledby="inventoryLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="inventoryLabel">Inventory</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h2>Statistics</h2>
+                            <h3>Overall score: {{score}}</h3>
+                            <p>Intelligence: {{intelligence}}</p>
+                            <p>Sociability: {{sociability}}</p>
+                            <p>Athleticism: {{athleticism}}</p>
+                        </div>
+                    
+                        <div class="col-md-6">
+                            <h2>Hello PLACEHOLDER PLACEHOLDER PLACEHOLDER</h2>
+                            <button type="button" class="btn btn-primary">Primary</button>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="events" tabindex="-1" aria-labelledby="eventsLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="eventsLabel">Leaderboard</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <h1>Events Here</h1>
+                  <h2>Scan Here</h2>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="shop" tabindex="-1" aria-labelledby="shopLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="shopLabel">Shop</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Shop Here
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="leaderboard" tabindex="-1" aria-labelledby="leaderboardLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="leaderboardLabel">Leaderboard</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  Leaderboard Here
+                </div>
+              </div>
+            </div>
+        </div>
     </body>
 </html>
