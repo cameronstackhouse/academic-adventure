@@ -30,23 +30,11 @@ def home(request):
     return render(request, 'academic_adventure/home.html', context)
 
 @login_required
-def leaderboard(request):
-    gamekeeper = request.user.gamekeeper
-    context = {"gamekeeper": gamekeeper}
-    return render(request, 'academic_adventure/leaderboard.html', context)
-
-@login_required
 def map(request):
     gamekeeper = request.user.gamekeeper
     context = {"gamekeeper": gamekeeper,
                 "events":Event.objects.all()}
     return render(request, 'academic_adventure/map.html', context)
-
-@login_required
-def scan(request):
-    gamekeeper = request.user.gamekeeper
-    context = {"gamekeeper": gamekeeper}
-    return render(request, 'academic_adventure/scan.html', context)
 
 @login_required
 def create(request):
