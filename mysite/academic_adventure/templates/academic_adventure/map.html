@@ -48,7 +48,7 @@
 			  }, function(positionError){
 			      //In the case the user doesn't allow their position to be accessed center the map on Exeter Uni campus
 			      map.setCenter(new google.maps.LatLng(50.736443, -3.533165));
-			  });
+			  }, {enableHighAccuracy: true});
 
               /* Adds markers to the map for each event */
               {% for event in events %}
