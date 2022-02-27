@@ -84,8 +84,8 @@
         <h1>Create Event</h1>
         </br>
 
-        <div>
-        <form method="POST">
+        <div id="left">
+            <form method="POST">
                 <fieldset>
                 {% csrf_token %}
                 {{ createform.as_p }}
