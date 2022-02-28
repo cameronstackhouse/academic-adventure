@@ -50,6 +50,7 @@ class Event(models.Model):
     code = models.CharField(max_length=100)
     type = models.CharField(max_length=40)
     society = models.OneToOneField(Society, on_delete=models.CASCADE, null=True, blank=True)
+    members = models.ManyToManyField(CustomUser, blank=True, related_name='%(class)s_members_created')
 
     def recent(self):
         """Function to determine if the event is a recent event
