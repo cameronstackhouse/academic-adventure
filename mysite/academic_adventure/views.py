@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required #Used to reject user entry to web page if not logged in
@@ -5,7 +6,7 @@ from .models import Event
 from .forms import CreateForm
 import string 
 import random
-
+import logging
 
 from .models import Event
 
@@ -46,6 +47,10 @@ def map(request):
 def scan(request):
     gamekeeper = request.user.gamekeeper
     context = {"gamekeeper": gamekeeper}
+    if request.method == "POST":
+        logging.info(request.POST.get("scancontent"))
+        scanned_event = Event.objects.get(pk=request.POST.get("scancontent"))
+        scanned_event.members.add(request.user)
     return render(request, 'academic_adventure/scan.html', context)
 
 @login_required
@@ -76,4 +81,9 @@ def code(request, **kwargs):
     """"""
     gamekeeper = request.user.gamekeeper
     event = Event.objects.get(pk=kwargs['event_id'])
-    return render(request, 'academic_adventure/code.html', {"event":event, "gamekeeper":gamekeeper})
+    event_members = event.members.all()
+    context = { "event":event, 
+                "gamekeeper":gamekeeper, 
+                "event_members":event_members
+    }
+    return render(request, 'academic_adventure/code.html', context)
