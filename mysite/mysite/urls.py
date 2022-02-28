@@ -17,8 +17,8 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('register', include('register.urls')),
-    path('academic-adventure/', include('academic_adventure.urls')),
+    path('register', include('register.urls')), #Includes the registration URLS
+    path('academic-adventure/', include('academic_adventure.urls')), #Includes all URLS of our main app
     path('academic-adventure/', include('django.contrib.auth.urls')), #Includes login and log out URLS for academic-adventure app
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls), #Includes ability to access admin URLS
 ]

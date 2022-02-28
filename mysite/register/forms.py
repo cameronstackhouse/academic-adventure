@@ -6,6 +6,7 @@ from django import forms
 User = get_user_model()
 
 class RegisterForm(UserCreationForm): 
+    """Custom user registration form for users registering for the application"""
     def __init__(self, *args, **kwargs): 
         super().__init__(*args, **kwargs) 
         self.fields['username'].widget.attrs.update({ 

@@ -31,26 +31,26 @@ class CustomUser(AbstractUser):
 
 class Society(models.Model):
     """Defines a society"""
-    name = models.CharField(max_length=50)
-    description = models.CharField(max_length=200)
-    members = models.ManyToManyField(CustomUser, blank=True)
+    name = models.CharField(max_length=50) #Name of the society
+    description = models.CharField(max_length=200) #Description of the society
+    members = models.ManyToManyField(CustomUser, blank=True) #Members of the society
 
     def __str__(self):
         return self.name
 
 class Event(models.Model):
     """Defines an event in the database"""
-    longitude = models.DecimalField(decimal_places=20, max_digits=30)
-    latitude = models.DecimalField(decimal_places=20, max_digits=30)
-    name = models.CharField(max_length=100)
-    description = models.CharField(max_length=400)
-    host = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    date = models.DateTimeField()
-    duration = models.DecimalField(decimal_places=2, max_digits=6)
-    code = models.CharField(max_length=100)
-    type = models.CharField(max_length=40)
-    society = models.OneToOneField(Society, on_delete=models.CASCADE, null=True, blank=True)
-    members = models.ManyToManyField(CustomUser, blank=True, related_name='%(class)s_members_created')
+    longitude = models.DecimalField(decimal_places=20, max_digits=30) #Longitude location of event
+    latitude = models.DecimalField(decimal_places=20, max_digits=30) #Latitude location of event
+    name = models.CharField(max_length=100) #Name of the event
+    description = models.CharField(max_length=400) #Short description of the event
+    host = models.ForeignKey(CustomUser, on_delete=models.CASCADE) #Host of the event
+    date = models.DateTimeField() #Date and time of the event
+    duration = models.DecimalField(decimal_places=2, max_digits=6) #Duration of the event
+    code = models.CharField(max_length=100) #Code for the event
+    type = models.CharField(max_length=40) #Type of event (battle, academic, sports, social, ...)
+    society = models.OneToOneField(Society, on_delete=models.CASCADE, null=True, blank=True) #Society the event belongs to
+    members = models.ManyToManyField(CustomUser, blank=True, related_name='%(class)s_members_created') #Members of the event
 
     def recent(self):
         """Function to determine if the event is a recent event
