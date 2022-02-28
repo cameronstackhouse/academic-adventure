@@ -54,7 +54,7 @@
                 scanner.addListener('scan', function (content) {
                     document.getElementById('scancontent').value = content;
                     document.getElementById('scanned').submit();
-                    alert(content);
+                    alert("Successfully added to event");
                 });
             Instascan.Camera.getCameras().then(function (cameras) {
                 if (cameras.length > 0) {

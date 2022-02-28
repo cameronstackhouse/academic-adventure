@@ -3,7 +3,7 @@ from .forms import RegisterForm
 from django.contrib import messages
 
 def register(request):
-    """View to register a user in the database
+    """View to register a user in the database for the application
     """
     form = RegisterForm() #Default user creation form provided by django
     if request.method == "POST": #Checks if POST request
@@ -18,4 +18,5 @@ def register(request):
     return render(request, 'register/register.html', {'form':form}) #Displays register HTML form with generic Django user registration form
     
 def privacy(request):
-    return render(request, 'register/privacy-policy.html')
+    """View to show the user the privacy policy for the application"""
+    return render(request, 'register/privacy-policy.html') #Renders the privacy policy HTML template
