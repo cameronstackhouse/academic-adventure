@@ -40,6 +40,14 @@ class Society(models.Model):
 
 class Event(models.Model):
     """Defines an event in the database"""
+    #Types of events available to be set
+    types = (
+        ("Battle", "Battle"),
+        ("Academic", "Academic"),
+        ("Sports", "Sports"),
+        ("Social", "Social"),
+    )
+
     longitude = models.DecimalField(decimal_places=20, max_digits=30) #Longitude location of event
     latitude = models.DecimalField(decimal_places=20, max_digits=30) #Latitude location of event
     name = models.CharField(max_length=100) #Name of the event
@@ -48,7 +56,10 @@ class Event(models.Model):
     date = models.DateTimeField() #Date and time of the event
     duration = models.DecimalField(decimal_places=2, max_digits=6) #Duration of the event
     code = models.CharField(max_length=100) #Code for the event
-    type = models.CharField(max_length=40) #Type of event (battle, academic, sports, social, ...)
+    type = models.CharField(
+        max_length=40,
+        choices=types, #Type of event (battle, academic, sports, social, ...)
+    ) 
     society = models.OneToOneField(Society, on_delete=models.CASCADE, null=True, blank=True) #Society the event belongs to
     members = models.ManyToManyField(CustomUser, blank=True, related_name='%(class)s_members_created') #Members of the event
 

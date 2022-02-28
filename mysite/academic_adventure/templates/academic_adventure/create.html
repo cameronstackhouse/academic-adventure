@@ -30,9 +30,10 @@
 
         <script>
             let map;
+            var marker; //Global individual marker
 
             function initMap() {
-            //Creating the map and seeting its zoom
+            //Creating the map and setting its zoom
                 map = new google.maps.Map(document.getElementById("map"));
                 map.setZoom(17);
                 map.setCenter(new google.maps.LatLng(50.736443, -3.533165));
@@ -44,7 +45,21 @@
                     //Sets the form text boxes to contain the coordinates
                     document.getElementById("id_longitude").value = lng;
                     document.getElementById("id_latitude").value = lat;
+
+                    placeMarker(coords) //Places marker on map
                 });
+            }
+
+            function placeMarker(location){
+                if(marker){ //If there is already a marker then move marker
+                    marker.setPosition(location);
+                } else { //Else create a new marker and place it on map
+                    marker = new google.maps.Marker({
+                        position: location,
+                        map: map,
+                        title: "Selected",
+                    });
+                }
             }
         </script>
     </head>
