@@ -31,19 +31,6 @@ def home(request):
     return render(request, 'academic_adventure/home.html', context) #Renders home.html template and passes in context
 
 @login_required
-def leaderboard(request):
-    """View displaying leaderboards to show a user their stats vs other people
-    across campus"""
-    gamekeeper = request.user.gamekeeper
-    context = {"gamekeeper": gamekeeper,
-            "scoreusers":sorted(CustomUser.objects.all(), key=lambda u:u.score, reverse = True)[:10],
-            "intusers":sorted(CustomUser.objects.all(), key=lambda u:u.intelligence, reverse = True)[:5],
-            "socusers":sorted(CustomUser.objects.all(), key=lambda u:u.sociability, reverse = True)[:5],
-            "athusers":sorted(CustomUser.objects.all(), key=lambda u:u.athleticism, reverse = True)[:5]
-            }
-    return render(request, 'academic_adventure/leaderboard.html', context)
-
-@login_required
 def map(request):
     """View for the map where the user can see their location and
     the location of events placed by gamekeepers"""

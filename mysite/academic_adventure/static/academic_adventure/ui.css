@@ -89,10 +89,6 @@ nav .navbar-nav li a{
     color: white;
 }
 
-#leaderboard {
-    border-collapse: collapse;
-    width: 80%;
-}
 #leaderboard td, #leaderboard th {
     border: 3px solid #546474;
     text-align: center;

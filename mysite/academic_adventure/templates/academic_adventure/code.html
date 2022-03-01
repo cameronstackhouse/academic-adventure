@@ -40,12 +40,9 @@
                         <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#shop" style="border: none; background: none; text-align: left;">
                             Shop
                         </button>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'academic_adventure:leaderboard' %}">Leaderboard</a>
-                        </li>
-                        <!-- <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#leaderboard" style="border: none; background: none; text-align: left;">
-                            Leaderboard
-                        </button> -->
+                        <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#leaderboard" style="border: none; background: none; text-align: left;">
+                          Leaderboard
+                        </button>
                         {% if gamekeeper %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'academic_adventure:create' %}">Create</a>
@@ -129,6 +126,7 @@
             </div>
           </div>
           
+              
           <div class="modal fade" id="leaderboard" tabindex="-1" aria-labelledby="leaderboardLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
               <div class="modal-content">
@@ -137,7 +135,76 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                  Leaderboard Here
+                  <p style="padding: 1%;"></p>  
+                  <div class="text-center">
+                      
+                        <h3>Overall Score:</h3>
+        
+                        
+                            <div class="text-center">
+                                <table id="leaderboard" class="center">
+                                    <tr>
+                                        <th>Username</th>
+                                        <th>Intelligence</th>
+                                        <th>Sociability</th>
+                                        <th>Athleticism</th>
+                                        <th>Total Score</th>
+                                      </tr>
+                                {% for user in scoreusers %}
+                                <tr>
+                                    <td>{{user.username}}</td>
+                                    <td>{{user.intelligence}}</td>
+                                    <td>{{user.sociability}}</td>
+                                    <td>{{user.athleticism}}</td>
+                                    <td>{{user.score|floatformat:"2"}}</td>
+                                </tr>
+                                {% endfor %}
+                                </table>
+                            </div>
+                    </div>
+        
+                    <p style="padding: 1%;"></p>
+                    <div class="row">
+                        <div class="column">
+                        <h3 class="text-center">Intelligence:</h3>
+                        <div class="center">
+                            <table id="minileaderboard" style="table-layout: fixed;">
+                                    {% for user in intusers %}
+                                    <tr>
+                                        <td>{{user.username}}</td>
+                                        <td>{{user.intelligence}}</td>
+                                    </tr>
+                                    {% endfor %}
+                            </table>
+                        </div>
+                        </div>
+                        <div class="column">
+                        <h3 class="text-center">Sociability:</h3>
+                        <div class="center">
+                            <table id="minileaderboard" style="table-layout: fixed;">
+                                    {% for user in socusers %}
+                                    <tr>
+                                        <td>{{user.username}}</td>
+                                        <td>{{user.sociability}}</td>
+                                    </tr>
+                                    {% endfor %}
+                            </table>
+                        </div>
+                        </div>
+                        <div class="column">
+                        <h3 class="text-center">Athleticism:</h3>
+                        <div class="center">
+                            <table id="minileaderboard" style="table-layout: fixed;">
+                                    {% for user in athusers %}
+                                    <tr>
+                                        <td>{{user.username}}</td>
+                                        <td>{{user.athleticism}}</td>
+                                    </tr>
+                                    {% endfor %}
+                            </table>
+                        </div>
+                        </div>
+                    </div>
                 </div>
               </div>
             </div>
