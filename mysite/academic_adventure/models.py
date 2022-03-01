@@ -29,6 +29,10 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.username
 
+    #class Meta:
+        #ordering = ('-intelligence + sociability + athleticism / 3',)
+
+
 class Society(models.Model):
     """Defines a society"""
     name = models.CharField(max_length=50) #Name of the society
