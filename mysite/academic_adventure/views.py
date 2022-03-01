@@ -27,7 +27,7 @@ def home(request):
                "sociability":sociability,
                "athleticism":athleticism,
                "score":score,
-               "gamekeeper":gamekeeper}
+               "gamekeeper":gamekeeper} 
     return render(request, 'academic_adventure/home.html', context) #Renders home.html template and passes in context
 
 @login_required
