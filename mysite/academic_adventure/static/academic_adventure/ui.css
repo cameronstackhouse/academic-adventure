@@ -1,0 +1,126 @@
+html, body
+{
+    height: 100%;
+}
+
+#navbarContainer {
+    background-image: linear-gradient(transparent, black);
+    z-index: 1;
+    float: left;
+    padding: 10px;
+    height: 100%;
+    width: 110px;
+}
+
+#topContainer {
+    background-color: lightblue;
+    z-index: 1;
+    float: top;
+    height: 70px;
+    width: 100%;
+}
+
+#logo {
+    width:150px;
+    height:90px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#navbarButton {
+    background-color: lightgray !important;
+}
+
+/* #navbar {
+
+} */
+
+.navbar-toggler-icon {
+    color: black !important;
+}
+
+nav .navbar-nav button{
+    color: black !important;
+}
+
+nav .navbar-nav li a{
+    color: black !important;
+}
+
+.modal-content {
+
+    width: 100%;
+    height: 90%;
+}
+
+/* Leaderboard */
+
+.row {
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+}
+
+.column {
+    flex: 33%;
+    padding: 5%;
+}
+#minileaderboard {
+    border-collapse: collapse;
+    width: 100%;
+}
+#minileaderboard td, #minileaderboard th {
+    border: 3px solid #546474;
+    text-align: center;
+    padding: 8px
+}
+#minileaderboard tr:nth-child(1) {
+    background-color: #b18b4f;
+    color: white; 
+}
+#minileaderboard tr:nth-child(2) {
+    background-color: #b6b3af;
+    color: white;
+}
+#minileaderboard tr:nth-child(3) {
+    background-color: #b16142;
+    color: white;
+}
+
+#leaderboard {
+    border-collapse: collapse;
+    width: 80%;
+}
+#leaderboard td, #leaderboard th {
+    border: 3px solid #546474;
+    text-align: center;
+    padding: 8px
+}
+#leaderboard tr:nth-child(2) {
+    background-color: #b18b4f;
+    color: white; 
+}
+#leaderboard tr:nth-child(3) {
+    background-color: #b6b3af;
+    color: white;
+}
+#leaderboard tr:nth-child(4) {
+    background-color: #b16142;
+    color: white;
+}
+#leaderboard tr:hover {
+    background-color: #484a50;
+    color: white;
+}
+#leaderboard  th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background-color: #74757b;
+    color: white;
+}
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
