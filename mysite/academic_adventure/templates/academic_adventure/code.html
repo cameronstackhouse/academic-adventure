@@ -45,9 +45,10 @@
 
           {% qr_from_text event.id size="L" %}
 
+          <h3>Members of event:</h3>
           {% for member in event_members %}
 
-          <p>{{member.username}}</p> </br>
+          <p>{{member.username}}</p>
 
           {% endfor %}
 
