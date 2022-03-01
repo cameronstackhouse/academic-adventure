@@ -55,6 +55,21 @@ def scan(request):
         logging.info(request.POST.get("scancontent")) 
         #Finds the event the QR code is for using stored contents of QR code
         scanned_event = Event.objects.get(pk=request.POST.get("scancontent"))
+
+        if request.user not in scanned_event.members.all(): #Checks if user is not already registered for event
+            #If user isn't already registered for an event then apply bonus for attending in person event
+            if scanned_event.type == "Sports":
+                request.user.athleticism += 1 #If sports event then add 1 to the users athleticism
+            elif scanned_event.type == "Academic":
+                request.user.intelligence += 1 #If academic event then add 1 to users intelligence
+            elif scanned_event.type == "Social":
+                request.user.sociability += 1 #If social event then add 1 to users sociability
+            elif scanned_event.type == "Battle":
+                #TODO: Redirect to battle system
+                pass
+            
+            request.user.save() #Saves changes made to the users stats
+    
         scanned_event.members.add(request.user) #Adds user to the event
     return render(request, 'academic_adventure/scan.html', context) #Shows scan page
 
