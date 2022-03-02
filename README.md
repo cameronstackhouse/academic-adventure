@@ -84,6 +84,12 @@ user = CustomUser.objects.get(username="YourUser")
 user.gamekeeper = True
 user.save()
 
+## Testing
+
+To run tests for this project, run the following command within the mysite folder:
+
+'python manage.py test academic_adventure'
+
 ## License
 
 Copyright (c) 2022 ECM2434 Group 19
