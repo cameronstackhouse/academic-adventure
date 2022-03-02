@@ -79,13 +79,10 @@ To make a registered user into a gamemaster:
 
 run 'python manage.py shell' and then enter the following commands.
 
-from academic_adventure.models import CustomUser
-
-user = CustomUser.objects.get(username="YourUser")
-
-user.gamekeeper = True
-
-user.save()
+- from academic_adventure.models import CustomUser
+- user = CustomUser.objects.get(username="YourUser")
+- user.gamekeeper = True
+- user.save()
 
 ## Testing
 
