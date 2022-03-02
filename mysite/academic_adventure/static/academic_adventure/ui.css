@@ -4,7 +4,7 @@ html, body
 }
 
 #navbarContainer {
-    background-image: linear-gradient(transparent, #242c44);
+    background-color: #242c44;
     z-index: 1;
     float: left;
     padding: 10px;
@@ -46,15 +46,15 @@ html, body
 }
 
 .navbar-toggler-icon {
-    color: black !important;
+    color: white !important;
 }
 
 .navbar-nav button{
-    color: black !important;
+    color: white !important;
 }
 
 .navbar-nav li a{
-    color: black !important;
+    color: white !important;
 }
 
 .modal-content {
