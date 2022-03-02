@@ -47,6 +47,9 @@
                     {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
                     <div class="alert alert-success" role="alert">
                         {{ message }}
+                        <p>Redirecting...</p>
+                        
+                        <meta http-equiv="refresh" content="2.5; url=/academic-adventure/login"/>
                     </div>
                     {% endif %}
             
