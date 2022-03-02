@@ -65,7 +65,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'academic_adventure.context_processors.navbar',
+                'academic_adventure.context_processors.sidebar',
             ],
         },
     },

@@ -1,6 +1,6 @@
 from .models import Event, CustomUser
 
-def navbar(request):
+def sidebar(request):
     """View displaying leaderboards to show a user their stats vs other people
     across campus"""
     gamekeeper = request.user.gamekeeper

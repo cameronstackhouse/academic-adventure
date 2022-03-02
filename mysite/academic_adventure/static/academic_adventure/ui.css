@@ -4,16 +4,18 @@ html, body
 }
 
 #navbarContainer {
-    background-image: linear-gradient(transparent, black);
+    background-image: linear-gradient(transparent, #242c44);
     z-index: 1;
     float: left;
     padding: 10px;
     height: 100%;
     width: 110px;
+    margin-left: 0rem;
+    transition: margin 0.5s ease-out;
 }
 
 #topContainer {
-    background-color: lightblue;
+    background-color: #b18b4f;
     z-index: 1;
     float: top;
     height: 70px;
@@ -29,29 +31,39 @@ html, body
 }
 
 #navbarButton {
-    background-color: lightgray !important;
+    background-color: #242c44 !important;
+    border: 2px solid white;
+    border-radius: 8px;
+    z-index: 1;
+    width: 70px;
+    height: 40px;
+    color: white;
+    text-align: center;
+    display: inline-block;
+    position: absolute;
+    top: 15px;
+    left: 15px;
 }
-
-/* #navbar {
-
-} */
 
 .navbar-toggler-icon {
     color: black !important;
 }
 
-nav .navbar-nav button{
+.navbar-nav button{
     color: black !important;
 }
 
-nav .navbar-nav li a{
+.navbar-nav li a{
     color: black !important;
 }
 
 .modal-content {
-
     width: 100%;
     height: 90%;
+} 
+
+body.sb-sidenav-toggled #navbarContainer {
+margin-left: -15rem;
 }
 
 /* Leaderboard */

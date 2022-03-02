@@ -10,14 +10,15 @@
         <!--The polyfill is needed for displaying of the map-->
 		<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 		<link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/ui.css' %}">
-		<!--This styling is used to dictate the sizing of the map on the page-->
+		<script type="text/javascript" src="{% static 'academic_adventure/navbar.js' %}"> </script>
+    <!--This styling is used to dictate the sizing of the map on the page-->
 		<style>
 			#map{
-				height: 95%;
+				height: 100%;
 			}
 			
 			html, body{
-				height: 95%;
+				height: 100%;
 				margin: 0;
 				padding: 0;
 			}
@@ -77,50 +78,47 @@
     </head>
 
     <body>
-        <div id="topContainer">
-            <img src="{% static 'academic_adventure/logo.png' %}"  id="logo">
-          </div>
-          <div id="navbarContainer">
-            <nav class="navbar navbar-light">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" id="navbarButton">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse show navbar-collapse" id="navbar">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="{% url 'academic_adventure:home' %}">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'academic_adventure:map' %}">Map</a>
-                        </li>
-                        <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#inventory" style="border: none; background: none; text-align: left;">
-                            Inventory
-                        </button>
-                        <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#events" style="border: none; background: none; text-align: left;">
-                            Events
-                        </button>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'academic_adventure:scan' %}">Scan</a>
-                        </li>
-                        <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#shop" style="border: none; background: none; text-align: left;">
-                            Shop
-                        </button>
-                        <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#leaderboard" style="border: none; background: none; text-align: left;">
-                          Leaderboard
-                        </button>
-                        {% if gamekeeper %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'academic_adventure:create' %}">Create</a>
-                        </li>
-                        {% endif %}
-          
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-          </div>
+      <div id="topContainer">
+        <img src="{% static 'academic_adventure/logo.png' %}"  id="logo">
+        <button type="button" id="navbarButton">Menu</button>
+      </div>
+        <div class="d-flex" id="navbarContainer">
+          <ul class="navbar-nav ms-auto">
+          <!-- <div class="sidebar-heading border-bottom bg-light">Menu</div> -->
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'academic_adventure:home' %}">Home</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="{% url 'academic_adventure:map' %}">Map</a>
+          </li>
+          <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#inventory" style="border: none; background: none; text-align: left;">
+              Inventory
+          </button>
+          <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#events" style="border: none; background: none; text-align: left;">
+              Events
+          </button>
+          <li class="nav-item">
+              <a class="nav-link" href="{% url 'academic_adventure:scan' %}">Scan</a>
+          </li>
+          <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#shop" style="border: none; background: none; text-align: left;">
+              Shop
+          </button>
+          <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#leaderboard" style="border: none; background: none; text-align: left;">
+              Leaderboard
+          </button>
+          {% if gamekeeper %}
+          <li class="nav-item">
+              <a class="nav-link" href="{% url 'academic_adventure:create' %}">Create</a>
+          </li>
+          {% endif %}
+
+          <li class="nav-item">
+              <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+          </li>
+          </ul>
+        </div>
+      </div>
+    </div>
 			
 		  <div id="map"></div>
 			
