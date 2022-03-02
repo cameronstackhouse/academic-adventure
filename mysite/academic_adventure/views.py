@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required #Used to reject user entry to web page if not logged in
 from .models import Event, CustomUser
@@ -94,12 +94,13 @@ def create(request):
             newevent.host = request.user
             newevent.code = ''.join(random.choice(string.ascii_uppercase + string.digits) for char in range(6)) #Adds code to event (NOT NEEDED ANYMORE)
             newevent.save() #Saves the event to the database
+            return redirect("academic_adventure:code", event_id = newevent.id) #Redirects user to the new event QR code page
     else:
-        createform = CreateForm(initial={'host':request.user})
+        createform = CreateForm(initial={'host':request.user}) #Creates the event creation form
     context = {'user': request.user,
                'createform': createform,
-               'allevents': Event.objects.filter(host=request.user),
-               'gamekeeper': gamekeeper}
+               'allevents': Event.objects.filter(host=request.user), #Only shows events being hosted by user
+               'gamekeeper': gamekeeper} #Data to be passed into the html form
     return render(request, 'academic_adventure/create.html', context)
 
 @login_required
