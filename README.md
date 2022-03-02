@@ -73,7 +73,7 @@ Currently Academic Adventure is designed to only work in Exeter, though we hope 
 customizable by the end of the next sprint.
 
 To run the server, simply run the command 'python manage.py runserver' in the mysite folder.
-To access the site go to your host-address/academic_adventure.
+To access the site go to your host-address/academic-adventure.
 
 To make a registered user into a gamemaster:
 
