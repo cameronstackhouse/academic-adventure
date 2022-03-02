@@ -7,12 +7,12 @@ ___
 
 The group members are:
 
-1. Cameron Stackhouse
-2. Simon Puttock
-3. Leo Boekestein
-4. Laison Kou
-5. Mattis Nowell
-6. Andrew Yau
+- Cameron Stackhouse
+- Simon Puttock
+- Leo Boekestein
+- Laison Kou
+- Mattis Nowell
+- Andrew Yau
 
 This is a submission for Sprint 1. 
 There are three types of document that you will find the following places.
