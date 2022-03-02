@@ -90,14 +90,17 @@
                 /*icon type dictionary*/
                 /*Change image url for each type of event*/
                 var icons = {
-                    academic: {
-                        icon: 'https://maps.google.com/mapfiles/kml/shapes/parking_lot_maps.png'
+                    Academic: {
+                        icon: "{% static 'academic_adventure/academic.png'%}"
                     },
-                    sport: {
-                        icon: 'https://trello.com/1/cards/621b979783a1d85b688ade45/attachments/621e7a8e7b0c9f7243c87f88/download/sports.png'
+                    Sports: {
+                        icon: "{% static 'academic_adventure/sports.png'%}"
                     },
-                    social: {
-                        icon: 'https://maps.google.com/mapfiles/kml/shapes/info-i_maps.png'
+                    Battle: {
+                        icon: "{% static 'academic_adventure/battle.png'%}"
+                    },
+                    Social: {
+                        icon: "{% static 'academic_adventure/social.png'%}"
                     }
                 };
 
