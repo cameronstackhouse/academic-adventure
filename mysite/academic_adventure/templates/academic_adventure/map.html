@@ -29,7 +29,7 @@
 			let map;
 
 			function initMap() {
-			  //Creating the map and seeting its zoom
+			  //Creating the map and setting its zoom
 			  map = new google.maps.Map(document.getElementById("map"));
 			  map.setZoom(17);
 			  
@@ -50,25 +50,121 @@
 			      map.setCenter(new google.maps.LatLng(50.736443, -3.533165));
 			  }, {enableHighAccuracy: true});
 
-              /* Adds markers to the map for each event */
-              {% for event in events %}
-              //Calls the recent function on the event to only display upcoming events in the next 2 hours
-              {% if event.recent %}
+                //database info storage
+                var lati = [];
+                var long = [];
+                var des = [];
+                var title = [];
+                var date = [];
+                var dur = [];
+                var type = [];
+                var numEvent = 0;
+                    
+                //this function loads up event data from django database
+                function loadMarkers(){
 
-              var marker = new google.maps.Marker({ //Creates a new marker
-                  position: { lat: {{ event.latitude }}, lng: {{ event.longitude }}}, //Sets the markers position
-                  map,
-                  title: "{{ event.name }}", //Sets the title of the marker
-                  description: "{{ event.description }}", //Sets the description of the marker
-                  date: "{{ event.date }}", //Sets the date of the marker
-                  duration: {{ event.duration }}, //Sets the duration the marker is valid for
-                  type: "{{ event.type }}", //Sets the type of event
-              });
+                    //load up each object in the query set
+                    {% for event in events %}
+                    //Calls the recent function on the event to only store data for the upcoming events in the next 2 hours
+                    {% if event.recent %}
 
-              {% endif %}
+                    //store info from event database
+                    lati.push("{{ event.latitude }}");
+                    long.push("{{ event.longitude }}");
+                    des.push("{{ event.description }}");
+                    title.push("{{ event.name }}");
+                    date.push("{{ event.date }}");
+                    dur.push("{{ event.duration }}");
+                    type.push("{{ event.type }}");
+                    numEvent++; /*counter*/
 
-              {% endfor %}
-            }
+                    {% endif %}
+
+                    {% endfor %}
+
+                };
+                loadMarkers();
+
+                /*icon type dictionary*/
+                /*Change image url for each type of event*/
+                var icons = {
+                    academic: {
+                        icon: 'https://maps.google.com/mapfiles/kml/shapes/parking_lot_maps.png'
+                    },
+                    sport: {
+                        icon: 'https://trello.com/1/cards/621b979783a1d85b688ade45/attachments/621e7a8e7b0c9f7243c87f88/download/sports.png'
+                    },
+                    social: {
+                        icon: 'https://maps.google.com/mapfiles/kml/shapes/info-i_maps.png'
+                    }
+                };
+
+                /* Adds markers to the map for each event */
+                function placeMarkers(){
+
+                    var features =[];
+
+                    for(i=0; i<numEvent;i++){
+                        var x = parseFloat(lati[i]);
+                        var y = parseFloat(long[i]);
+
+                        features.push({
+                            position: new google.maps.LatLng(x,y),
+                            description: des[i],
+                            date: date[i],
+                            duration: dur[i],
+                            title: title[i],  
+                            type: type[i]
+
+                        });
+                    }
+
+                    /*instantiate info window obj*/
+                    infowindow = new google.maps.InfoWindow();
+
+                    // Create markers.
+                    features.forEach(function(feature) {
+                        var marker = new google.maps.Marker({
+                            position: feature.position,
+                            icon: icons[feature.type].icon,
+                            title: feature.title,
+                            description: feature.description,
+                            date: feature.date,
+                            type: feature.type,
+                            map: map
+                        });
+
+                        /*click event listener to show info window for each marker */
+                        google.maps.event.addListener(marker, 'click', function() {
+                            /*html body elements that goes into the info window*/
+                            var contentInfo = 
+                            '<h1>'+ this.title +'</h1>' +
+                            '<h6>Event Type: </h6>' +
+                            '<p>'+ this.type +'<p>' +
+                            // '<h6>Host: </h6>' +
+                            // '<p>'+ this.host +'<p>' +
+                            '<h6>Description: </h6>' +
+                            '<p>'+ this.description +'<p>' +
+                            '<h6>Date: </h6>' +
+                            '<p>'+ this.date +'<p>'
+                            ;
+
+
+                            /*set content for each marker*/
+                            // infowindow.setContent(this.title + this.description + this.date);
+                            infowindow.setContent(contentInfo);
+                            infowindow.open(map, this);
+                    });
+
+
+                    });
+                };
+                placeMarkers();
+
+                    
+
+              
+            };
             
 		</script>
 
