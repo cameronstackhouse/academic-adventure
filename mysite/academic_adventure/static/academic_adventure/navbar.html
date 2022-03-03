@@ -1,0 +1,179 @@
+<div id="topContainer">
+    <img src="{% static 'academic_adventure/logo.png' %}"  id="logo">
+    <button type="button" id="navbarButton">Menu</button>
+</div>
+    <div class="d-flex" id="navbarContainer">
+      <ul class="navbar-nav ms-auto">
+      <!-- <div class="sidebar-heading border-bottom bg-light">Menu</div> -->
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'academic_adventure:home' %}">Home</a>
+      </li>
+      <li class="nav-item">
+          <a class="nav-link" href="{% url 'academic_adventure:map' %}">Map</a>
+      </li>
+      <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#inventory" style="border: none; background: none; text-align: left;">
+          Inventory
+      </button>
+      <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#events" style="border: none; background: none; text-align: left;">
+          Events
+      </button>
+      <li class="nav-item">
+          <a class="nav-link" href="{% url 'academic_adventure:scan' %}">Scan</a>
+      </li>
+      <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#shop" style="border: none; background: none; text-align: left;">
+          Shop
+      </button>
+      <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#leaderboard" style="border: none; background: none; text-align: left;">
+          Leaderboard
+      </button>
+      {% if gamekeeper %}
+      <li class="nav-item">
+          <a class="nav-link" href="{% url 'academic_adventure:create' %}">Create</a>
+      </li>
+      {% endif %}
+
+      <li class="nav-item">
+          <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+      </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="inventory" tabindex="-1" aria-labelledby="inventoryLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="inventoryLabel">Inventory</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h2>Statistics</h2>
+                    <h3>Overall score: {{score}}</h3>
+                    <p>Intelligence: {{intelligence}}</p>
+                    <p>Sociability: {{sociability}}</p>
+                    <p>Athleticism: {{athleticism}}</p>
+                </div>
+            
+                <div class="col-md-6">
+                    <h2>Hello PLACEHOLDER PLACEHOLDER PLACEHOLDER</h2>
+                    <button type="button" class="btn btn-primary">Primary</button>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal fade" id="events" tabindex="-1" aria-labelledby="eventsLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="eventsLabel">Leaderboard</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h1>Events Here</h1>
+          <h2>Scan Here</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal fade" id="shop" tabindex="-1" aria-labelledby="shopLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="shopLabel">Shop</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            Shop Here
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal fade" id="leaderboard" tabindex="-1" aria-labelledby="leaderboardLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="leaderboardLabel">Leaderboard</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p style="padding: 1%;"></p>
+          <div class="text-center">
+              
+                <h3>Overall Score:</h3>
+
+                
+                    <div class="text-center">
+                        <table id="leaderboard" class="center">
+                            <tr>
+                                <th>Username</th>
+                                <th>Intelligence</th>
+                                <th>Sociability</th>
+                                <th>Athleticism</th>
+                                <th>Total Score</th>
+                              </tr>
+                        {% for user in scoreusers %}
+                        <tr>
+                            <td>{{user.username}}</td>
+                            <td>{{user.intelligence}}</td>
+                            <td>{{user.sociability}}</td>
+                            <td>{{user.athleticism}}</td>
+                            <td>{{user.score|floatformat:"2"}}</td>
+                        </tr>
+                        {% endfor %}
+                        </table>
+                    </div>
+            </div>
+
+            <p style="padding: 1%;"></p>
+            <div class="row">
+                <div class="column">
+                <h3 class="text-center">Intelligence:</h3>
+                <div class="center">
+                    <table id="minileaderboard" style="table-layout: fixed;">
+                            {% for user in intusers %}
+                            <tr>
+                                <td>{{user.username}}</td>
+                                <td>{{user.intelligence}}</td>
+                            </tr>
+                            {% endfor %}
+                    </table>
+                </div>
+                </div>
+                <div class="column">
+                <h3 class="text-center">Sociability:</h3>
+                <div class="center">
+                    <table id="minileaderboard" style="table-layout: fixed;">
+                            {% for user in socusers %}
+                            <tr>
+                                <td>{{user.username}}</td>
+                                <td>{{user.sociability}}</td>
+                            </tr>
+                            {% endfor %}
+                    </table>
+                </div>
+                </div>
+                <div class="column">
+                <h3 class="text-center">Athleticism:</h3>
+                <div class="center">
+                    <table id="minileaderboard" style="table-layout: fixed;">
+                            {% for user in athusers %}
+                            <tr>
+                                <td>{{user.username}}</td>
+                                <td>{{user.athleticism}}</td>
+                            </tr>
+                            {% endfor %}
+                    </table>
+                </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
