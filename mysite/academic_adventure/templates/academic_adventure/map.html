@@ -12,13 +12,15 @@
 		<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 		
 		<!--This styling is used to dictate the sizing of the map on the page-->
-		<style>
+        <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/ui.css' %}">
+        <script type="text/javascript" src="{% static 'academic_adventure/navbar.js' %}"> </script>
+        <style>
 			#map{
-				height: 95%;
+				height: 100%;
 			}
 			
 			html, body{
-				height: 95%;
+				height: 100%;
 				margin: 0;
 				padding: 0;
 			}
@@ -304,34 +306,53 @@
     </head>
 
     <body>
-        <nav class="navbar navbar-expand-sm navbar-light bg-light">
-            <a class="navbar-brand" href="#">
-                <img src="{% static 'academic_adventure/logo.png' %}"  alt="logo" style="width:110px; height:70px;">
-            </a>
+        <div id="topContainer">
+            <img src="{% static 'academic_adventure/logo.png' %}"  id="logo">
+            <button type="button" id="navbarButton">Menu</button>
+        </div>
+            <div class="d-flex" id="navbarContainer">
+              <ul class="navbar-nav ms-auto">
+              <!-- <div class="sidebar-heading border-bottom bg-light">Menu</div> -->
+              <li class="nav-item active">
+                <a class="nav-link" href="{% url 'academic_adventure:home' %}">Home</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'academic_adventure:map' %}">Map</a>
+              </li>
+              <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#inventory" style="border: none; background: none; text-align: left;">
+                Profile
+                </button>
+              <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#inventory" style="border: none; background: none; text-align: left;">
+                  Inventory
+              </button>
+              <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#events" style="border: none; background: none; text-align: left;">
+                  Events
+              </button>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'academic_adventure:scan' %}">Scan</a>
+              </li>
+              <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#shop" style="border: none; background: none; text-align: left;">
+                  Shop
+              </button>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'academic_adventure:leaderboard' %}">Leaderboard</a>
+                </li>
+              <!-- <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#leaderboard" style="border: none; background: none; text-align: left;">
+                  Leaderboard
+              </button> -->
+              {% if gamekeeper %}
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'academic_adventure:create' %}">Create</a>
+              </li>
+              {% endif %}
 
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'academic_adventure:home' %}">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Map</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'academic_adventure:leaderboard' %}">Leaderboard</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'academic_adventure:scan' %}">Scan</a>
-                </li>
-                {% if gamekeeper %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'academic_adventure:create' %}">Create</a>
-                </li>
-                {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-                </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+              </li>
               </ul>
-          </nav>
+            </div>
+          </div>
+        </div>
 			
 		  <div id="map"></div>
 			

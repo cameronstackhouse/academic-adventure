@@ -1,0 +1,135 @@
+html, body
+{
+    height: 100%;
+}
+
+#navbarContainer {
+    background-color: #242c44;
+    z-index: 2;
+    float: left;
+    position: absolute;
+    padding: 10px;
+    height: 100%;
+    width: 110px;
+    margin-left: -15rem;
+    transition: margin 0.5s ease-out;
+}
+
+#topContainer {
+    background-color: #b18b4f;
+    z-index: 1;
+    float: top;
+    height: 70px;
+    width: 100%;
+}
+
+#logo {
+    width:150px;
+    height:90px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#navbarButton {
+    background-color: #242c44 !important;
+    border: 2px solid black;
+    border-radius: 8px;
+    z-index: 1;
+    width: 70px;
+    height: 40px;
+    color: white;
+    text-align: center;
+    display: inline-block;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+}
+
+.navbar-toggler-icon {
+    color: white !important;
+}
+
+.navbar-nav button{
+    color: white !important;
+}
+
+.navbar-nav li a{
+    color: white !important;
+}
+
+.modal-content {
+    width: 100%;
+    height: 90%;
+} 
+
+body.sb-sidenav-toggled #navbarContainer {
+margin-left: 0rem;
+}
+
+/* Leaderboard */
+
+.row {
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+}
+
+.column {
+    flex: 33%;
+    padding: 5%;
+}
+#minileaderboard {
+    border-collapse: collapse;
+    width: 100%;
+}
+#minileaderboard td, #minileaderboard th {
+    border: 3px solid #546474;
+    text-align: center;
+    padding: 8px
+}
+#minileaderboard tr:nth-child(1) {
+    background-color: #b18b4f;
+    color: white; 
+}
+#minileaderboard tr:nth-child(2) {
+    background-color: #b6b3af;
+    color: white;
+}
+#minileaderboard tr:nth-child(3) {
+    background-color: #b16142;
+    color: white;
+}
+
+#leaderboard td, #leaderboard th {
+    border: 3px solid #546474;
+    text-align: center;
+    padding: 8px
+}
+#leaderboard tr:nth-child(2) {
+    background-color: #b18b4f;
+    color: white; 
+}
+#leaderboard tr:nth-child(3) {
+    background-color: #b6b3af;
+    color: white;
+}
+#leaderboard tr:nth-child(4) {
+    background-color: #b16142;
+    color: white;
+}
+#leaderboard tr:hover {
+    background-color: #484a50;
+    color: white;
+}
+#leaderboard  th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background-color: #74757b;
+    color: white;
+}
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
