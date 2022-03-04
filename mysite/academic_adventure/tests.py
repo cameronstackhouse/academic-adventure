@@ -1,5 +1,4 @@
 import datetime
-from urllib import response
 
 from django.test import TestCase
 from django.test.client import Client
@@ -15,7 +14,7 @@ class EventModelTest(TestCase):
     def event_is_recent_with_future_event(self):
         """
         recent() returns False for events that are not within
-        2 hours in the future.
+        2 hours in the future
         """
 
         time = timezone.now() + datetime.timedelta(hours=3)
@@ -26,7 +25,7 @@ class EventModelTest(TestCase):
     def event_is_recent_with_recent_event(self):
         """
         recent() returns True for events that are within the next
-        2 hours in the future.
+        2 hours in the future
         """
 
         time = timezone.now() + datetime.timedelta(hours=1.5)
@@ -36,7 +35,7 @@ class EventModelTest(TestCase):
     
     def event_is_recent_with_previous_event(self):
         """
-        recent() returns False for events that are in the past.
+        recent() returns False for events that are in the past
         """
 
         time = timezone.now() - datetime.timedelta(hours=0.2)
@@ -46,7 +45,7 @@ class EventModelTest(TestCase):
     
     def event_is_recent_with_boundary_event(self):
         """
-        recent() returns True for events exactly 2 hours in the future.
+        recent() returns True for events exactly 2 hours in the future
         """
 
         time = timezone.now() + datetime.timedelta(hours=2)
@@ -75,7 +74,11 @@ class LoginTest(TestCase):
         Test the login view when the user is logged in.
         Should redirect the user to the home page.
         """
-        pass
+        client = Client()
+        response = client.post("/academic-adventure/login/", follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed("home.html")
 
 
 class HomeViewTest(TestCase):
@@ -84,6 +87,10 @@ class HomeViewTest(TestCase):
     """
     
     def test_home_GET(self):
+        """
+        Tests a GET request for the homepage, should return and render
+        home.html
+        """
         client = Client()
         response = client.get(reverse("academic_adventure:home"), follow=True)
 
@@ -97,6 +104,9 @@ class MapViewTest(TestCase):
     """
 
     def test_map_GET(self):
+        """
+        Tests GET method on map view. Should return the map.html page
+        """
         client = Client()
         response = client.get(reverse("academic_adventure:map"), follow=True)
 
@@ -110,9 +120,54 @@ class LeaderboardViewTest(TestCase):
     """
 
     def test_leaderboard_GET(self):
+        """
+        Tests the GET method on the leaderboard view.
+        Should return the leaderboard.html page
+        """
         client = Client()
         response = client.get(reverse("academic_adventure:leaderboard"), follow=True)
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed("leaderboard.html")
 
+
+class CreateViewTest(TestCase):
+    """
+    Tests the create view which allows gamekeepers to create events
+    """
+
+    def test_create_GET(self):
+        """
+        Tests the GET method on the create view. Should return the
+        create.html page
+        """
+        client = Client()
+        response = client.get(reverse("academic_adventure:create"), follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed("create.html")
+
+    def test_create_POST(self):
+        """
+        Tests when the POST method is used on the view. Should redirect the user
+        to the code.html page
+        """
+        client = Client()
+        response = client.post(reverse("academic_adventure:create"), follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed("code.html")
+
+
+class ScanViewTest(TestCase):
+    """
+    Tests the scan view which allows a user to scan a QR code to 
+    join an event
+    """
+
+    def test_scan_GET(self):
+        client = Client()
+        response = client.post(reverse("academic_adventure:create"), follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed("scan.html")
