@@ -73,7 +73,7 @@
                 scanner.addListener('scan', function (content) {
                     document.getElementById('scancontent').value = content;
                     document.getElementById('scanned').submit();
-                    alert("Successfully added to event");
+                    alert("Code scanned!");
                 });
             Instascan.Camera.getCameras().then(function (cameras) {
                 if (cameras.length > 0) {
@@ -85,6 +85,10 @@
                 console.error(e);
             });
         </script>
+
+        {% if message %}
+            <p>{{ message }}</p>
+        {% endif %}
 
     </body>
 </html>

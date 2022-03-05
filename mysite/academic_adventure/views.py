@@ -1,12 +1,11 @@
+from curses.ascii import isdigit
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required #Used to reject user entry to web page if not logged in
 from .models import Event, CustomUser
 from .forms import CreateForm
 import string 
 import random
 import logging
-
 
 from .models import Event
 
@@ -60,23 +59,32 @@ def scan(request):
     if request.method == "POST": #If the user has scanned a QR code
         logging.info(request.POST.get("scancontent")) 
         #Finds the event the QR code is for using stored contents of QR code
-        scanned_event = Event.objects.get(pk=request.POST.get("scancontent"))
+        
+        #Checks if the code is a digit and if the event ID being scanned exists
+        if request.POST.get("scancontent").isdigit() and Event.objects.filter(pk=request.POST.get("scancontent")).exists():
+            scanned_event = Event.objects.get(pk=request.POST.get("scancontent")) #Gets the scanned event
 
-        if request.user not in scanned_event.members.all(): #Checks if user is not already registered for event
-            #If user isn't already registered for an event then apply bonus for attending in person event
-            if scanned_event.type == "Sports":
-                request.user.athleticism += 1 #If sports event then add 1 to the users athleticism
-            elif scanned_event.type == "Academic":
-                request.user.intelligence += 1 #If academic event then add 1 to users intelligence
-            elif scanned_event.type == "Social":
-                request.user.sociability += 1 #If social event then add 1 to users sociability
-            elif scanned_event.type == "Battle":
-                #TODO: Redirect to battle system
-                pass
+            if request.user not in scanned_event.members.all(): #Checks if user is not already registered for event
+                #If user isn't already registered for an event then apply bonus for attending in person event
+                if scanned_event.type == "Sports":
+                    request.user.athleticism += 1 #If sports event then add 1 to the users athleticism
+                elif scanned_event.type == "Academic":
+                    request.user.intelligence += 1 #If academic event then add 1 to users intelligence
+                elif scanned_event.type == "Social":
+                    request.user.sociability += 1 #If social event then add 1 to users sociability
+                elif scanned_event.type == "Battle":
+                    #TODO: Redirect to battle system
+                    pass
             
-            request.user.save() #Saves changes made to the users stats
-    
-        scanned_event.members.add(request.user) #Adds user to the event
+                request.user.save() #Saves changes made to the users stats
+                scanned_event.members.add(request.user) #Adds user to the event
+                context["message"] = f"Successfully added to event: {scanned_event.name}."
+            else: #Else if user is already registered for event
+                context["message"] = "You are already registered for this event."
+        else: #If the event does not exist
+            context["message"] = "Error, event does not exist."
+
+            
     return render(request, 'academic_adventure/scan.html', context) #Shows scan page
 
 @login_required
