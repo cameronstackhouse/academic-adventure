@@ -98,20 +98,20 @@ class HomeViewTest(TestCase):
         self.assertTemplateUsed("home.html")
 
 
-class MapViewTest(TestCase):
+class EventsViewTest(TestCase):
     """
     Tests for the map view
     """
 
-    def test_map_GET(self):
+    def test_events_GET(self):
         """
         Tests GET method on map view. Should return the map.html page
         """
         client = Client()
-        response = client.get(reverse("academic_adventure:map"), follow=True)
+        response = client.get(reverse("academic_adventure:events"), follow=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed("map.html")
+        self.assertTemplateUsed("events.html")
 
 
 class LeaderboardViewTest(TestCase):
