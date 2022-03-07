@@ -21,30 +21,31 @@
         </div>
             <div class="d-flex" id="navbarContainer">
               <ul class="navbar-nav ms-auto">
+              <!-- <div class="sidebar-heading border-bottom bg-light">Menu</div> -->
               <li class="nav-item active">
                 <a class="nav-link" href="{% url 'academic_adventure:home' %}">Home</a>
               </li>
-              <li class="nav-item">
-                  <a class="nav-link" href="{% url 'academic_adventure:map' %}">Map</a>
-              </li>
-              <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#inventory" style="border: none; background: none; text-align: left;">
+              <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#profileModal" style="border: none; background: none; text-align: left">
                 Profile
                 </button>
-              <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#inventory" style="border: none; background: none; text-align: left;">
+              <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#inventoryModal" style="border: none; background: none; text-align: left">
                   Inventory
               </button>
-              <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#events" style="border: none; background: none; text-align: left;">
-                  Events
-              </button>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'academic_adventure:events' %}">Events</a>
+                </li>
               <li class="nav-item">
                   <a class="nav-link" href="{% url 'academic_adventure:scan' %}">Scan</a>
               </li>
-              <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#shop" style="border: none; background: none; text-align: left;">
+              <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#shopModal" style="border: none; background: none; text-align: left">
                   Shop
               </button>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'academic_adventure:leaderboard' %}">Leaderboard</a>
-              </li>
+                </li>
+              <!-- <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#leaderboard">
+                  Leaderboard
+              </button> -->
               {% if gamekeeper %}
               <li class="nav-item">
                   <a class="nav-link" href="{% url 'academic_adventure:create' %}">Create</a>
@@ -89,6 +90,62 @@
         {% if message %}
             <p>{{ message }}</p>
         {% endif %}
+
+        <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModal" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="profileModal">Profile</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h2>Statistics</h2>
+                            <h3>Overall score: {{score}}</h3>
+                            <p>Intelligence: {{intelligence}}</p>
+                            <p>Sociability: {{sociability}}</p>
+                            <p>Athleticism: {{athleticism}}</p>
+                        </div>
+                    
+                        <div class="col-md-6">
+                            <h2>Hello PLACEHOLDER PLACEHOLDER PLACEHOLDER</h2>
+                            <button type="button" class="btn btn-primary">Primary</button>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal fade" id="inventoryModal" tabindex="-1" aria-labelledby="inventoryModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="inventoryModalLabel">Inventory</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Inventory
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="modal fade" id="shopModal" tabindex="-1" aria-labelledby="shopModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="shopModalLabel">Shop</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Shop Here
+                </div>
+              </div>
+            </div>
+          </div>
 
     </body>
 </html>
