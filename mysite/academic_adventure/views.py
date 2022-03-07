@@ -1,4 +1,3 @@
-from curses.ascii import isdigit
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required #Used to reject user entry to web page if not logged in
 from .models import Event, CustomUser
