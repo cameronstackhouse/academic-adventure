@@ -79,28 +79,25 @@
               <li class="nav-item active">
                 <a class="nav-link" href="{% url 'academic_adventure:home' %}">Home</a>
               </li>
-              <li class="nav-item">
-                  <a class="nav-link" href="{% url 'academic_adventure:map' %}">Map</a>
-              </li>
-              <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#inventory" style="border: none; background: none; text-align: left;">
+              <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#profileModal" style="border: none; background: none; text-align: left">
                 Profile
                 </button>
-              <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#inventory" style="border: none; background: none; text-align: left;">
+              <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#inventoryModal" style="border: none; background: none; text-align: left">
                   Inventory
               </button>
-              <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#events" style="border: none; background: none; text-align: left;">
-                  Events
-              </button>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'academic_adventure:events' %}">Events</a>
+                </li>
               <li class="nav-item">
                   <a class="nav-link" href="{% url 'academic_adventure:scan' %}">Scan</a>
               </li>
-              <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#shop" style="border: none; background: none; text-align: left;">
+              <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#shopModal" style="border: none; background: none; text-align: left">
                   Shop
               </button>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'academic_adventure:leaderboard' %}">Leaderboard</a>
                 </li>
-              <!-- <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#leaderboard" style="border: none; background: none; text-align: left;">
+              <!-- <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#leaderboard">
                   Leaderboard
               </button> -->
               {% if gamekeeper %}
