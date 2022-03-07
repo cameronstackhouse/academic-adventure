@@ -8,25 +8,25 @@ import logging
 
 from .models import Event
 
-@login_required
-def home(request):
-    """Homepage view to show the user their stats"""
+# @login_required
+# def home(request):
+#     """Homepage view to show the user their stats"""
 
-    #Gets user attributes to pass into home.html file
+#     #Gets user attributes to pass into home.html file
     
-    username = request.user.username
-    intelligence = request.user.intelligence
-    sociability = request.user.sociability
-    athleticism = request.user.athleticism
-    score = request.user.score
-    gamekeeper = request.user.gamekeeper
-    context = {"username":username,
-               "intelligence": intelligence,
-               "sociability":sociability,
-               "athleticism":athleticism,
-               "score":score,
-               "gamekeeper":gamekeeper}
-    return render(request, 'academic_adventure/home.html', context) #Renders home.html template and passes in context
+#     username = request.user.username
+#     intelligence = request.user.intelligence
+#     sociability = request.user.sociability
+#     athleticism = request.user.athleticism
+#     score = request.user.score
+#     gamekeeper = request.user.gamekeeper
+#     context = {"username":username,
+#                "intelligence": intelligence,
+#                "sociability":sociability,
+#                "athleticism":athleticism,
+#                "score":score,
+#                "gamekeeper":gamekeeper}
+#     return render(request, 'academic_adventure/home.html', context) #Renders home.html template and passes in context
 
 @login_required
 def leaderboard(request):
@@ -42,13 +42,22 @@ def leaderboard(request):
     return render(request, 'academic_adventure/leaderboard.html', context)
 
 @login_required
-def map(request):
+def home(request):
     """View for the map where the user can see their location and
     the location of events placed by gamekeepers"""
     gamekeeper = request.user.gamekeeper #Gets if the user is a gamekeeper
     context = {"gamekeeper": gamekeeper,
                 "events":Event.objects.all()} #Passes user information and event information into the HTML form
-    return render(request, 'academic_adventure/map.html', context)
+    return render(request, 'academic_adventure/home.html', context)
+
+@login_required
+def events(request):
+    """View for the map where the user can see their location and
+    the location of events placed by gamekeepers"""
+    gamekeeper = request.user.gamekeeper #Gets if the user is a gamekeeper
+    context = {"gamekeeper": gamekeeper,
+                "events":Event.objects.all()} #Passes user information and event information into the HTML form
+    return render(request, 'academic_adventure/events.html', context)
 
 @login_required
 def scan(request):
