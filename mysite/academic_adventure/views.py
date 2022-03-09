@@ -12,12 +12,11 @@ from .models import Event
 def leaderboard(request):
     """View displaying leaderboards to show a user their stats vs other people
     across campus"""
-    gamekeeper = request.user.gamekeeper
-    context = {"gamekeeper": gamekeeper,
-            "scoreusers":sorted(CustomUser.objects.all(), key=lambda u:u.score, reverse = True)[:10],
+    context = {"scoreusers":sorted(CustomUser.objects.all(), key=lambda u:u.score, reverse = True)[:10],
             "intusers":sorted(CustomUser.objects.all(), key=lambda u:u.intelligence, reverse = True)[:5],
             "socusers":sorted(CustomUser.objects.all(), key=lambda u:u.sociability, reverse = True)[:5],
-            "athusers":sorted(CustomUser.objects.all(), key=lambda u:u.athleticism, reverse = True)[:5]
+            "athusers":sorted(CustomUser.objects.all(), key=lambda u:u.athleticism, reverse = True)[:5],
+            "user":request.user
             }
     return render(request, 'academic_adventure/leaderboard.html', context)
 
@@ -25,25 +24,22 @@ def leaderboard(request):
 def home(request):
     """View for the map where the user can see their location and
     the location of events placed by gamekeepers"""
-    gamekeeper = request.user.gamekeeper #Gets if the user is a gamekeeper
-    context = {"gamekeeper": gamekeeper,
-                "events":Event.objects.all()} #Passes user information and event information into the HTML form
+    context = {"events":Event.objects.all(),
+                "user":request.user} #Passes user information and event information into the HTML form
     return render(request, 'academic_adventure/home.html', context)
 
 @login_required
 def events(request):
     """View for the map where the user can see their location and
     the location of events placed by gamekeepers"""
-    gamekeeper = request.user.gamekeeper #Gets if the user is a gamekeeper
-    context = {"gamekeeper": gamekeeper,
-                "events":Event.objects.all()} #Passes user information and event information into the HTML form
+    context = {"events":Event.objects.all(),
+                "user":request.user} #Passes user information and event information into the HTML form
     return render(request, 'academic_adventure/events.html', context)
 
 @login_required
 def scan(request):
     """View to scan a QR code to join an event"""
-    gamekeeper = request.user.gamekeeper #Gets if the user is a gamekeeper
-    context = {"gamekeeper": gamekeeper}
+    context = {"user":request.user}
     if request.method == "POST": #If the user has scanned a QR code
         logging.info(request.POST.get("scancontent")) 
         #Finds the event the QR code is for using stored contents of QR code
@@ -93,10 +89,11 @@ def create(request):
             return redirect("academic_adventure:code", event_id = newevent.id) #Redirects user to the new event QR code page
     else:
         createform = CreateForm(initial={'host':request.user}) #Creates the event creation form
-    context = {'user': request.user,
+        context = {'user': request.user,
                'createform': createform,
                'allevents': Event.objects.filter(host=request.user), #Only shows events being hosted by user
-               'gamekeeper': gamekeeper} #Data to be passed into the html form
+               'gamekeeper': gamekeeper
+               } #Data to be passed into the html form
     return render(request, 'academic_adventure/create.html', context)
 
 @login_required
@@ -106,11 +103,10 @@ def code(request, **kwargs):
     To join the user must scan the QR code for an event. They will then be taken 
     to the relevant page based on the event type or stats bonuses will be applied 
     to their account"""
-    gamekeeper = request.user.gamekeeper
     event = Event.objects.get(pk=kwargs['event_id']) #Gets the event from the ID passed into the function
     event_members = event.members.all() #Gets all members of a given event
     context = { "event":event, 
-                "gamekeeper":gamekeeper, 
-                "event_members":event_members
-    } #Information about event name, participants, and if the user is a gamekeeper to be passed to HTML form
+                "event_members":event_members,
+                "user": request.user
+                } #Information about event name, participants, and if the user is a gamekeeper to be passed to HTML form
     return render(request, 'academic_adventure/code.html', context)
