@@ -294,10 +294,6 @@
                     });
                 };
                 placeMarkers();
-
-                    
-
-              
             };
             
 		</script>
@@ -306,17 +302,12 @@
     </head>
 
     <body>
-        <!-- <div id="navbar"></div>
-        <script>
-        $( "#navbar" ).load( "{% static 'academic_adventure/navbar.html' %}" );
-        </script> -->
         <div id="topContainer">
             <img src="{% static 'academic_adventure/logo.png' %}"  id="logo">
             <button type="button" id="navbarButton">Menu</button>
         </div>
             <div class="d-flex" id="navbarContainer">
               <ul class="navbar-nav ms-auto">
-              <!-- <div class="sidebar-heading border-bottom bg-light">Menu</div> -->
               <li class="nav-item active">
                 <a class="nav-link" href="{% url 'academic_adventure:home' %}">Home</a>
               </li>
@@ -338,9 +329,6 @@
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'academic_adventure:leaderboard' %}">Leaderboard</a>
                 </li>
-              <!-- <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#leaderboard">
-                  Leaderboard
-              </button> -->
               {% if gamekeeper %}
               <li class="nav-item">
                   <a class="nav-link" href="{% url 'academic_adventure:create' %}">Create</a>

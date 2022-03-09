@@ -8,26 +8,6 @@ import logging
 
 from .models import Event
 
-# @login_required
-# def home(request):
-#     """Homepage view to show the user their stats"""
-
-#     #Gets user attributes to pass into home.html file
-    
-#     username = request.user.username
-#     intelligence = request.user.intelligence
-#     sociability = request.user.sociability
-#     athleticism = request.user.athleticism
-#     score = request.user.score
-#     gamekeeper = request.user.gamekeeper
-#     context = {"username":username,
-#                "intelligence": intelligence,
-#                "sociability":sociability,
-#                "athleticism":athleticism,
-#                "score":score,
-#                "gamekeeper":gamekeeper}
-#     return render(request, 'academic_adventure/home.html', context) #Renders home.html template and passes in context
-
 @login_required
 def leaderboard(request):
     """View displaying leaderboards to show a user their stats vs other people
