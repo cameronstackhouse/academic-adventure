@@ -315,9 +315,6 @@
               <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#profileModal" style="border: none; background: none; text-align: left">
                 Profile
                 </button>
-              <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#inventoryModal" style="border: none; background: none; text-align: left">
-                  Inventory
-              </button>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'academic_adventure:events' %}">Events</a>
                 </li>
@@ -365,6 +362,7 @@
                             <h2>Hello {{user.username}}!</h2>
                             <p>PLACEHOLDER FOR PROFILE PIC</p>
                             <img src="{% static 'academic_adventure/logo.png' %}"  id="logo" alt="academic adventure logo">
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#inventoryModal">Inventory</button>
                             <br>
                             <br>
                             <br>
