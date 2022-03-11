@@ -64,14 +64,23 @@
         </form>
 
         <script type="text/javascript">
+            //Creating a scanner object using the video HMTL tag created previously as "preview".
             let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+                //Adding a listener to the scanner object with a function to execute when triggered with the
+                //content of the scan as argument and the following instructions:
                 scanner.addListener('scan', function (content) {
-                    document.getElementById('scancontent').value = content;
-                    document.getElementById('scanned').submit();
-                    alert("Code scanned!");
+                  //Adding the content to the hidden input "scancontent" from the form "scanned".
+                  document.getElementById('scancontent').value = content;
+                  //Submitting the "scanned" form 
+                  document.getElementById('scanned').submit();
+                  alert("Code scanned!");
                 });
+            //Asking Instascan to get the user's cameras as an array called "cameras" and then executing a function 
+            //with the detected cameras as argument.  
             Instascan.Camera.getCameras().then(function (cameras) {
+                // If at least one camera is detected:
                 if (cameras.length > 0) {
+                    // The first camera is used.
                     scanner.start(cameras[0]);
                 } else {
                     console.error('No cameras found.');
