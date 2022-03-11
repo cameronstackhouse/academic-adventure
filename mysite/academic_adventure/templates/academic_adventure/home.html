@@ -31,12 +31,13 @@
 		<!--Zoom 15 is used to move it to a nore local map display-->
 		<!--Center used to look at the middle of campus-->
 		<script>
-			let map;
+			let map; //instanciated a 'map' variable to place a google map on this page
 
-			function initMap() {
+			function initMap() { //function to create the google map on this page
+
                 // Create a new StyledMapType object, passing it an array of styles,
                 // and the name to be displayed on the map type control.
-                const styledMapType = new google.maps.StyledMapType(
+                const styledMapType = new google.maps.StyledMapType( //a list of style configs for google map elements
                     [
                         { elementType: "geometry", stylers: [{ color: "#ebe3cd" }] },
                         { elementType: "labels.text.fill", stylers: [{ color: "#523735" }] },
@@ -215,7 +216,7 @@
                     {% endfor %}
 
                 };
-                loadMarkers();
+                loadMarkers();// call the load markers function to retrieve marker data from the django database, and store it on the JS lists.
 
                 /*icon type dictionary*/
                 /*Change image url for each type of event*/
@@ -237,9 +238,9 @@
                 /* Adds markers to the map for each event */
                 function placeMarkers(){
 
-                    var features =[];
+                    var features =[];//stores a list marker objects
 
-                    for(i=0; i<numEvent;i++){
+                    for(i=0; i<numEvent;i++){ // a loop to push marker objects into the 'features' list
                         var x = parseFloat(lati[i]);
                         var y = parseFloat(long[i]);
 
@@ -294,7 +295,7 @@
 
                     });
                 };
-                placeMarkers();
+                placeMarkers();//call the place markers functions on the map
             };
             
 		</script>
