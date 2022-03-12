@@ -59,7 +59,7 @@
 					document.getElementById("playthrough").innerHTML = "Your HP has dropped to 0 you lose.";
 					document.getElementById("progress").hidden = true;
 					document.getElementById("result").hidden = false;
-					document.getElementById("resultcontent").value = -1;
+					document.getElementById("resultcontent").value = 0;
 				} else if(opp_hp <= 0){
 					//End game as win
 					opp_hp = 0;
@@ -74,8 +74,26 @@
 				document.getElementById("o_hp").innerText = opp_hp.toString();
 				
 				if(turn == 20){
-					alert("End of game");
-					//End game and evaluate winner
+					if(user_hp < opp_hp){
+						//End game as loss
+						document.getElementById("playthrough").innerHTML = "End of turns, you lost by decison.";
+						document.getElementById("progress").hidden = true;
+						document.getElementById("result").hidden = false;
+						document.getElementById("resultcontent").value = 0;
+					} else if(opp_hp < user_hp){
+						//End game as win
+						document.getElementById("playthrough").innerHTML = "End of turns, you win by decision.";
+						document.getElementById("progress").hidden = true;
+						document.getElementById("result").hidden = false;
+						document.getElementById("claim").value = "Claim reward";
+						document.getElementById("resultcontent").value = 1;
+					} else {
+						//End game as draw (no reward)
+						document.getElementById("playthrough").innerHTML = "End of turns, you draw.";
+						document.getElementById("progress").hidden = true;
+						document.getElementById("result").hidden = false;
+						document.getElementById("resultcontent").value = 0;
+					}
 				}
 			}
 		</script>

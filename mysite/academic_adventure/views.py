@@ -151,6 +151,16 @@ def battle(request):
     This will run an automated battle, then
     reward the player points through a post request if they win.
     """
+    if request.method == "POST":
+        if request.POST.get("resultcontent").isdigit():
+            if int(request.POST.get("resultcontent")) == 1:
+                request.user.intelligence += 1
+                request.user.sociability += 1
+                request.user.athleticism += 1
+                request.user.save()
+            
+            return redirect('academic_adventure:home')
+    
     #TODO: Secondary check they have not completed the event before loading (no going back a page for infinite rewards)
     
     intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
