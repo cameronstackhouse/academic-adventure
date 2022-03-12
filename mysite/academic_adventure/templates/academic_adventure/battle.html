@@ -13,6 +13,72 @@
         <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/profile.css' %}">
         <script type="text/javascript" src="{% static 'academic_adventure/navbar.js' %}"> </script>
         <title>Scan</title>
+		<script>
+			var turn = 0;
+			var int_diff = parseInt("{{ user.intelligence }}") - parseInt("{{ opponent.intelligence }}");
+			var soc_diff = parseInt("{{ user.sociability }}") - parseInt("{{ opponent.sociability }}");
+			var atl_diff = parseInt("{{ user.athleticism }}") - parseInt("{{ opponent.athleticism }}");
+			
+			function takeTurn(){
+				turn += 1;
+				
+				var user_hp = parseInt(document.getElementById("u_hp").innerText);
+				var opp_hp = parseInt(document.getElementById("o_hp").innerText);
+				
+				//find stat used to battle and find result of battle
+				var choice = Math.floor((Math.random() * 10) % 3)
+				if(choice == 0 && int_diff > 0){
+					opp_hp -= int_diff;
+					document.getElementById("playthrough").innerHTML = "<p>You battled using intelligence and won.</p><p>Your opponent lost " + int_diff.toString() + " HP.";
+				} else if(choice == 0 && int_diff < 0){
+					user_hp += int_diff;
+					document.getElementById("playthrough").innerHTML = "<p>You battled using intelligence and lost.</p><p>You lost " + (-int_diff).toString() + " HP.";
+				} else if(choice == 0 && int_diff == 0){
+					document.getElementById("playthrough").innerHTML = "<p>You battled using intelligence and drew.</p><p>No HP was lost.";
+				} else if(choice == 1 && soc_diff > 0){
+					opp_hp -= soc_diff;
+					document.getElementById("playthrough").innerHTML = "<p>You battled using sociability and won.</p><p>Your opponent lost " + (soc_diff).toString() + " HP.";
+				} else if(choice == 1 && soc_diff < 0){
+					user_hp += soc_diff;
+					document.getElementById("playthrough").innerHTML = "<p>You battled using sociability and lost.</p><p>You lost " + (-soc_diff).toString() + " HP.";
+				} else if(choice == 1 && soc_diff == 0){
+					document.getElementById("playthrough").innerHTML = "<p>You battled using sociability and drew.</p><p>No HP was lost.";
+				} else if(choice == 2 && atl_diff > 0){
+					opp_hp -= atl_diff;
+					document.getElementById("playthrough").innerHTML = "<p>You battled using athleticism and won.</p><p>Your opponent lost " + (atl_diff).toString() + " HP.";
+				} else if(choice == 2 && atl_diff < 0){
+					user_hp += atl_diff;
+					document.getElementById("playthrough").innerHTML = "<p>You battled using athleticism and lost.</p><p>You lost " + (-atl_diff).toString() + " HP.";
+				} else if(choice == 2 && atl_diff == 0){
+					document.getElementById("playthrough").innerHTML = "<p>You battled using athleticism and drew.</p><p>No HP was lost.";
+				}
+				
+				if(user_hp <= 0){
+					//End game as loss
+					user_hp = 0;
+					document.getElementById("playthrough").innerHTML = "Your HP has dropped to 0 you lose.";
+					document.getElementById("progress").hidden = true;
+					document.getElementById("result").hidden = false;
+					document.getElementById("resultcontent").value = -1;
+				} else if(opp_hp <= 0){
+					//End game as win
+					opp_hp = 0;
+					document.getElementById("playthrough").innerHTML = "Your opponent's HP has dropped to 0 you win.";
+					document.getElementById("progress").hidden = true;
+					document.getElementById("result").hidden = false;
+					document.getElementById("claim").value = "Claim reward";
+					document.getElementById("resultcontent").value = 1;
+				}
+				
+				document.getElementById("u_hp").innerText = user_hp.toString();
+				document.getElementById("o_hp").innerText = opp_hp.toString();
+				
+				if(turn == 20){
+					alert("End of game");
+					//End game and evaluate winner
+				}
+			}
+		</script>
     </head>
 
     <body>
@@ -59,31 +125,42 @@
 			<thead>
 				<tr>
 					<th scope="col">{{ user.username }}</th>
-					<th scope="col">Status</th>
+					<th scope="col">VS</th>
 					<th scope="col">{{ opponent.username }}</th>
 				</tr>
 			</thead>
-			<tr id=hp>
-				<td>100</td>
+			<tr id="hp">
+				<td id="u_hp">25</td>
 				<td>Health points</td>
-				<td>100</td>
+				<td id="o_hp">25</td>
 			</tr>
-			<tr id=intelligence>
+			<tr id="intelligence">
 				<td>{{ user.intelligence }}</td>
 				<td>Intelligence</td>
 				<td>{{ opponent.intelligence }}</td>
 			</tr>
-			<tr id=sociability>
+			<tr id="sociability">
 				<td>{{ user.sociability }}</td>
 				<td>Sociability</td>
 				<td>{{ opponent.sociability }}</td>
 			</tr>
-			<tr id=athleticism>
+			<tr id="athleticism">
 				<td>{{ user.athleticism }}</td>
 				<td>Athleticism</td>
 				<td>{{ opponent.athleticism }}</td>
 			</tr>
 		</table>
+		
+		<div id="playthrough">
+		</div>
+		
+		<button id="progress" onclick="takeTurn()">Take next turn</button>
+		
+		<form method="POST" id="result" hidden>
+            {% csrf_token %} 
+            <input type="hidden" name="resultcontent" id="resultcontent" value="" />
+			<input type="submit" value="Return to map" id="claim" />
+        </form>
 
         <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModal" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
