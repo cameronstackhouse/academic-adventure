@@ -82,8 +82,7 @@ def scan(request):
                 elif scanned_event.type == "Social":
                     request.user.sociability += 1 #If social event then add 1 to users sociability
                 elif scanned_event.type == "Battle":
-                    #TODO: Redirect to battle system
-                    pass
+                    return redirect('academic_adventure:battle')
             
                 request.user.save() #Saves changes made to the users stats
                 scanned_event.members.add(request.user) #Adds user to the event
@@ -144,3 +143,28 @@ def code(request, **kwargs):
                 "sociability_position": sociability_position
                 } #Information about event name, participants, and if the user is a gamekeeper to be passed to HTML form
     return render(request, 'academic_adventure/code.html', context)
+
+@login_required
+def battle(request):
+    """
+    View to run a battle for a given event.
+    This will run an automated battle, then
+    reward the player points through a post request if they win.
+    """
+    #TODO: Secondary check they have not completed the event before loading (no going back a page for infinite rewards)
+    
+    intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
+    
+    #Get random opponent
+    opponents = list(CustomUser.objects.all())
+    opponent = random.choice(opponents)
+    
+    #Possible scaling of stats for a fair battle
+    
+    context = { "user": request.user,
+                "opponent": opponent,
+                "intelligence_position": intelligence_position,
+                "athleticism_position": athleticism_position,
+                "sociability_position": sociability_position
+                } #Information about the user and their oppo
+    return render(request, 'academic_adventure/battle.html', context)
