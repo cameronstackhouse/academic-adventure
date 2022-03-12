@@ -14,82 +14,91 @@
         <script type="text/javascript" src="{% static 'academic_adventure/navbar.js' %}"> </script>
         <title>Scan</title>
 		<script>
+			//global variables of the turn and what to decrease HP by for each turn
 			var turn = 0;
 			var int_diff = parseInt("{{ user.intelligence }}") - parseInt("{{ opponent.intelligence }}");
 			var soc_diff = parseInt("{{ user.sociability }}") - parseInt("{{ opponent.sociability }}");
 			var atl_diff = parseInt("{{ user.athleticism }}") - parseInt("{{ opponent.athleticism }}");
 			
 			function takeTurn(){
-				turn += 1;
+				turn += 1; //Increase turn counter
 				
+				//Get each user's current HP
 				var user_hp = parseInt(document.getElementById("u_hp").innerText);
 				var opp_hp = parseInt(document.getElementById("o_hp").innerText);
 				
 				//find stat used to battle and find result of battle
 				var choice = Math.floor((Math.random() * 10) % 3)
-				if(choice == 0 && int_diff > 0){
-					opp_hp -= int_diff;
+				if(choice == 0 && int_diff > 0){//If the player wins intelligence
+					opp_hp -= int_diff; //Decrease the opponents HP by the difference
+					//Display the results to the user
 					document.getElementById("playthrough").innerHTML = "<p>You battled using intelligence and won.</p><p>Your opponent lost " + int_diff.toString() + " HP.";
-				} else if(choice == 0 && int_diff < 0){
+				} else if(choice == 0 && int_diff < 0){//If the opponent win in intelligence
 					user_hp += int_diff;
 					document.getElementById("playthrough").innerHTML = "<p>You battled using intelligence and lost.</p><p>You lost " + (-int_diff).toString() + " HP.";
-				} else if(choice == 0 && int_diff == 0){
+				} else if(choice == 0 && int_diff == 0){//If they draw in intelligence
 					document.getElementById("playthrough").innerHTML = "<p>You battled using intelligence and drew.</p><p>No HP was lost.";
-				} else if(choice == 1 && soc_diff > 0){
+				} else if(choice == 1 && soc_diff > 0){//If the player wins at sociability
 					opp_hp -= soc_diff;
 					document.getElementById("playthrough").innerHTML = "<p>You battled using sociability and won.</p><p>Your opponent lost " + (soc_diff).toString() + " HP.";
-				} else if(choice == 1 && soc_diff < 0){
+				} else if(choice == 1 && soc_diff < 0){//If the player loses at sociability
 					user_hp += soc_diff;
 					document.getElementById("playthrough").innerHTML = "<p>You battled using sociability and lost.</p><p>You lost " + (-soc_diff).toString() + " HP.";
-				} else if(choice == 1 && soc_diff == 0){
+				} else if(choice == 1 && soc_diff == 0){//If they draw in sociability
 					document.getElementById("playthrough").innerHTML = "<p>You battled using sociability and drew.</p><p>No HP was lost.";
-				} else if(choice == 2 && atl_diff > 0){
+				} else if(choice == 2 && atl_diff > 0){//If the player wins in athleticism
 					opp_hp -= atl_diff;
 					document.getElementById("playthrough").innerHTML = "<p>You battled using athleticism and won.</p><p>Your opponent lost " + (atl_diff).toString() + " HP.";
-				} else if(choice == 2 && atl_diff < 0){
+				} else if(choice == 2 && atl_diff < 0){//If the opponent wins in athleticism
 					user_hp += atl_diff;
 					document.getElementById("playthrough").innerHTML = "<p>You battled using athleticism and lost.</p><p>You lost " + (-atl_diff).toString() + " HP.";
-				} else if(choice == 2 && atl_diff == 0){
+				} else if(choice == 2 && atl_diff == 0){//If they draw in athleticism
 					document.getElementById("playthrough").innerHTML = "<p>You battled using athleticism and drew.</p><p>No HP was lost.";
 				}
 				
 				if(user_hp <= 0){
 					//End game as loss
 					user_hp = 0;
+					//Show the results to the user
 					document.getElementById("playthrough").innerHTML = "Your HP has dropped to 0 you lose.";
+					//Change the button shown and result of form
 					document.getElementById("progress").hidden = true;
 					document.getElementById("result").hidden = false;
 					document.getElementById("resultcontent").value = 0;
 				} else if(opp_hp <= 0){
 					//End game as win
 					opp_hp = 0;
+					//Show result to the user
 					document.getElementById("playthrough").innerHTML = "Your opponent's HP has dropped to 0 you win.";
+					//Change button and result of the form
 					document.getElementById("progress").hidden = true;
 					document.getElementById("result").hidden = false;
-					document.getElementById("claim").value = "Claim reward";
+					document.getElementById("claim").value = "Claim reward";//Change value of submit button to better represent win
 					document.getElementById("resultcontent").value = 1;
 				}
 				
+				//Update the displayed HP to any made changes
 				document.getElementById("u_hp").innerText = user_hp.toString();
 				document.getElementById("o_hp").innerText = opp_hp.toString();
 				
+				//Results from timeout going to decison
 				if(turn == 20){
 					if(user_hp < opp_hp){
 						//End game as loss
-						document.getElementById("playthrough").innerHTML = "End of turns, you lost by decison.";
+						document.getElementById("playthrough").innerHTML = "End of turns, you lost by decison.";//Inform the user of lost by decision
 						document.getElementById("progress").hidden = true;
 						document.getElementById("result").hidden = false;
 						document.getElementById("resultcontent").value = 0;
 					} else if(opp_hp < user_hp){
 						//End game as win
-						document.getElementById("playthrough").innerHTML = "End of turns, you win by decision.";
+						document.getElementById("playthrough").innerHTML = "End of turns, you win by decision.";//Inform the user of win by decision
 						document.getElementById("progress").hidden = true;
 						document.getElementById("result").hidden = false;
 						document.getElementById("claim").value = "Claim reward";
 						document.getElementById("resultcontent").value = 1;
 					} else {
 						//End game as draw (no reward)
-						document.getElementById("playthrough").innerHTML = "End of turns, you draw.";
+						document.getElementById("playthrough").innerHTML = "End of turns, you draw.";//Inform the user of draw by decision
 						document.getElementById("progress").hidden = true;
 						document.getElementById("result").hidden = false;
 						document.getElementById("resultcontent").value = 0;
@@ -139,6 +148,7 @@
         </div>
 		
 		<h1>Battle</h1>
+		<!--Table to display the users stats during battle-->
 		<table class="table">
 			<thead>
 				<tr>
@@ -169,11 +179,14 @@
 			</tr>
 		</table>
 		
+		<!--A div to display the play-by-play of each turn-->
 		<div id="playthrough">
 		</div>
 		
+		<!--Button to progress the game, will be hidden at end of the game-->
 		<button id="progress" onclick="takeTurn()">Take next turn</button>
 		
+		<!--Form to provide the results of the battle to the server-->
 		<form method="POST" id="result" hidden>
             {% csrf_token %} 
             <input type="hidden" name="resultcontent" id="resultcontent" value="" />

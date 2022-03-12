@@ -151,17 +151,19 @@ def battle(request):
     This will run an automated battle, then
     reward the player points through a post request if they win.
     """
+    
+    #TODO: check they have not already played this battle (preventing refresh cheating)
+    
+    #POST request handling for end of game
     if request.method == "POST":
         if request.POST.get("resultcontent").isdigit():
-            if int(request.POST.get("resultcontent")) == 1:
+            if int(request.POST.get("resultcontent")) == 1: #If the player won update their attributes
                 request.user.intelligence += 1
                 request.user.sociability += 1
                 request.user.athleticism += 1
                 request.user.save()
             
-            return redirect('academic_adventure:home')
-    
-    #TODO: Secondary check they have not completed the event before loading (no going back a page for infinite rewards)
+            return redirect('academic_adventure:home') #redirect after a battle back to home page
     
     intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
     
@@ -182,7 +184,7 @@ def battle(request):
     #Scaling opponent stats to user for fairer battle
     user_total = request.user.athleticism + request.user.sociability + request.user.intelligence
     opponent_total = opponent.athleticism + opponent.sociability + opponent.intelligence
-    factor = user_total/opponent_total
+    factor = user_total/opponent_total #Finding by what factor to increase/decrease the opponents stats by
     opponent.athleticism = int(factor*opponent.athleticism)
     opponent.intelligence = int(factor*opponent.intelligence)
     opponent.sociability = int(factor*opponent.sociability)
@@ -192,5 +194,5 @@ def battle(request):
                 "intelligence_position": intelligence_position,
                 "athleticism_position": athleticism_position,
                 "sociability_position": sociability_position
-                } #Information about the user and their oppo
+                } #Information about the user and their opponent
     return render(request, 'academic_adventure/battle.html', context)
