@@ -31,13 +31,14 @@
 		<!--Zoom 15 is used to move it to a nore local map display-->
 		<!--Center used to look at the middle of campus-->
 		<script>
-			let map; //instanciated a 'map' variable to place a google map on this page
+			let map; //instantiated a 'map' variable to place a google map on this page
 
 			function initMap() { //function to create the google map on this page
 
                 // Create a new StyledMapType object, passing it an array of styles,
                 // and the name to be displayed on the map type control.
                 const styledMapType = new google.maps.StyledMapType( //a list of style configs for google map elements
+                    /*Google maps generated code to display a styled map*/
                     [
                         { elementType: "geometry", stylers: [{ color: "#ebe3cd" }] },
                         { elementType: "labels.text.fill", stylers: [{ color: "#523735" }] },
@@ -171,12 +172,13 @@
 				    var initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 				    map.setCenter(initialLocation);
 
-                    var marker = new google.maps.Marker({
-                        position: initialLocation,
-                        map,
-                        title: "Your location",
-                        label:{text:"You",color:"white",fontSize:"16px",fontWeight:"bold" },
-                        icon: "{% static 'academic_adventure/user.png'%}"
+                    //Sets a marker in the place of the users location
+                    var marker = new google.maps.Marker({ //Creates a new google maps marker
+                        position: initialLocation, //Sets the position
+                        map, //Specifies which map the marker should be placed on
+                        title: "Your location", //Sets a title
+                        label:{text:"You",color:"white",fontSize:"16px",fontWeight:"bold" }, //Sets a label on top of the marker
+                        icon: "{% static 'academic_adventure/user.png'%}" //Sets the icon to be a custom image (user.png)
                     });
 			    }, function(positionError){
 			        //In the case the user doesn't allow their position to be accessed center the map on Exeter Uni campus
@@ -193,7 +195,9 @@
                 var type = [];
                 var numEvent = 0;
                     
-                //this function loads up event data from django database
+                /**
+                 * loads event data from django database of all the events that are in the next two hours
+                 */
                 function loadMarkers(){
 
                     //load up each object in the query set
@@ -201,7 +205,7 @@
                     //Calls the recent function on the event to only store data for the upcoming events in the next 2 hours
                     {% if event.recent %}
 
-                    //store info from event database
+                    //store info from event database in each array defined above
                     lati.push("{{ event.latitude }}");
                     long.push("{{ event.longitude }}");
                     des.push("{{ event.description }}");
@@ -222,67 +226,71 @@
                 /*Change image url for each type of event*/
                 var icons = {
                     Academic: {
-                        icon: "{% static 'academic_adventure/academic.png'%}"
+                        icon: "{% static 'academic_adventure/academic.png'%}" //Sets the academic event icon to a custom icon
                     },
                     Sports: {
-                        icon: "{% static 'academic_adventure/sports.png'%}"
+                        icon: "{% static 'academic_adventure/sports.png'%}" //Sets the sports event icon to a custom icon
                     },
                     Battle: {
-                        icon: "{% static 'academic_adventure/battle.png'%}"
+                        icon: "{% static 'academic_adventure/battle.png'%}" //Sets the battle event icon to a custom icon
                     },
                     Social: {
-                        icon: "{% static 'academic_adventure/social.png'%}"
+                        icon: "{% static 'academic_adventure/social.png'%}" //Sets the social event icon to a custom icon
                     }
                 };
 
-                /* Adds markers to the map for each event */
+                /**
+                 * Adds markers to the map for each event
+                 */
                 function placeMarkers(){
 
                     var features =[];//stores a list marker objects
 
                     for(i=0; i<numEvent;i++){ // a loop to push marker objects into the 'features' list
-                        var x = parseFloat(lati[i]);
+                        //Gets the location (lat and long) of a marker
+                        var x = parseFloat(lati[i]); 
                         var y = parseFloat(long[i]);
 
+                        //Pushes a new marker into the array of marker objects
                         features.push({
-                            position: new google.maps.LatLng(x,y),
-                            description: des[i],
-                            date: date[i],
-                            duration: dur[i],
-                            title: title[i],  
-                            type: type[i]
+                            position: new google.maps.LatLng(x,y), //Sets the position
+                            description: des[i], //Sets the description
+                            date: date[i], //Sets the date of the event
+                            duration: dur[i], //Sets the duration of the event
+                            title: title[i], //Sets the title of the event
+                            type: type[i] //Sets the type of event
 
                         });
                     }
 
-                    /*instantiate info window obj*/
+                    /*instantiate info window object*/
                     infowindow = new google.maps.InfoWindow();
 
-                    // Create markers.
+                    // Iterate through list of marker objects and create and place markers
                     features.forEach(function(feature) {
-                        var marker = new google.maps.Marker({
-                            position: feature.position,
-                            icon: icons[feature.type].icon,
-                            title: feature.title,
-                            description: feature.description,
-                            date: feature.date,
-                            type: feature.type,
-                            map: map
+                        var marker = new google.maps.Marker({ //Creates a new google maps marker
+                            position: feature.position, //Sets its position
+                            icon: icons[feature.type].icon, //Sets its icon
+                            title: feature.title, //Sets its title
+                            description: feature.description, //Sets its description
+                            date: feature.date, //Sets its date
+                            type: feature.type, //Sets its type
+                            map: map //Specifies the map to place the marker on
                         });
 
                         /*click event listener to show info window for each marker */
                         google.maps.event.addListener(marker, 'click', function() {
-                            /*html body elements that goes into the info window*/
+                            /*Sets the content of what is displayed in the info window*/
                             var contentInfo = 
-                            '<h1>'+ this.title +'</h1>' +
+                            '<h1>'+ this.title +'</h1>' + //Title of the event
                             '<h6>Event Type: </h6>' +
-                            '<p>'+ this.type +'<p>' +
+                            '<p>'+ this.type +'<p>' + //Type of event
                             // '<h6>Host: </h6>' +
                             // '<p>'+ this.host +'<p>' +
                             '<h6>Description: </h6>' +
-                            '<p>'+ this.description +'<p>' +
+                            '<p>'+ this.description +'<p>' + //Description of event
                             '<h6>Date: </h6>' +
-                            '<p>'+ this.date +'<p>'
+                            '<p>'+ this.date +'<p>' //Date of the event
                             ;
 
 
