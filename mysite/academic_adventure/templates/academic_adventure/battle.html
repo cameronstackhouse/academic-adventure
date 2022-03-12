@@ -55,6 +55,35 @@
         </div>
 		
 		<h1>Battle</h1>
+		<table class="table">
+			<thead>
+				<tr>
+					<th scope="col">{{ user.username }}</th>
+					<th scope="col">Status</th>
+					<th scope="col">{{ opponent.username }}</th>
+				</tr>
+			</thead>
+			<tr id=hp>
+				<td>100</td>
+				<td>Health points</td>
+				<td>100</td>
+			</tr>
+			<tr id=intelligence>
+				<td>{{ user.intelligence }}</td>
+				<td>Intelligence</td>
+				<td>{{ opponent.intelligence }}</td>
+			</tr>
+			<tr id=sociability>
+				<td>{{ user.sociability }}</td>
+				<td>Sociability</td>
+				<td>{{ opponent.sociability }}</td>
+			</tr>
+			<tr id=athleticism>
+				<td>{{ user.athleticism }}</td>
+				<td>Athleticism</td>
+				<td>{{ opponent.athleticism }}</td>
+			</tr>
+		</table>
 
         <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModal" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">

@@ -155,11 +155,27 @@ def battle(request):
     
     intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
     
-    #Get random opponent
-    opponents = list(CustomUser.objects.all())
+    #Get random opponent excluding the current user
+    opponents = list(CustomUser.objects.all().exclude(username=request.user.username))
     opponent = random.choice(opponents)
     
-    #Possible scaling of stats for a fair battle
+    #Error trapping for cases of 0 stats
+    if opponent.athleticism == 0:
+        opponent.athleticism += 1
+        
+    if opponent.sociability == 0:
+        opponent.sociability += 1
+        
+    if opponent.intelligence == 0:
+        opponent.intelligence += 1
+    
+    #Scaling opponent stats to user for fairer battle
+    user_total = request.user.athleticism + request.user.sociability + request.user.intelligence
+    opponent_total = opponent.athleticism + opponent.sociability + opponent.intelligence
+    factor = user_total/opponent_total
+    opponent.athleticism = int(factor*opponent.athleticism)
+    opponent.intelligence = int(factor*opponent.intelligence)
+    opponent.sociability = int(factor*opponent.sociability)
     
     context = { "user": request.user,
                 "opponent": opponent,
