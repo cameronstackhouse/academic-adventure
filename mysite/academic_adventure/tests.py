@@ -9,7 +9,8 @@ from .models import Event
 
 class EventModelTest(TestCase):
     """
-    Tests for the event model in the database
+    Tests for the event model in the database.
+    Extends the default django TestCase to allow for it to be run as a test
     """
     def event_is_recent_with_future_event(self):
         """
@@ -68,7 +69,8 @@ class EventModelTest(TestCase):
 
 class LoginTest(TestCase):
     """
-    Tests for the login view
+    Tests for the login view.
+    Extends the default django TestCase to allow for it to be run as a test
     """
 
     def test_login_GET(self):
@@ -101,7 +103,8 @@ class LoginTest(TestCase):
 
 class HomeViewTest(TestCase):
     """
-    Tests for the home view
+    Tests for the home view.
+    Extends the default django TestCase to allow for it to be run as a test
     """
     
     def test_home_GET(self):
@@ -121,7 +124,8 @@ class HomeViewTest(TestCase):
 
 class EventsViewTest(TestCase):
     """
-    Tests for the map view
+    Tests for the map view.
+    Extends the default django TestCase to allow for it to be run as a test
     """
 
     def test_events_GET(self):
@@ -140,7 +144,8 @@ class EventsViewTest(TestCase):
 
 class LeaderboardViewTest(TestCase):
     """
-    Tests for the leaderboard view
+    Tests for the leaderboard view.
+    Extends the default django TestCase to allow for it to be run as a test
     """
 
     def test_leaderboard_GET(self):
@@ -160,7 +165,8 @@ class LeaderboardViewTest(TestCase):
 
 class CreateViewTest(TestCase):
     """
-    Tests the create view which allows gamekeepers to create events
+    Tests the create view which allows gamekeepers to create events.
+    Extends the default django TestCase to allow for it to be run as a test
     """
 
     def test_create_GET(self):
@@ -195,7 +201,8 @@ class CreateViewTest(TestCase):
 class ScanViewTest(TestCase):
     """
     Tests the scan view which allows a user to scan a QR code to 
-    join an event
+    join an event.
+    Extends the default django TestCase to allow for it to be run as a test
     """
 
     def test_scan_GET(self):
