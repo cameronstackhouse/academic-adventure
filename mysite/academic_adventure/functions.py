@@ -5,8 +5,11 @@ def get_user_positions(user):
     Function to get the users positions in the leaderboard rankings. 
     This is used to display the users position to them.
 
-    :param user: user to find positions of
-    :return: users positions in the leaderboards of points
+    Keyword arguments:
+    user -- user to find leaderboard positions of
+
+    Return:
+    Users position in each leaderboard
     """
 
     #Sorts the data of users by intelligence, athleticism, and sociability
@@ -36,4 +39,5 @@ def get_user_positions(user):
             break
         sociability_position += 1
     
+    #Returns the positions of a given user in each leaderboard
     return intelligence_position, athleticism_position, sociability_position
