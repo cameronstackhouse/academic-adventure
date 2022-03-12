@@ -82,8 +82,7 @@ def scan(request):
                 elif scanned_event.type == "Social":
                     request.user.sociability += 1 #If social event then add 1 to users sociability
                 elif scanned_event.type == "Battle":
-                    #TODO: Redirect to battle system
-                    pass
+                    return redirect('academic_adventure:battle')
             
                 request.user.save() #Saves changes made to the users stats
                 scanned_event.members.add(request.user) #Adds user to the event
@@ -144,3 +143,56 @@ def code(request, **kwargs):
                 "sociability_position": sociability_position
                 } #Information about event name, participants, and if the user is a gamekeeper to be passed to HTML form
     return render(request, 'academic_adventure/code.html', context)
+
+@login_required
+def battle(request):
+    """
+    View to run a battle for a given event.
+    This will run an automated battle, then
+    reward the player points through a post request if they win.
+    """
+    
+    #TODO: check they have not already played this battle (preventing refresh cheating)
+    
+    #POST request handling for end of game
+    if request.method == "POST":
+        if request.POST.get("resultcontent").isdigit():
+            if int(request.POST.get("resultcontent")) == 1: #If the player won update their attributes
+                request.user.intelligence += 1
+                request.user.sociability += 1
+                request.user.athleticism += 1
+                request.user.save()
+            
+            return redirect('academic_adventure:home') #redirect after a battle back to home page
+    
+    intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
+    
+    #Get random opponent excluding the current user
+    opponents = list(CustomUser.objects.all().exclude(username=request.user.username))
+    opponent = random.choice(opponents)
+    
+    #Error trapping for cases of 0 stats
+    if opponent.athleticism == 0:
+        opponent.athleticism += 1
+        
+    if opponent.sociability == 0:
+        opponent.sociability += 1
+        
+    if opponent.intelligence == 0:
+        opponent.intelligence += 1
+    
+    #Scaling opponent stats to user for fairer battle
+    user_total = request.user.athleticism + request.user.sociability + request.user.intelligence
+    opponent_total = opponent.athleticism + opponent.sociability + opponent.intelligence
+    factor = user_total/opponent_total #Finding by what factor to increase/decrease the opponents stats by
+    opponent.athleticism = int(factor*opponent.athleticism)
+    opponent.intelligence = int(factor*opponent.intelligence)
+    opponent.sociability = int(factor*opponent.sociability)
+    
+    context = { "user": request.user,
+                "opponent": opponent,
+                "intelligence_position": intelligence_position,
+                "athleticism_position": athleticism_position,
+                "sociability_position": sociability_position
+                } #Information about the user and their opponent
+    return render(request, 'academic_adventure/battle.html', context)
