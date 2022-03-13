@@ -1,0 +1,11 @@
+/*CSS for the leaderboard page*/
+
+.main_table{
+    overflow-x: scroll;
+    display: inline-block;
+    max-width: 100%;
+}
+
+td{
+    overflow-x: scroll;
+}
