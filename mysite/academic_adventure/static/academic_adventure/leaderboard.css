@@ -1,11 +1,13 @@
 /*CSS for the leaderboard page*/
 
+/*Styling for the main table*/
 .main_table{
     overflow-x: scroll;
     display: inline-block;
     max-width: 100%;
 }
 
+/*Styling for individual cells*/
 td{
     overflow-x: scroll;
 }
