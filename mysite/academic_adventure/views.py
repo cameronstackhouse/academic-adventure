@@ -154,6 +154,17 @@ def battle(request, event_id):
     This will run an automated battle, then
     reward the player points through a post request if they win.
     """
+        
+    #POST request handling for end of game
+    if request.method == "POST":
+        if request.POST.get("resultcontent").isdigit():
+            if int(request.POST.get("resultcontent")) == 1: #If the player won update their attributes
+                request.user.intelligence += 1
+                request.user.sociability += 1
+                request.user.athleticism += 1
+                request.user.save()
+            
+            return redirect('academic_adventure:home') #redirect after a battle back to home page
     
     #Checks that the event ID passed into the function has an event associated with it
     if not Event.objects.filter(pk=event_id).exists():
@@ -167,17 +178,6 @@ def battle(request, event_id):
         return redirect("academic_adventure:scan")
         
     current_event.members.add(request.user)
-    
-    #POST request handling for end of game
-    if request.method == "POST":
-        if request.POST.get("resultcontent").isdigit():
-            if int(request.POST.get("resultcontent")) == 1: #If the player won update their attributes
-                request.user.intelligence += 1
-                request.user.sociability += 1
-                request.user.athleticism += 1
-                request.user.save()
-            
-            return redirect('academic_adventure:home') #redirect after a battle back to home page
     
     intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
     
