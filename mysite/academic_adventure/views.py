@@ -70,6 +70,9 @@ def scan(request):
         #Finds the event the QR code is for using stored contents of QR code
         
         #Checks if the code is a digit and if the event ID being scanned exists
+
+        #TODO check timeframe validity of event
+
         if request.POST.get("scancontent").isdigit() and Event.objects.filter(pk=request.POST.get("scancontent")).exists():
             scanned_event = Event.objects.get(pk=request.POST.get("scancontent")) #Gets the scanned event
 
@@ -82,7 +85,7 @@ def scan(request):
                 elif scanned_event.type == "Social":
                     request.user.sociability += 1 #If social event then add 1 to users sociability
                 elif scanned_event.type == "Battle":
-                    return redirect('academic_adventure:battle')
+                    return redirect('academic_adventure:battle', event_id = scanned_event.id) #If battle then redirect to the battle view
             
                 request.user.save() #Saves changes made to the users stats
                 scanned_event.members.add(request.user) #Adds user to the event
@@ -125,7 +128,7 @@ def create(request):
     return render(request, 'academic_adventure/create.html', context)
 
 @login_required
-def code(request, **kwargs):
+def code(request, event_id):
     """View to display a QR code for a game.
     This QR code is used for users joining a game.
     To join the user must scan the QR code for an event. They will then be taken 
@@ -133,7 +136,7 @@ def code(request, **kwargs):
     to their account"""
     intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
 
-    event = Event.objects.get(pk=kwargs['event_id']) #Gets the event from the ID passed into the function
+    event = Event.objects.get(pk=event_id) #Gets the event from the ID passed into the function
     event_members = event.members.all() #Gets all members of a given event
     context = { "event":event, 
                 "event_members":event_members,
@@ -145,14 +148,25 @@ def code(request, **kwargs):
     return render(request, 'academic_adventure/code.html', context)
 
 @login_required
-def battle(request):
+def battle(request, event_id):
     """
     View to run a battle for a given event.
     This will run an automated battle, then
     reward the player points through a post request if they win.
     """
     
-    #TODO: check they have not already played this battle (preventing refresh cheating)
+    #Checks that the event ID passed into the function has an event associated with it
+    if not Event.objects.filter(pk=event_id).exists():
+        return redirect("academic_adventure:scan")
+        
+    current_event = Event.objects.get(pk=event_id) #Gets the event being participated in
+
+    #checks the user has not already played this battle (preventing refresh cheating)
+    #Also checks to see if the event associated with the ID entered is a battle or not
+    if request.user in current_event.members.all() or current_event.type != "Battle":
+        return redirect("academic_adventure:scan")
+        
+    current_event.members.add(request.user)
     
     #POST request handling for end of game
     if request.method == "POST":
