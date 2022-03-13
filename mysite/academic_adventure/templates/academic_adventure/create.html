@@ -102,6 +102,7 @@
         </br>
 
         <div id="left">
+            <h3>Enter event details</h3>
             <form method="POST">
                 <fieldset>
                 {% csrf_token %}
@@ -111,9 +112,10 @@
             </form>
         </div>
 
-        <h3>Select loaction from the map</h3>
+
+        <h3>Select location from the map</h3>
         <div id="map">
-            <script 
+          <script 
                 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDS7uNAAWZIIeVC3-GXZUx7hNdkLoY7I3E&callback=initMap&v=weekly"
 		        async
 		    ></script>
