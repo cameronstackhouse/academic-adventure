@@ -162,7 +162,8 @@ def battle(request, event_id):
     current_event = Event.objects.get(pk=event_id) #Gets the event being participated in
 
     #checks the user has not already played this battle (preventing refresh cheating)
-    if request.user in current_event.members.all():
+    #Also checks to see if the event associated with the ID entered is a battle or not
+    if request.user in current_event.members.all() or current_event.type != "Battle":
         return redirect("academic_adventure:scan")
         
     current_event.members.add(request.user)
