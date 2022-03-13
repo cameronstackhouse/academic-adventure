@@ -1,0 +1,11 @@
+/*CSS for the create page*/
+
+#map{
+    height: 50%;
+}
+
+html, body{
+    height: 95%;
+    margin: 0;
+    padding: 0;
+}
