@@ -6,15 +6,16 @@ html, body
 #navbarContainer {
     background-color: #242c44;
     z-index: 2;
-    float: left;
-    position: absolute;
+    float: left; /*The container is fixed to the left side of the page*/ 
+    position: absolute; /*Allows navbar to overlap with the page when opened */
     padding: 10px;
     height: 100%;
     width: 110px;
-    margin-left: -15rem;
+    margin-left: -15rem; /*The container is originally out of sight from the page*/
     transition: margin 0.5s ease-out;
 }
 
+/*The top bar containing the logo*/
 #topContainer {
     background-color: #b18b4f;
     z-index: 1;
@@ -27,44 +28,49 @@ html, body
     width:150px;
     height:90px;
     display: block;
-    margin-left: auto;
+    margin-left: auto; /*Logo is in the centre of the topContainer*/
     margin-right: auto;
 }
 
 #navbarButton {
     background-color: #242c44 !important;
     border: 2px solid black;
-    border-radius: 8px;
-    z-index: 1;
+    border-radius: 8px; /*Rounded edges of the button*/
+    z-index: 1; /*Button is on top to the topContainer*/
     width: 70px;
     height: 40px;
     color: white;
     text-align: center;
     display: inline-block;
-    position: absolute;
+    position: absolute; /*Button is unaffected by other containers*/
     top: 15px;
     left: 15px;
 }
 
+/*Changes navbar text colour to white*/
 .navbar-toggler-icon {
     color: white !important;
 }
 
+/*Changes navbar text colour to white*/
 .navbar-nav button{
     color: white !important;
 }
 
+/*Changes navbar menu options text colour to white*/
 .navbar-nav li a{
     color: white !important;
 }
 
+/*Modal contents side*/
 .modal-content {
     width: 100%;
     height: 90%;
 } 
 
+/*When the navbar button is clicked, this class is toggled, moving the navbar within sight of the page from the left*/
 body.sb-sidenav-toggled #navbarContainer {
-margin-left: 0rem;
+    margin-left: 0rem; /*The container becomes in view*/
 }
 
 /* Leaderboard */
