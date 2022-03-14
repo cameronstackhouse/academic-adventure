@@ -70,9 +70,9 @@
                         <table id="leaderboard" class="center main_table" >
                             <tr>
                                 <th>Username</th>
-                                <th>Intelligence</th>
-                                <th>Sociability</th>
-                                <th>Athleticism</th>
+                                <th><img src="{% static 'academic_adventure/academic.png' %}"  id="int" alt="Intelligence"></th><!--Intelligence-->
+                                <th><img src="{% static 'academic_adventure/social.png' %}"  id="int" alt="Sociability"></th><!--Sociability-->
+                                <th><img src="{% static 'academic_adventure/sports.png' %}"  id="int" alt="Athleticism"></th><!--Athleticism-->
                                 <th>Total Score</th>
                               </tr>
                         {% for user in scoreusers %}
