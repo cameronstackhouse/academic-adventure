@@ -18,20 +18,9 @@
 		    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
         <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/ui.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/profile.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/create.css' %}">
         <script type="text/javascript" src="{% static 'academic_adventure/navbar.js' %}"> </script>
         <title>Create</title>
-
-        <style>
-            #map{
-				height: 50%;
-			}
-			
-			html, body{
-				height: 95%;
-				margin: 0;
-				padding: 0;
-			}
-        </style>
 
         <script>
             let map;
@@ -113,6 +102,7 @@
         </br>
 
         <div id="left">
+            <h3>Enter event details</h3>
             <form method="POST">
                 <fieldset>
                 {% csrf_token %}
@@ -121,10 +111,12 @@
                 </fieldset>
             </form>
         </div>
+        
 
-        <h3>Select loaction from the map</h3>
+
+        <h3>Select location from the map</h3>
         <div id="map">
-            <script 
+          <script 
                 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDS7uNAAWZIIeVC3-GXZUx7hNdkLoY7I3E&callback=initMap&v=weekly"
 		        async
 		    ></script>
