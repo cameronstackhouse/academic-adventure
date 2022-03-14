@@ -60,6 +60,8 @@ def events(request):
 def scan(request):
     """View to scan a QR code to join an event"""
 
+    #TODO CHECK FOR VALID TIME
+
     valid_radius = 0.00036 #Maximum distance a user can be away from an event and participate
     intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
 
@@ -112,7 +114,7 @@ def scan(request):
                     request.user.sociability += 1 #If social event then add 1 to users sociability
                     context["message"] = f"Successfully added to event: {scanned_event.name}. Sociability increased!"
                 elif scanned_event.type == "Battle":
-                    request.session['battle_id'] = request.POST.get("scancontent")
+                    request.session['battle_id'] = request.POST.get("scancontent") #Sets the battle ID session variable to the event ID
                     return redirect('academic_adventure:battle') #If battle then redirect to the battle view
             
                 request.user.save() #Saves changes made to the users stats
