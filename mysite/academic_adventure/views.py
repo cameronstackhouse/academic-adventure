@@ -67,12 +67,14 @@ def scan(request):
                "sociability_position": sociability_position}
     if request.method == "POST": #If the user has scanned a QR code
         logging.info(request.POST.get("scancontent")) 
-        #Finds the event the QR code is for using stored contents of QR code
-        
-        #Checks if the code is a digit and if the event ID being scanned exists
 
+        #Gets user location to check to see if the 
+        lat = request.POST.get("userlat")
+        lng = request.POST.get("userlng")
+        
         #TODO check timeframe validity of event
 
+         #Checks if the code is a digit and if the event ID being scanned exists
         if request.POST.get("scancontent").isdigit() and Event.objects.filter(pk=request.POST.get("scancontent")).exists():
             scanned_event = Event.objects.get(pk=request.POST.get("scancontent")) #Gets the scanned event
 

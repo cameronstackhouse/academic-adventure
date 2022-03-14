@@ -1,3 +1,4 @@
+from math import sqrt
 from .models import CustomUser
 
 def get_user_positions(user):
@@ -37,3 +38,18 @@ def get_user_positions(user):
         sociability_position += 1
     
     return intelligence_position, athleticism_position, sociability_position
+
+
+def compare_positions(user_lat, user_long, event_lat, event_long):
+    """
+    Function to compare the position and get the absolute distance between a
+    the users current position and the position of the event
+
+    Keyword arguments:
+    user_lat -- current latitude of the user
+    user_long -- current longitude of the user
+    event_lat -- latitude of the event
+    event_long -- longitude of the event
+    """
+    #Calculates and returns the absolute distance between the two sets of coordinates
+    return sqrt( (user_lat - event_lat)**2 + (user_long - event_long)**2)
