@@ -52,4 +52,4 @@ def compare_positions(user_lat, user_long, event_lat, event_long):
     event_long -- longitude of the event
     """
     #Calculates and returns the absolute distance between the two sets of coordinates
-    return sqrt( (user_lat - event_lat)**2 + (user_long - event_long)**2)
+    return sqrt( (user_lat - event_lat)**2 + (user_long - event_long)**2 )

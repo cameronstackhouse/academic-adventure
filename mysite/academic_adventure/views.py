@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required #Used to reject user entry to web page if not logged in
 from .models import Event, CustomUser
@@ -7,7 +8,7 @@ import random
 import logging
 
 from .models import Event
-from .functions import get_user_positions
+from .functions import get_user_positions, compare_positions
 
 @login_required
 def leaderboard(request):
@@ -68,15 +69,30 @@ def scan(request):
     if request.method == "POST": #If the user has scanned a QR code
         logging.info(request.POST.get("scancontent")) 
 
-        #Gets user location to check to see if the 
+        #Gets user location
         lat = request.POST.get("userlat")
         lng = request.POST.get("userlng")
+
+        #Checks if user location has successfully been accessed
+        if lng == "" or lat == "":
+            context["message"] = "Error, can't get your location."
+            return render(request, 'academic_adventure/scan.html', context) #Shows scan page
+
+        lat = Decimal(lat)
+        lng = Decimal(lng)
         
         #TODO check timeframe validity of event
 
          #Checks if the code is a digit and if the event ID being scanned exists
         if request.POST.get("scancontent").isdigit() and Event.objects.filter(pk=request.POST.get("scancontent")).exists():
             scanned_event = Event.objects.get(pk=request.POST.get("scancontent")) #Gets the scanned event
+
+            #Gets the location for the event
+            event_lng = scanned_event.longitude
+            event_lat = scanned_event.latitude
+
+            #Gets the absolute distance the user is from the event
+            distance = compare_positions(lat, lng, event_lat, event_lng)
 
             if request.user not in scanned_event.members.all(): #Checks if user is not already registered for event
                 #If user isn't already registered for an event then apply bonus for attending in person event
@@ -93,7 +109,7 @@ def scan(request):
                 scanned_event.members.add(request.user) #Adds user to the event
                 context["message"] = f"Successfully added to event: {scanned_event.name}."
             else: #Else if user is already registered for event
-                context["message"] = "You are already registered for this event."
+                context["message"] = f"You are already registered for this event. Distance to event: {distance}. User lat: {lat} User long: {lng}. Event lat: {event_lat} Event lng: {event_lng}"
         else: #If the event does not exist
             context["message"] = "Error, event does not exist."
 
