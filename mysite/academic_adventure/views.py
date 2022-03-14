@@ -60,6 +60,7 @@ def events(request):
 def scan(request):
     """View to scan a QR code to join an event"""
 
+    valid_radius = 0.00036 #Maximum distance a user can be away from an event and participate
     intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
 
     context = {"user":request.user,
@@ -69,7 +70,7 @@ def scan(request):
     if request.method == "POST": #If the user has scanned a QR code
         logging.info(request.POST.get("scancontent")) 
 
-        #Gets user location
+        #Gets user location from post request
         lat = request.POST.get("userlat")
         lng = request.POST.get("userlng")
 
@@ -78,12 +79,11 @@ def scan(request):
             context["message"] = "Error, can't get your location."
             return render(request, 'academic_adventure/scan.html', context) #Shows scan page
 
+        #Converts user location to decimal from string
         lat = Decimal(lat)
         lng = Decimal(lng)
         
-        #TODO check timeframe validity of event
-
-         #Checks if the code is a digit and if the event ID being scanned exists
+        #Checks if the code is a digit and if the event ID being scanned exists
         if request.POST.get("scancontent").isdigit() and Event.objects.filter(pk=request.POST.get("scancontent")).exists():
             scanned_event = Event.objects.get(pk=request.POST.get("scancontent")) #Gets the scanned event
 
@@ -91,25 +91,34 @@ def scan(request):
             event_lng = scanned_event.longitude
             event_lat = scanned_event.latitude
 
-            #Gets the absolute distance the user is from the event
+            #Gets the distance the user is from the event scanned
             distance = compare_positions(lat, lng, event_lat, event_lng)
 
             if request.user not in scanned_event.members.all(): #Checks if user is not already registered for event
+
+                #Performs a distance check to check that the user is close enough to participate in the event
+                if distance > valid_radius:
+                    context["message"] = "Too far away to participate in event" #Error message
+                    return render(request, 'academic_adventure/scan.html', context) #Shows scan page
+                
                 #If user isn't already registered for an event then apply bonus for attending in person event
                 if scanned_event.type == "Sports":
                     request.user.athleticism += 1 #If sports event then add 1 to the users athleticism
+                    context["message"] = f"Successfully added to event: {scanned_event.name}. Athleticism increased!"
                 elif scanned_event.type == "Academic":
                     request.user.intelligence += 1 #If academic event then add 1 to users intelligence
+                    context["message"] = f"Successfully added to event: {scanned_event.name}. Intelligence increased!"
                 elif scanned_event.type == "Social":
                     request.user.sociability += 1 #If social event then add 1 to users sociability
+                    context["message"] = f"Successfully added to event: {scanned_event.name}. Sociability increased!"
                 elif scanned_event.type == "Battle":
-                    return redirect('academic_adventure:battle', event_id = scanned_event.id) #If battle then redirect to the battle view
+                    request.session['battle_id'] = request.POST.get("scancontent")
+                    return redirect('academic_adventure:battle') #If battle then redirect to the battle view
             
                 request.user.save() #Saves changes made to the users stats
                 scanned_event.members.add(request.user) #Adds user to the event
-                context["message"] = f"Successfully added to event: {scanned_event.name}."
             else: #Else if user is already registered for event
-                context["message"] = f"You are already registered for this event. Distance to event: {distance}. User lat: {lat} User long: {lng}. Event lat: {event_lat} Event lng: {event_lng}"
+                context["message"] = f"You are already registered for this event."
         else: #If the event does not exist
             context["message"] = "Error, event does not exist."
 
@@ -128,13 +137,13 @@ def create(request):
         createform = CreateForm(request.POST) #Gets the values from the form
         if createform.is_valid(): #Checks if the values are valid
             newevent = createform.save() #If so create a new event
-            # Set host as current and code as a randomly generated code
+            # Set host as user and code as a randomly generated code
             newevent.host = request.user
             newevent.code = ''.join(random.choice(string.ascii_uppercase + string.digits) for char in range(6)) #Adds code to event (NOT NEEDED ANYMORE)
             newevent.save() #Saves the event to the database
             return redirect("academic_adventure:code", event_id = newevent.id) #Redirects user to the new event QR code page
     else:
-        createform = CreateForm(initial={'host':request.user}) #Creates the event creation form
+        createform = CreateForm() #Creates the event creation form
         context = {'user': request.user,
                "gamekeeper": gamekeeper,
                "createform": createform, #Passes form to be displayed to create an event into the html form
@@ -166,13 +175,22 @@ def code(request, event_id):
     return render(request, 'academic_adventure/code.html', context)
 
 @login_required
-def battle(request, event_id):
+def battle(request):
     """
     View to run a battle for a given event.
     This will run an automated battle, then
     reward the player points through a post request if they win.
+    Uses a session variable to pass in the event id of the battle
+    to prevent users from entering in the event ID of a battle 
+    in the URL and gaining access to a battle that is too far away.
     """
-        
+
+    #Checks if an event ID has been set for the battle (Set in the scan view)
+    if not request.session.has_key('battle_id'):
+        return redirect("academic_adventure:scan") #If not set then the user is redirected to the scan view
+
+    event_id = int(request.session['battle_id']) #Gets the event id of the battle
+    
     #POST request handling for end of game
     if request.method == "POST":
         if request.POST.get("resultcontent").isdigit():

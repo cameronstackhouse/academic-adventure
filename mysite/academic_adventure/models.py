@@ -53,7 +53,7 @@ class Event(models.Model):
     latitude = models.DecimalField(decimal_places=20, max_digits=30) #Latitude location of event
     name = models.CharField(max_length=100) #Name of the event
     description = models.CharField(max_length=400) #Short description of the event
-    host = models.ForeignKey(CustomUser, on_delete=models.CASCADE) #Host of the event
+    host = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True) #Host of the event
     date = models.DateTimeField() #Date and time of the event
     duration = models.DecimalField(decimal_places=2, max_digits=6) #Duration of the event
     code = models.CharField(max_length=100) #Code for the event
