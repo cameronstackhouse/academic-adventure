@@ -1,13 +1,18 @@
+from datetime import timedelta
 from math import sqrt
-from .models import CustomUser
+from django.utils import timezone
+from .models import CustomUser, Event
 
 def get_user_positions(user):
     """
     Function to get the users positions in the leaderboard rankings. 
     This is used to display the users position to them.
 
-    :param user: user to find positions of
-    :return: users positions in the leaderboards of points
+    Keyword arguments:
+    user -- user to get the leaderboard positions of
+
+    Return:
+    User positions in each stat leaderboard 
     """
 
     #Sorts the data of users by intelligence, athleticism, and sociability
@@ -50,6 +55,34 @@ def compare_positions(user_lat, user_long, event_lat, event_long):
     user_long -- current longitude of the user
     event_lat -- latitude of the event
     event_long -- longitude of the event
+
+    Return:
+    Distance between user and event
     """
     #Calculates and returns the absolute distance between the two sets of coordinates
     return sqrt( (user_lat - event_lat)**2 + (user_long - event_long)**2 )
+
+def user_occupied(user):
+    """
+    Function to determine if a user is already occupied and registered to an event taking place
+    at the current time.
+
+    Keyword arguments:
+    user -- User to check if occupied
+
+    Return:
+    Boolean indicating if a user is already currently signed up to an event
+    """
+    current_time = timezone.now() #Gets the current datetime
+    #Iterates through events
+    for event in Event.objects.all():  
+        #If event is a battle then ignore the time constraint
+        if event.type == "Battle":
+            next
+        #Else checks if user is in the event and if the event is taking place within the current time
+        minutes = int(60 * event.duration)
+        if user in event.members.all() and event.date - timedelta(minutes=10) <= current_time <= event.date + timedelta(minutes=minutes):
+            return True
+    
+    return False
+

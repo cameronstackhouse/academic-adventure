@@ -14,9 +14,6 @@ class CustomUser(AbstractUser):
     intelligence = models.IntegerField(default=0) #Users intelligence score
     sociability = models.IntegerField(default=0) #Users sociability score
     athleticism = models.IntegerField(default=0) #Users athleticism score
-    intel_xp = models.FloatField(default=0) #Current xp for intelligence
-    soc_xp = models.FloatField(default=0) #Current xp for sociability
-    ath_xp = models.FloatField(default=0) #Current xp for athleticism
     points = models.IntegerField(default=0) #Current user points
     gamekeeper = models.BooleanField(default=False) #Boolean indicating if user is a gamekeeper or not
 
@@ -69,6 +66,17 @@ class Event(models.Model):
         and should be displayed to the user"""
         #Checks that the date of the event is after the current time and before 2 hours in the future
         return timezone.now() <= self.date <= timezone.now() + datetime.timedelta(hours=2)
+
+    def joinable(self):
+        """
+        Function to check if the event is within a scanable time frame and
+        therefore if the event can be joined by a user
+
+        Return:
+        Returns a boolean indicating if the event is within a joinable timeframe
+        """
+        #Checks if the current time is between 10 minutes before the start of the event and 5 minutes after the start of the event
+        return self.date - datetime.timedelta(minutes=10) <= timezone.now() <= self.date + datetime.timedelta(minutes=5)
 
     def __str__(self):
         return self.name

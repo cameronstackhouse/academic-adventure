@@ -8,7 +8,7 @@ import random
 import logging
 
 from .models import Event
-from .functions import get_user_positions, compare_positions
+from .functions import get_user_positions, compare_positions, user_occupied
 
 @login_required
 def leaderboard(request):
@@ -95,23 +95,32 @@ def scan(request):
 
             #Gets the distance the user is from the event scanned
             distance = compare_positions(lat, lng, event_lat, event_lng)
+        
+            #Checks if user is already currently participating in an event 
+            # This only allows a user to be at one event at once
+            if user_occupied(request.user): 
+                context["message"] = "You are already signed up for an event." #Displays message to user
+                return render(request, 'academic_adventure/scan.html', context) #Shows scan page
 
             if request.user not in scanned_event.members.all(): #Checks if user is not already registered for event
-
                 #Performs a distance check to check that the user is close enough to participate in the event
                 if distance > valid_radius:
                     context["message"] = "Too far away to participate in event" #Error message
                     return render(request, 'academic_adventure/scan.html', context) #Shows scan page
-                
+                #Checks if the scanned event is joinable (If the current time is between 10 minutes before the start of the event and 5 minutes after the start of the event)
+                elif not scanned_event.joinable():
+                    context["message"] = "Can't join event, must be between 10 minutes before the start of the event and 5 minutes after the start."
+                    return render(request, 'academic_adventure/scan.html', context) #Shows scan page
+            
                 #If user isn't already registered for an event then apply bonus for attending in person event
                 if scanned_event.type == "Sports":
-                    request.user.athleticism += 1 #If sports event then add 1 to the users athleticism
+                    request.user.athleticism += 1 * round(scanned_event.duration) #If sports event then increase the users athleticism. Scaled by duration of the event
                     context["message"] = f"Successfully added to event: {scanned_event.name}. Athleticism increased!"
                 elif scanned_event.type == "Academic":
-                    request.user.intelligence += 1 #If academic event then add 1 to users intelligence
+                    request.user.intelligence += 1 * round(scanned_event.duration) #If academic event then add 1 to users intelligence. Scaled by duration of the event
                     context["message"] = f"Successfully added to event: {scanned_event.name}. Intelligence increased!"
                 elif scanned_event.type == "Social":
-                    request.user.sociability += 1 #If social event then add 1 to users sociability
+                    request.user.sociability += 1 * round(scanned_event.duration) #If social event then add 1 to users sociability. Scaled by duration of the event
                     context["message"] = f"Successfully added to event: {scanned_event.name}. Sociability increased!"
                 elif scanned_event.type == "Battle":
                     request.session['battle_id'] = request.POST.get("scancontent") #Sets the battle ID session variable to the event ID
