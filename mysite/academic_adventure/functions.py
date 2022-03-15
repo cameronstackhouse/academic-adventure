@@ -9,10 +9,10 @@ def get_user_positions(user):
     This is used to display the users position to them.
 
     Keyword arguments:
-    user -- user to find leaderboard positions of
+    user -- user to get the leaderboard positions of
 
     Return:
-    Users position in each leaderboard
+    User positions in each stat leaderboard 
     """
 
     #Sorts the data of users by intelligence, athleticism, and sociability

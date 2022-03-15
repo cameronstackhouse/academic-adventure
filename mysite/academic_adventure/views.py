@@ -1,7 +1,7 @@
 from decimal import Decimal
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required #Used to reject user entry to web page if not logged in
-from .models import Event, CustomUser #Imports user defined models in the system
+from .models import Event, CustomUser
 from .forms import CreateForm
 import string 
 import random
@@ -12,13 +12,8 @@ from .functions import get_user_positions, compare_positions, user_occupied
 
 @login_required
 def leaderboard(request):
-    """
-    View displaying leaderboards to show a user their stats against other people
-    across campus.
-
-    Keyword arguments:
-    request -- HttpRequest object 
-    """
+    """View displaying leaderboards to show a user their stats vs other people
+    across campus"""
 
     intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
 
@@ -31,55 +26,39 @@ def leaderboard(request):
             "athleticism_position": athleticism_position,
             "sociability_position": sociability_position
             } #Data to be passed into the html form
-    return render(request, 'academic_adventure/leaderboard.html', context) #Returns the leaderboard html page with the context passed in
+    return render(request, 'academic_adventure/leaderboard.html', context)
 
 @login_required
 def home(request):
-    """
-    View for the map where the user can see their location and
-    the location of events placed by gamekeepers
-
-    Keyword arguments:
-    request -- HttpRequest object 
-    """
+    """View for the map where the user can see their location and
+    the location of events placed by gamekeepers"""
    
     intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
 
-    context = {"events":Event.objects.all(), #Gets all events in the database
+    context = {"events":Event.objects.all(),
                 "user":request.user,
                 "intelligence_position": intelligence_position,
                 "athleticism_position": athleticism_position,
                 "sociability_position": sociability_position} #Passes user information and event information into the HTML form
-    return render(request, 'academic_adventure/home.html', context) #Returns the home html page with the context passed in
+    return render(request, 'academic_adventure/home.html', context)
 
 @login_required
 def events(request):
-    """
-    View for the map where the user can see their location and
-    the location of events placed by gamekeepers
-
-    Keyword arguments:
-    request -- HttpRequest object 
-    """
+    """View for the map where the user can see their location and
+    the location of events placed by gamekeepers"""
 
     intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
 
-    context = {"events":Event.objects.all(), #Gets all events in the database
+    context = {"events":Event.objects.all(),
                 "user":request.user,
                 "intelligence_position": intelligence_position,
                 "athleticism_position": athleticism_position,
                 "sociability_position": sociability_position} #Passes user information and event information into the HTML form
-    return render(request, 'academic_adventure/events.html', context) #Returns the events html page with the context passed in
+    return render(request, 'academic_adventure/events.html', context)
 
 @login_required
 def scan(request):
-    """
-    View to scan a QR code to join an event and apply stats bonuses. 
-    The view opens the users camera and allows for a QR code to be scanned.
-
-    Keyword arguments:
-    request -- HttpRequest object 
-    """
+    """View to scan a QR code to join an event"""
 
     #TODO CHECK FOR VALID TIME
 
@@ -91,9 +70,7 @@ def scan(request):
                "athleticism_position": athleticism_position,
                "sociability_position": sociability_position}
     if request.method == "POST": #If the user has scanned a QR code
-        logging.info(request.POST.get("scancontent")) #Finds the event the QR code is for using stored contents of QR code
-        
-        #Checks if the code is a digit and if the event ID being scanned exists
+        logging.info(request.POST.get("scancontent")) 
 
         #Gets user location from post request
         lat = request.POST.get("userlat")
@@ -156,17 +133,13 @@ def scan(request):
         else: #If the event does not exist
             context["message"] = "Error, event does not exist."
 
-    return render(request, 'academic_adventure/scan.html', context) #Shows scan page with the context passed in
+    return render(request, 'academic_adventure/scan.html', context) #Shows scan page
 
 @login_required
 def create(request):
-    """
-    Create view. This view allows for a gamekeeper to create
+    """Create view. This view allows for a gamekeeper to create
     an activity and generate a QR code for a user to join an activity. Create
     also keeps a list of previously generated event QR codes.
-
-    Keyword arguments:
-    request -- HttpRequest object 
     """
     gamekeeper = request.user.gamekeeper #Gets if the user is a gamekeeper
     intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
@@ -190,7 +163,7 @@ def create(request):
                "athleticism_position": athleticism_position,
                "sociability_position": sociability_position
                } #Data to be passed into the html form
-    return render(request, 'academic_adventure/create.html', context) #Renders the create html page with the context passed in
+    return render(request, 'academic_adventure/create.html', context)
 
 @login_required
 def code(request, event_id):
@@ -198,25 +171,19 @@ def code(request, event_id):
     This QR code is used for users joining a game.
     To join the user must scan the QR code for an event. They will then be taken 
     to the relevant page based on the event type or stats bonuses will be applied 
-    to their account
-
-    Keyword arguments:
-    request -- HttpRequest object 
-    event_id -- ID of the event to display the code
-    """
+    to their account"""
     intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
 
     event = Event.objects.get(pk=event_id) #Gets the event from the ID passed into the function
     event_members = event.members.all() #Gets all members of a given event
-    context = { "event":event, #The event itself
-                "event_members":event_members, #Members of the event
+    context = { "event":event, 
+                "event_members":event_members,
                 "user": request.user,
                 "intelligence_position": intelligence_position,
                 "athleticism_position": athleticism_position,
                 "sociability_position": sociability_position
                 } #Information about event name, participants, and if the user is a gamekeeper to be passed to HTML form
-
-    return render(request, 'academic_adventure/code.html', context) #Renders the code html with the context passed in
+    return render(request, 'academic_adventure/code.html', context)
 
 @login_required
 def battle(request):

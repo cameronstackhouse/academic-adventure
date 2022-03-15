@@ -1,18 +1,14 @@
 <!DOCTYPE html>
 
-<!--Loads static files of the project-->
 {% load static %}
 
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
         <link rel="icon" href="{% static 'academic_adventure/favicon.ico'%}">
-        <!--Include bootstrap files-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-        <!--Includes javascript package to scan event-->
         <script type="text/javascript" src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"> </script>
-        <!--Includes stylesheets for the UI and navbar-->
         <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/ui.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/profile.css' %}">
         <script type="text/javascript" src="{% static 'academic_adventure/navbar.js' %}"> </script>
@@ -20,7 +16,6 @@
     </head>
 
     <body>
-        <!--HTML for the navbar-->
         <div id="topContainer">
             <img src="{% static 'academic_adventure/logo.png' %}"  id="logo" alt="academic adventure logo">
             <button type="button" id="navbarButton">Menu</button>
@@ -59,7 +54,6 @@
           </div>
         </div>
 
-        <!--Profile page modal-->
         <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModal" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
               <div class="modal-content">
@@ -96,7 +90,6 @@
             </div>
           </div>
 
-          <!--Inventory modal-->
           <div class="modal fade" id="inventoryModal" tabindex="-1" aria-labelledby="inventoryModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
               <div class="modal-content">
@@ -112,7 +105,6 @@
             </div>
           </div>
           
-          <!--Shop modal-->
           <div class="modal fade" id="shopModal" tabindex="-1" aria-labelledby="shopModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
               <div class="modal-content">

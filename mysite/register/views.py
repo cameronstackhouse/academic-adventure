@@ -3,11 +3,7 @@ from .forms import RegisterForm
 from django.contrib import messages
 
 def register(request):
-    """
-    View to register a user in the database for the application
-
-    Keyword arguments:
-    request -- HttpRequest of the user
+    """View to register a user in the database for the application
     """
     form = RegisterForm() #Default user creation form provided by django
     if request.method == "POST": #Checks if POST request
@@ -15,17 +11,12 @@ def register(request):
         if credentials.is_valid(): #Checks if the users password and username is valid
             credentials.save() #If so save the username and password to the database
             messages.success(request, "Account created") #Add a success message to the screen
-            return redirect("/register") #Redirects to the register page, where the user waits 3 seconds and then gets redirected to login page
+            return redirect("/register")
         else:
             messages.error(request, "Error, password or username invalid.") #Display error message
 
-    return render(request, 'register/register.html', {'form':form}) #Displays register HTML form with the Django user registration form
+    return render(request, 'register/register.html', {'form':form}) #Displays register HTML form with generic Django user registration form
     
 def privacy(request):
-    """
-    View to show the user the privacy policy for the application
-
-    Keyword arguments:
-    request -- HttpRequest of the user
-    """
+    """View to show the user the privacy policy for the application"""
     return render(request, 'register/privacy-policy.html') #Renders the privacy policy HTML template
