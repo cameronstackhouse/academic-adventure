@@ -90,6 +90,9 @@ def scan(request):
         logging.info(request.POST.get("scancontent")) #Finds the event the QR code is for using stored contents of QR code
         
         #Checks if the code is a digit and if the event ID being scanned exists
+
+        #TODO check timeframe validity of event
+
         if request.POST.get("scancontent").isdigit() and Event.objects.filter(pk=request.POST.get("scancontent")).exists():
             scanned_event = Event.objects.get(pk=request.POST.get("scancontent")) #Gets the scanned event
 
@@ -102,8 +105,7 @@ def scan(request):
                 elif scanned_event.type == "Social":
                     request.user.sociability += 1 #If social event then add 1 to users sociability
                 elif scanned_event.type == "Battle":
-                    #TODO: Redirect to battle system
-                    pass
+                    return redirect('academic_adventure:battle', event_id = scanned_event.id) #If battle then redirect to the battle view
             
                 request.user.save() #Saves changes made to the users stats
                 scanned_event.members.add(request.user) #Adds user to the event
@@ -150,9 +152,8 @@ def create(request):
     return render(request, 'academic_adventure/create.html', context) #Renders the create html page with the context passed in
 
 @login_required
-def code(request, **kwargs):
-    """
-    View to display a QR code for a game and show users registered for an event.
+def code(request, event_id):
+    """View to display a QR code for a game.
     This QR code is used for users joining a game.
     To join the user must scan the QR code for an event. They will then be taken 
     to the relevant page based on the event type or stats bonuses will be applied 
@@ -164,7 +165,7 @@ def code(request, **kwargs):
     """
     intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
 
-    event = Event.objects.get(pk=kwargs['event_id']) #Gets the event from the ID passed into the function
+    event = Event.objects.get(pk=event_id) #Gets the event from the ID passed into the function
     event_members = event.members.all() #Gets all members of a given event
     context = { "event":event, #The event itself
                 "event_members":event_members, #Members of the event
@@ -173,4 +174,69 @@ def code(request, **kwargs):
                 "athleticism_position": athleticism_position,
                 "sociability_position": sociability_position
                 } #Information about event name, participants, and if the user is a gamekeeper to be passed to HTML form
+
     return render(request, 'academic_adventure/code.html', context) #Renders the code html with the context passed in
+
+@login_required
+def battle(request, event_id):
+    """
+    View to run a battle for a given event.
+    This will run an automated battle, then
+    reward the player points through a post request if they win.
+    """
+        
+    #POST request handling for end of game
+    if request.method == "POST":
+        if request.POST.get("resultcontent").isdigit():
+            if int(request.POST.get("resultcontent")) == 1: #If the player won update their attributes
+                request.user.intelligence += 1
+                request.user.sociability += 1
+                request.user.athleticism += 1
+                request.user.save()
+            
+            return redirect('academic_adventure:home') #redirect after a battle back to home page
+    
+    #Checks that the event ID passed into the function has an event associated with it
+    if not Event.objects.filter(pk=event_id).exists():
+        return redirect("academic_adventure:scan")
+        
+    current_event = Event.objects.get(pk=event_id) #Gets the event being participated in
+
+    #checks the user has not already played this battle (preventing refresh cheating)
+    #Also checks to see if the event associated with the ID entered is a battle or not
+    if request.user in current_event.members.all() or current_event.type != "Battle":
+        return redirect("academic_adventure:scan")
+        
+    current_event.members.add(request.user)
+    
+    intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
+    
+    #Get random opponent excluding the current user
+    opponents = list(CustomUser.objects.all().exclude(username=request.user.username))
+    opponent = random.choice(opponents)
+    
+    #Error trapping for cases of 0 stats
+    if opponent.athleticism == 0:
+        opponent.athleticism += 1
+        
+    if opponent.sociability == 0:
+        opponent.sociability += 1
+        
+    if opponent.intelligence == 0:
+        opponent.intelligence += 1
+    
+    #Scaling opponent stats to user for fairer battle
+    user_total = request.user.athleticism + request.user.sociability + request.user.intelligence
+    opponent_total = opponent.athleticism + opponent.sociability + opponent.intelligence
+    factor = user_total/opponent_total #Finding by what factor to increase/decrease the opponents stats by
+    opponent.athleticism = int(factor*opponent.athleticism)
+    opponent.intelligence = int(factor*opponent.intelligence)
+    opponent.sociability = int(factor*opponent.sociability)
+    
+    context = { "user": request.user,
+                "opponent": opponent,
+                "intelligence_position": intelligence_position,
+                "athleticism_position": athleticism_position,
+                "sociability_position": sociability_position
+                } #Information about the user and their opponent
+    return render(request, 'academic_adventure/battle.html', context)

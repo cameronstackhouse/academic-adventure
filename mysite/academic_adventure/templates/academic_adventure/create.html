@@ -24,6 +24,7 @@
         <!--CSS for the UI and navbar-->
         <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/ui.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/profile.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/create.css' %}">
         <script type="text/javascript" src="{% static 'academic_adventure/navbar.js' %}"> </script>
         <title>Create</title>
 
@@ -121,6 +122,7 @@
 
         <!--Displays form to create an event-->
         <div id="left">
+            <h3>Enter event details</h3>
             <form method="POST">
                 <fieldset>
                 {% csrf_token %}
@@ -129,11 +131,15 @@
                 </fieldset>
             </form>
         </div>
+        
+
+
 
         <!--Displays the map to select the location from-->
         <h3>Select loaction from the map</h3>
+
         <div id="map">
-            <script 
+          <script 
                 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDS7uNAAWZIIeVC3-GXZUx7hNdkLoY7I3E&callback=initMap&v=weekly"
 		        async
 		    ></script>

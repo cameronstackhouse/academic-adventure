@@ -16,9 +16,10 @@
         <!--Includes the sytlesheets for the UI and the navbar-->
         <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/ui.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/profile.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/leaderboard.css' %}">
         <!--Javascript to make the navbar work-->
         <script type="text/javascript" src="{% static 'academic_adventure/navbar.js' %}"> </script>
-        <title>Leaderboard</title>
+        <title>Leaderboard</title>   
     </head>
 
     <body>
@@ -73,12 +74,12 @@
 
                     <div class="text-center">
                         <!--Leaderboard of total user scores-->
-                        <table id="leaderboard" class="center">
+                        <table id="leaderboard" class="center main_table" >
                             <tr>
                                 <th>Username</th>
-                                <th>Intelligence</th>
-                                <th>Sociability</th>
-                                <th>Athleticism</th>
+                                <th><img src="{% static 'academic_adventure/academic.png' %}"  id="int" alt="Intelligence"></th><!--Intelligence-->
+                                <th><img src="{% static 'academic_adventure/social.png' %}"  id="int" alt="Sociability"></th><!--Sociability-->
+                                <th><img src="{% static 'academic_adventure/sports.png' %}"  id="int" alt="Athleticism"></th><!--Athleticism-->
                                 <th>Total Score</th>
                               </tr>
                         <!--Iterates through scoreusers passed in-->      
