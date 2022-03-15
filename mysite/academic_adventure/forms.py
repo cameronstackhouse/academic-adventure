@@ -13,14 +13,13 @@ class CreateForm(forms.ModelForm):
         """
         model = Event #Selects model to use 
         #Input fields needed to create an event
-        fields = ["longitude", "latitude", "name", "description", "host", "date", "duration", "type", "society"]
+        fields = ["longitude", "latitude", "name", "description", "date", "duration", "type", "society"]
         #Labels for each input field
         labels = {"date": "Date and Time", #Date of the event
                   "duration": "Duration (Hours)", #Duration of the event
                   "longitude": "Longitude (Select from map)", #Location of the event
                   "latitude": "Latitude (Select from map)",
                   "name": "Name of event", #Name of the event
-                  "host": "Host of event", #Host of the event
                   "type": "Type of event", #Type of event (Academic, Battle, Social, Sports)
                   "society": "Society running the event", #Society running the event
                   "description": "Description of event"} #Description of the event
