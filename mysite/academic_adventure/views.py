@@ -99,7 +99,7 @@ def scan(request):
             #Checks if user is already currently participating in an event 
             # This only allows a user to be at one event at once
             if user_occupied(request.user): 
-                context["message"] = "You are already signed up for an event." #Displays message to user
+                context["message"] = "You are already signed up for an event. Try again when your current event finishes." #Displays message to user
                 return render(request, 'academic_adventure/scan.html', context) #Shows scan page
 
             if request.user not in scanned_event.members.all(): #Checks if user is not already registered for event
