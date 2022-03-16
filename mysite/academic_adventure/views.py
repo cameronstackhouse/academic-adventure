@@ -209,7 +209,7 @@ def code(request, event_id):
                 "user": request.user,
                 "intelligence_position": intelligence_position,
                 "athleticism_position": athleticism_position,
-                "sociability_position": sociability_position
+                "sociability_position": sociability_position,
                 } #Information about event name, participants, and if the user is a gamekeeper to be passed to HTML form
 
     return render(request, 'academic_adventure/code.html', context) #Renders the code html with the context passed in

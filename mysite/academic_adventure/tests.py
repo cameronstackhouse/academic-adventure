@@ -341,4 +341,9 @@ class BattleViewTest(TestCase):
 
         self.assertEqual(response.status_code, 200) #Assert that the client could successfully access the page
         self.assertTemplateUsed("battle.html") #Assert that the html template used is correct
-        
+
+
+class CodeViewTest(TestCase):
+    """
+    Tests the code view which displays a 
+    """
