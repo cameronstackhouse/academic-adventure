@@ -64,8 +64,96 @@ class EventModelTest(TestCase):
         time = timezone.now() + datetime.timedelta(hours=2) #Sets a time to be 2 hours in the future from now
         current_event = Event(date = time) #Creates a new event with this date
 
-        self.assertIs(current_event.recent(), True) #Asserts that the new event is recent using the recent function
+        self.assertIs(current_event.recent(), True)   
+    
+    def event_is_joinable(self):
+        """
+        joinable() should return True if the current time is between 10 minutes before an events start time and 5 minutes after
 
+        Keyword arguments:
+        self -- TestCase obejct to allow for the method to be run as a Django test
+        """
+
+        time = timezone.now() + datetime.timedelta(minutes=5)
+        current_event = Event(date=time)
+
+        self.assertIs(current_event.joinable(), True)
+    
+    def event_is_joinable_lower_boundary(self):
+        """
+        joinable() should return True if the current time is between 10 minutes before an events start time and 5 minutes after.
+        This tests the lower boundary (10 mins before).
+
+        Keyword arguments:
+        self -- TestCase obejct to allow for the method to be run as a Django test
+        """
+
+        time = timezone.now() - datetime.timedelta(minutes=10)
+        current_event = Event(date=time)
+
+        self.assertIs(current_event.joinable(), True)
+    
+    def event_is_joinable_upper_boundary(self):
+        """
+        joinable() should return True if the current time is between 10 minutes before an events start time and 5 minutes after.
+        This tests the upper boundary (5 mins after the start).
+
+        Keyword arguments:
+        self -- TestCase obejct to allow for the method to be run as a Django test
+        """
+
+        time = timezone.now() + datetime.timedelta(minutes=5)
+        current_event = Event(date=time)
+
+        self.assertIs(current_event.joinable(), True)
+    
+    def event_is_joinable_invalid_lower(self):
+        """
+        joinable() should return false if the event is too far in the past
+
+        Keyword arguments:
+        self -- TestCase obejct to allow for the method to be run as a Django test
+        """
+        time = timezone.now() - datetime.timedelta(minutes=11)
+        current_event = Event(date=time)
+
+        self.assertIs(current_event.joinable(), False)
+    
+    def event_is_joinable_invalid_higher(self):
+        """
+        joinable() should return false if the event is too far in the future
+
+        Keyword arguments:
+        self -- TestCase obejct to allow for the method to be run as a Django test
+        """
+        time = timezone.now() + datetime.timedelta(minutes=6)
+        current_event = Event(date=time)
+
+        self.assertIs(current_event.joinable(), False)
+    
+    def event_is_joinable_past_day(self):
+        """
+        joinable() should return false if the event is on another day in the past
+
+        Keyword arguments:
+        self -- TestCase obejct to allow for the method to be run as a Django test
+        """
+        time = timezone.now() - datetime.timedelta(days=1)
+        current_event = Event(date=time)
+
+        self.assertIs(current_event.joinable(), False)
+    
+    def event_is_joinable_future_day(self):
+        """
+        joinable() should return false if the event is on another day in the future
+
+        Keyword arguments:
+        self -- TestCase obejct to allow for the method to be run as a Django test
+        """
+        time = timezone.now() + datetime.timedelta(days=1)
+        current_event = Event(date=time)
+
+        self.assertIs(current_event.joinable(), False)
 
 class LoginTest(TestCase):
     """

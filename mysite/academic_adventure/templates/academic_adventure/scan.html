@@ -67,6 +67,18 @@
         <form method="POST" id="scanned">
             {% csrf_token %} 
             <input type="hidden" name="scancontent" id="scancontent" value="" />
+            <input type="hidden" name="userlat" id="userlat" value=""/>
+            <input type="hidden" name="userlng" id="userlng" value=""/>
+            <script>
+              if(navigator.geolocation){ //Checks if browser has geolocator capability
+                navigator.geolocation.getCurrentPosition(function(position){ //Gets and sets current position of user
+                  document.getElementById("userlat").value = position.coords.latitude;
+                  document.getElementById("userlng").value = position.coords.longitude;
+                });
+              } else { //If geolocator not available then display an error message
+                alert("Geolocation not available for your browser. Please use a browser that supports HTML geolocation")
+              }
+            </script>
         </form>
 
         <script type="text/javascript">
