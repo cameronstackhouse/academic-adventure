@@ -295,13 +295,27 @@ class ScanViewTest(TestCase):
 
     def test_scan_GET(self):
         """
-        Tests when the GET method 
+        Tests when the GET method is used on the scan view
 
         Keyword arguments:
         self -- test case object for the scan view
         """
         client = Client()
-        response = client.post(reverse("academic_adventure:create"), follow=True) #Client tries to access the scan page using a get request
+        response = client.get(reverse("academic_adventure:create"), follow=True) #Client tries to access the scan page using a get request
+
+        self.assertEqual(response.status_code, 200) #Assert that the client could successfully access the page
+        self.assertTemplateUsed("scan.html") #Assert that the html template used is correct
+    
+    def test_scan_POST(self):
+        """
+        Tests the POST method on the scan view
+
+        Keyword arguments:
+        self -- test case object for the scan view
+        """
+        client = Client()
+
+        response = client.post(reverse("academic_adventure:create"), follow=True) #Client tries to access the scan page using a post request
 
         self.assertEqual(response.status_code, 200) #Assert that the client could successfully access the page
         self.assertTemplateUsed("scan.html") #Assert that the html template used is correct
