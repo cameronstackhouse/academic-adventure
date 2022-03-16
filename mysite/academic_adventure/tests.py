@@ -319,3 +319,26 @@ class ScanViewTest(TestCase):
 
         self.assertEqual(response.status_code, 200) #Assert that the client could successfully access the page
         self.assertTemplateUsed("scan.html") #Assert that the html template used is correct
+
+
+class BattleViewTest(TestCase):
+    """
+    Tests the battle view which allows a user to battle against 
+    a random user from the database scaled to the users level.
+    Extends the default django TestCase to allow for it to be run as a test
+    """
+
+    def test_battle_GET(self):
+        """
+        Tests when the GET method is used on the battle view
+
+        Keyword arguments:
+        self -- test case object for the battle view
+        """
+        client = Client()
+
+        response = client.get(reverse("academic_adventure:battle"), follow=True) #Client tries to access the battle page using a post request
+
+        self.assertEqual(response.status_code, 200) #Assert that the client could successfully access the page
+        self.assertTemplateUsed("battle.html") #Assert that the html template used is correct
+        
