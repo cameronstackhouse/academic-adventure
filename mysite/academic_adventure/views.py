@@ -81,8 +81,6 @@ def scan(request):
     request -- HttpRequest object 
     """
 
-    #TODO CHECK FOR VALID TIME
-
     valid_radius = 0.00036 #Maximum distance a user can be away from an event and participate
     intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
 
@@ -93,8 +91,6 @@ def scan(request):
     if request.method == "POST": #If the user has scanned a QR code
         logging.info(request.POST.get("scancontent")) #Finds the event the QR code is for using stored contents of QR code
         
-        #Checks if the code is a digit and if the event ID being scanned exists
-
         #Gets user location from post request
         lat = request.POST.get("userlat")
         lng = request.POST.get("userlng")
