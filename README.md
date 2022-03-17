@@ -14,37 +14,6 @@ The group members are:
 - Mattis Nowell
 - Andrew Yau
 
-This is a submission for Sprint 1. 
-There are three types of document that you will find the following places.
-
-## PROCESS DOCUMENTS
-Our process documents are managed on Trello. The link to our project page is below. 
-We have added both mattcollison2 and nr3391 to the board so it is visible for you to view.
-
-Trello Page: [https://trello.com/b/LhVN7c3f/kanban]
-
-We have also taken regular snapshots of our Kanban board to archive our progress. 
-These are held in the repository below alongside meeting notes, agenda and minutes. 
-These will be found in the repository below.
-
-[./process-documents/](./process-documents/)
-
-
-## TECHNICAL DOCUMENTS
-Our technical documents are primarily managed on GitHub.
-
-Github Repo: [https://github.com/cameronstackhouse/group-software-engineering]
-
-We have also include the versioned source code for archiving.
-
-[./technical-documents/](./technical-documents/)
-
-## PRODUCT DOCUMENTS
-
-Our product documents are available in the folder below.
-
-[./product-documents/UI/](./product-documents/UI/)
-
 ## Introduction
 
 Academic Adventure is a location-based RPG style browser game that allows students to meet 
@@ -100,3 +69,5 @@ the GNU General Public License as published by the Free Software Foundation, eit
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
 without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+For more information please see the attached LICENCE file or visit: https://www.gnu.org/licenses
