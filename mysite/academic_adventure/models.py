@@ -83,7 +83,7 @@ class Event(models.Model):
     host = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True) #Host of the event
     date = models.DateTimeField() #Date and time of the event
     duration = models.DecimalField(decimal_places=2, max_digits=6) #Duration of the event
-    code = models.CharField(max_length=100) #Code for the event
+    code = models.CharField(max_length=100, unique=True) #Unique code for the event used in the QR code
     type = models.CharField(
         max_length=40,
         choices=types, #Type of event (battle, academic, sports, social, ...)

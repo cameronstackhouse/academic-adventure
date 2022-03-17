@@ -154,7 +154,7 @@
             {% if event.host == user%}
 
             <!--Link to the QR code and more details about the event-->
-            <a href="{% url 'academic_adventure:code' event_id=event.id %}">{{event.name}}</a></br>
+            <a href="{% url 'academic_adventure:code' event_id=event.code %}">{{event.name}}</a></br>
 
             {% endif %}
 
