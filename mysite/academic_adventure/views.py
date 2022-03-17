@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required #Used to reject user entry to web page if not logged in
 from .models import Event, CustomUser #Imports user defined models in the system
 from .forms import CreateForm
+from django.utils.crypto import get_random_string #Imports a random string generator for code generation
 import string 
 import random
 import logging
@@ -105,8 +106,8 @@ def scan(request):
         lng = Decimal(lng)
         
         #Checks if the code is a digit and if the event ID being scanned exists
-        if request.POST.get("scancontent").isdigit() and Event.objects.filter(pk=request.POST.get("scancontent")).exists():
-            scanned_event = Event.objects.get(pk=request.POST.get("scancontent")) #Gets the scanned event
+        if Event.objects.filter(code=request.POST.get("scancontent")).exists():
+            scanned_event = Event.objects.get(code=request.POST.get("scancontent")) #Gets the scanned event
 
             #Gets the location for the event
             event_lng = scanned_event.longitude
@@ -173,9 +174,9 @@ def create(request):
             newevent = createform.save() #If so create a new event
             # Set host as user and code as a randomly generated code
             newevent.host = request.user
-            newevent.code = ''.join(random.choice(string.ascii_uppercase + string.digits) for char in range(6)) #Adds code to event (NOT NEEDED ANYMORE)
+            newevent.code = get_random_string(75, allowed_chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ")
             newevent.save() #Saves the event to the database
-            return redirect("academic_adventure:code", event_id = newevent.id) #Redirects user to the new event QR code page
+            return redirect("academic_adventure:code", event_id = newevent.code) #Redirects user to the new event QR code page
     else:
         createform = CreateForm() #Creates the event creation form
         context = {'user': request.user,
@@ -202,7 +203,7 @@ def code(request, event_id):
     """
     intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
 
-    event = Event.objects.get(pk=event_id) #Gets the event from the ID passed into the function
+    event = Event.objects.get(code=event_id) #Gets the event from the ID passed into the function
     event_members = event.members.all() #Gets all members of a given event
     context = { "event":event, #The event itself
                 "event_members":event_members, #Members of the event
