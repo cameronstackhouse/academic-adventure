@@ -3,9 +3,9 @@ import datetime
 from django.test import TestCase
 from django.test.client import Client
 from django.utils import timezone
-from django.urls import reverse
+from django.urls import NoReverseMatch, reverse
 
-from .models import Event
+from .models import CustomUser, Event
 
 class EventModelTest(TestCase):
     """
@@ -64,7 +64,7 @@ class EventModelTest(TestCase):
         time = timezone.now() + datetime.timedelta(hours=2) #Sets a time to be 2 hours in the future from now
         current_event = Event(date = time) #Creates a new event with this date
 
-        self.assertIs(current_event.recent(), True)   
+        self.assertIs(current_event.recent(), True) #Asserts that the event is recent
     
     def event_is_joinable(self):
         """
@@ -74,10 +74,10 @@ class EventModelTest(TestCase):
         self -- TestCase obejct to allow for the method to be run as a Django test
         """
 
-        time = timezone.now() + datetime.timedelta(minutes=5)
-        current_event = Event(date=time)
+        time = timezone.now() + datetime.timedelta(minutes=3) #Sets the time to be 3 minutes in the future
+        current_event = Event(date=time) #Creates a new event with the date
 
-        self.assertIs(current_event.joinable(), True)
+        self.assertIs(current_event.joinable(), True)  #Asserts that the event is joinable
     
     def event_is_joinable_lower_boundary(self):
         """
@@ -88,10 +88,10 @@ class EventModelTest(TestCase):
         self -- TestCase obejct to allow for the method to be run as a Django test
         """
 
-        time = timezone.now() - datetime.timedelta(minutes=10)
-        current_event = Event(date=time)
+        time = timezone.now() - datetime.timedelta(minutes=10) #Sets the time to be 10 minutes in the past
+        current_event = Event(date=time) #Creates a new event with the date
 
-        self.assertIs(current_event.joinable(), True)
+        self.assertIs(current_event.joinable(), True) #Asserts that the event is joinable
     
     def event_is_joinable_upper_boundary(self):
         """
@@ -102,10 +102,10 @@ class EventModelTest(TestCase):
         self -- TestCase obejct to allow for the method to be run as a Django test
         """
 
-        time = timezone.now() + datetime.timedelta(minutes=5)
-        current_event = Event(date=time)
+        time = timezone.now() + datetime.timedelta(minutes=5) #Sets the time to be 5 minutes in the future
+        current_event = Event(date=time) #Creates a new event with the date
 
-        self.assertIs(current_event.joinable(), True)
+        self.assertIs(current_event.joinable(), True) #Asserts that the event is joinable
     
     def event_is_joinable_invalid_lower(self):
         """
@@ -114,10 +114,10 @@ class EventModelTest(TestCase):
         Keyword arguments:
         self -- TestCase obejct to allow for the method to be run as a Django test
         """
-        time = timezone.now() - datetime.timedelta(minutes=11)
-        current_event = Event(date=time)
+        time = timezone.now() - datetime.timedelta(minutes=11) #Sets the time to be 11 minutes in the past
+        current_event = Event(date=time) #Creates a new event with the date
 
-        self.assertIs(current_event.joinable(), False)
+        self.assertIs(current_event.joinable(), False) #Asserts that the event is not joinable
     
     def event_is_joinable_invalid_higher(self):
         """
@@ -126,10 +126,10 @@ class EventModelTest(TestCase):
         Keyword arguments:
         self -- TestCase obejct to allow for the method to be run as a Django test
         """
-        time = timezone.now() + datetime.timedelta(minutes=6)
-        current_event = Event(date=time)
+        time = timezone.now() + datetime.timedelta(minutes=6) #Sets the time to be 6 minutes in the future
+        current_event = Event(date=time) #Creates a new event with the date
 
-        self.assertIs(current_event.joinable(), False)
+        self.assertIs(current_event.joinable(), False) #Asserts that the event is not joinable
     
     def event_is_joinable_past_day(self):
         """
@@ -138,10 +138,10 @@ class EventModelTest(TestCase):
         Keyword arguments:
         self -- TestCase obejct to allow for the method to be run as a Django test
         """
-        time = timezone.now() - datetime.timedelta(days=1)
-        current_event = Event(date=time)
+        time = timezone.now() - datetime.timedelta(days=1) #Sets the time to be one day in the past
+        current_event = Event(date=time) #Creates a new event with the date
 
-        self.assertIs(current_event.joinable(), False)
+        self.assertIs(current_event.joinable(), False) #Asserts that the event is not joinable
     
     def event_is_joinable_future_day(self):
         """
@@ -150,10 +150,10 @@ class EventModelTest(TestCase):
         Keyword arguments:
         self -- TestCase obejct to allow for the method to be run as a Django test
         """
-        time = timezone.now() + datetime.timedelta(days=1)
-        current_event = Event(date=time)
+        time = timezone.now() + datetime.timedelta(days=1) #Sets the time to be one day in the future
+        current_event = Event(date=time) #Creates a new event with the date
 
-        self.assertIs(current_event.joinable(), False)
+        self.assertIs(current_event.joinable(), False) #Asserts that the event is not joinable
 
 class LoginTest(TestCase):
     """
@@ -295,13 +295,92 @@ class ScanViewTest(TestCase):
 
     def test_scan_GET(self):
         """
-        Tests when the GET method 
+        Tests when the GET method is used on the scan view
 
         Keyword arguments:
         self -- test case object for the scan view
         """
         client = Client()
-        response = client.post(reverse("academic_adventure:create"), follow=True) #Client tries to access the scan page using a get request
+        response = client.get(reverse("academic_adventure:create"), follow=True) #Client tries to access the scan page using a get request
 
         self.assertEqual(response.status_code, 200) #Assert that the client could successfully access the page
         self.assertTemplateUsed("scan.html") #Assert that the html template used is correct
+    
+    def test_scan_POST(self):
+        """
+        Tests the POST method on the scan view
+
+        Keyword arguments:
+        self -- test case object for the scan view
+        """
+        client = Client()
+
+        response = client.post(reverse("academic_adventure:create"), follow=True) #Client tries to access the scan page using a post request
+
+        self.assertEqual(response.status_code, 200) #Assert that the client could successfully access the page
+        self.assertTemplateUsed("scan.html") #Assert that the html template used is correct
+
+
+class BattleViewTest(TestCase):
+    """
+    Tests the battle view which allows a user to battle against 
+    a random user from the database scaled to the users level.
+    Extends the default django TestCase to allow for it to be run as a test
+    """
+
+    def test_battle_GET(self):
+        """
+        Tests when the GET method is used on the battle view
+
+        Keyword arguments:
+        self -- test case object for the battle view
+        """
+        client = Client()
+
+        response = client.get(reverse("academic_adventure:battle"), follow=True) #Client tries to access the battle page using a post request
+
+        self.assertEqual(response.status_code, 200) #Assert that the client could successfully access the page
+        self.assertTemplateUsed("battle.html") #Assert that the html template used is correct
+
+
+class CodeViewTest(TestCase):
+    """
+    Tests the code view which displays a code to join an event.
+    Extends the default django TestCase to allow for it to be run as a test
+    """
+    def test_code_GET(self):
+        """
+        Tests when the GET method is used on the code view
+
+        Keyword arguments:
+        self -- test case object for the code view
+        """
+        client = Client()
+
+        #Creates a gamekeeper to set an event
+        gamekeeper = CustomUser.objects.create(avatar="", intelligence=0, sociability=0, athleticism=0, points=0, gamekeeper=True)
+        #Creates an event
+        event = Event.objects.create(longitude=0, latitude=0, name="Test", description="Test", host=gamekeeper, date=timezone.now(), duration=1.2, code="a", type="Battle")
+        event_number = event.id
+
+        #Tries to get the QR code associated with the event in the code view
+        response = client.get(reverse("academic_adventure:code", kwargs={"event_id":event_number}), follow=True)
+
+        self.assertEqual(response.status_code, 200) #Assert that the client could successfully access the page
+        self.assertTemplateUsed("code.html") #Assert that the html template used is correct
+    
+    def test_code_invalid_GET(self):
+        """
+        Tests the code view with an invalid code ID passed into it.
+
+        Keyword arguments:
+        self -- test case object for the code view
+        """
+        client = Client()
+
+        try:
+            #Trues to get the view with an invalid event code
+            response = client.get(reverse("academic_adventure:code", kwargs={"event_id":"a"}), follow=True)
+            self.fail #If succeeds then fail the test
+        except NoReverseMatch:
+            pass

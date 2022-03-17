@@ -3,6 +3,14 @@
 <!--Loads static files of the project-->
 {% load static %}
 
+<!--Checks if the user is a gamekeeper-->
+{% if not user.gamekeeper %}
+
+<!--If not then return the user to the home page-->
+<meta http-equiv="Refresh" content="0; url={% url 'academic_adventure:home' %}">
+
+{% endif %}
+
 <html>
     <head>
         <link rel="icon" href="{% static 'academic_adventure/favicon.ico'%}">
