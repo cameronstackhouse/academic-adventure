@@ -145,23 +145,6 @@
 		    ></script>
         </div>
 
-        <!--Displays a list of events hosted by the user-->
-        <div id="events">
-            <h3>Your Events:</h3>
-
-            {% for event in allevents %}
-
-            {% if event.host == user%}
-
-            <!--Link to the QR code and more details about the event-->
-            <a href="{% url 'academic_adventure:code' event_id=event.code %}">{{event.name}}</a></br>
-
-            {% endif %}
-
-            {% endfor %}
-        
-        </div>
-
         <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModal" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
               <div class="modal-content">
