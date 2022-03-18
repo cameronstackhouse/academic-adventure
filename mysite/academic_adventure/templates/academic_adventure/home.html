@@ -196,7 +196,8 @@
                     //load up each object in the query set
                     {% for event in events %}
                     //Calls the recent function on the event to only store data for the upcoming events in the next 2 hours
-                    {% if event.recent %}
+                    //Also only shows the events that the user is not already registered for
+                    {% if event.recent and user not in event.members.all %}
 
                     //store info from event database in each array defined above
                     lati.push("{{ event.latitude }}");
