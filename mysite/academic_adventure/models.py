@@ -4,6 +4,9 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser #Abstract user model to extend
 
+class Image(models.Model):
+    name = models.CharField(max_length=50, blank=True)
+    img = models.ImageField(default="user.png", upload_to="profilepics")
 
 class CustomUser(AbstractUser):
     """
@@ -21,6 +24,9 @@ class CustomUser(AbstractUser):
     athleticism = models.IntegerField(default=0) #Users athleticism score
     points = models.IntegerField(default=0) #Current user points
     gamekeeper = models.BooleanField(default=False) #Boolean indicating if user is a gamekeeper or not
+    profile_pic = models.ImageField(default="user.png", upload_to="profilepics") #Current profile picture image  
+    pic_inventory = models.ManyToManyField(Image, blank=True) 
+    points = models.IntegerField(default=0) #User's spendable points 
 
     @property 
     def score(self):

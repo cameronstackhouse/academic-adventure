@@ -15,10 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('register', include('register.urls')), #Includes the registration URLS
     path('academic-adventure/', include('academic_adventure.urls')), #Includes all URLS of our main app
     path('academic-adventure/', include('django.contrib.auth.urls')), #Includes login and log out URLS for academic-adventure app
     path('admin/', admin.site.urls), #Includes ability to access admin URLS
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

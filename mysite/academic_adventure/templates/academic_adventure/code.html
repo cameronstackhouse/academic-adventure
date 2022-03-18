@@ -93,7 +93,7 @@
                   <div class="row">
                     <div class="col-md-6" id="userProfilePic">
                       <h2>Hello {{user.username}}!</h2>
-                      <p>PLACEHOLDER FOR PROFILE PIC</p>
+                      <img src="{{ user.profile_pic.url }}">
                       <img src="{% static 'academic_adventure/logo.png' %}"  id="logo" alt="academic adventure logo">
                       <button type="button" data-bs-toggle="modal" data-bs-target="#inventoryModal">Inventory</button>
                       <br>
