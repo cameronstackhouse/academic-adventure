@@ -17,6 +17,13 @@
         <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/profile.css' %}">
         <script type="text/javascript" src="{% static 'academic_adventure/navbar.js' %}"> </script>
         <title>Events</title>
+        <style>
+        #preview{
+          width: 100%;
+          height: 500px;
+          margin: 0px auto;
+        }
+        </style>
     </head>
 
     <body>
@@ -58,6 +65,91 @@
             </div>
           </div>
         </div>
+
+        <!--Display-->
+    
+        <!--List of user event-->
+
+        {% if userevent %}
+
+        <h3>You are attending: </h3>
+          <p>{{event.name}} - {{event.date}}</p>
+         
+        {% else %}
+
+        <h3>You are not attending any event </h3>
+
+        {% endif %}
+
+        <!--Scan button-->
+        <button type="button" data-bs-toggle="modal" data-bs-target="#scanModal">Scan</button>
+
+        </br>
+
+        <!--Displays message to user if a message is passed in-->
+        
+        {% if message %}
+
+          <p>{{ message }}</p>
+
+        {% endif %}
+
+        <!--List of society, course or close events -->
+
+        <h3>Your Societies Events:</h3>
+
+        {% for event in potentialevents|slice:":4" %}
+
+        <p>{{event.name}} - {{event.society}}</p> 
+
+        {% endfor %}
+
+        <!--Modal for rest of events-->
+
+        {% if potentialevents|length > 4%}
+
+        <a data-bs-toggle="modal" data-bs-target="#youreventModal" href="#youreventModal">......</a>
+        </br>
+
+        {% endif %}
+
+        <!--List of created events-->
+
+        {% if user.gamekeeper == True %}
+
+        <div id="events">
+          <h3>Your Created Events:</h3>
+
+          {% for event in hostevents|slice:":4" %}
+
+          <a href="{% url 'academic_adventure:code' event_id=event.code %}">{{event.name}}</a> 
+          </br>
+
+          {% endfor %}
+
+          <!--Modal to display rest of created events-->
+
+          {% if hostevents|length > 4%}
+
+          <a data-bs-toggle="modal" data-bs-target="#yourcreatedModal" href="#yourcreatedModal">......</a>
+
+          {% endif %}
+
+          {% endif %}
+
+        </div>
+
+        <!--Create event button-->
+
+        {% if user.gamekeeper == True %}
+
+        <form method="get" action="/academic-adventure/create">
+          <input type="submit" value="Create an event">
+        </form>
+
+        {% endif %}
+
+        <!--End Display-->
 
         <!--Profile page modal-->
         <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModal" aria-hidden="true">
@@ -127,5 +219,110 @@
             </div>
           </div>
 
+          <!--Scan modal-->
+          <div class="modal fade" id="scanModal" tabindex="-1" aria-labelledby="scanModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="scanModalLabel">Scan</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  
+                  <video id="preview">
+
+                  <form method="POST" id="scanned">
+                      {% csrf_token %} 
+                      <input type="hidden" name="scancontent" id="scancontent" value="" />
+                      <input type="hidden" name="userlat" id="userlat" value=""/>
+                      <input type="hidden" name="userlng" id="userlng" value=""/>
+                      <script>
+                        if(navigator.geolocation){ //Checks if browser has geolocator capability
+                          navigator.geolocation.getCurrentPosition(function(position){ //Gets and sets current position of user
+                            document.getElementById("userlat").value = position.coords.latitude;
+                            document.getElementById("userlng").value = position.coords.longitude;
+                          });
+                        } else { //If geolocator not available then display an error message
+                          alert("Geolocation not available for your browser. Please use a browser that supports HTML geolocation")
+                        }
+                      </script>
+                  </form>
+          
+                  <script type="text/javascript">
+                      //Creating a scanner object using the video HMTL tag created previously as "preview".
+                      let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+                          //Adding a listener to the scanner object with a function to execute when triggered with the
+                          //content of the scan as argument and the following instructions:
+                          scanner.addListener('scan', function (content) {
+                            //Adding the content to the hidden input "scancontent" from the form "scanned".
+                            document.getElementById('scancontent').value = content;
+                            //Submitting the "scanned" form 
+                            document.getElementById('scanned').submit();
+                            alert("Code scanned!");
+                          });
+                      //Asking Instascan to get the user's cameras as an array called "cameras" and then executing a function 
+                      //with the detected cameras as argument.  
+                      Instascan.Camera.getCameras().then(function (cameras) {
+                          // If at least one camera is detected:
+                          if (cameras.length > 0) {
+                              // The first camera is used.
+                              scanner.start(cameras[0]);
+                          } else {
+                              console.error('No cameras found.');
+                          }
+                      }).catch(function (e) {
+                          console.error(e);
+                      });
+                  </script>
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--Your Events modal-->
+          <div class="modal fade" id="youreventModal" tabindex="-1" aria-labelledby="youreventModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="yourEventModalLabel">Your Events</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  Other events that could interest you:
+
+                  {% for event in potentialevents|slice:"4:" %}
+
+                  </br>
+                  <p>{{event.name}}</p> 
+
+                  {% endfor %}
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--Your Created events modal-->
+          <div class="modal fade" id="yourcreatedModal" tabindex="-1" aria-labelledby="shopModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="shopModalLabel">Your Created Events</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Other Created Events:
+
+                    {% for event in hostevents|slice:"4:" %}
+
+                    </br>
+                    <a href="{% url 'academic_adventure:code' event_id=event.code %}">{{event.name}}</a> 
+
+                    {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
         </body>
 </html>
