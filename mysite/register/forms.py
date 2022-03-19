@@ -53,7 +53,7 @@ class RegisterForm(UserCreationForm):
             'maxlength':'22',  
             'minlength':'8' #Sets a minimum password length, ensures security
             }) 
- 
+
  
     username = forms.CharField(max_length=20, label=False) #Changes the username input field
 
