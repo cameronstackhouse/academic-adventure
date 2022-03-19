@@ -73,7 +73,7 @@ def events(request):
     #Retrieving events that are not expired and have the user as a member
     user_event = None
     for event in Event.objects.all().order_by('date'):
-        event_minutes = int(((event.duration % 1) * 60) + (event.duration - (event.duration % 1) * 60)) #Converting duration to a supported format
+        event_minutes = float(event.duration * 60) #Converting duration to a supported format
         if (request.user in event.members.all()) and (event.date + datetime.timedelta(minutes=event_minutes) >= current_datetime): #Is the event not expired ?
             user_event = event
             break
@@ -100,7 +100,7 @@ def events(request):
                "athleticism_position": athleticism_position,
                "sociability_position": sociability_position,
                 "events":Event.objects.all(), #Gets all events in the database
-                "userevents": user_event, #Gets all the events previously filtered
+                "userevent": user_event, #Gets all the events previously filtered
                 "potentialevents": potential_events, 
                 "hostevents": host_events, #Gets all event created in the user is a gamekeeper
                 "current_time": current_datetime}
