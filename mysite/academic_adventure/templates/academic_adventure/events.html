@@ -64,7 +64,11 @@
         {% if userevent %}
 
         <h3>You are attending: </h3>
-          <p>{{userevent.name}} - {{userevent.date}}</p>
+        <p>{{userevent.name}} - {{userevent.date}}</p>
+        
+        <form method="get" action="/academic-adventure/leave/{{userevent.code}}">
+          <input type="submit" value="Leave Event">
+        </form>
          
         {% else %}
 

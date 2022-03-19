@@ -147,7 +147,7 @@ def events(request):
 
     #Retrieving events that are not expired and have the user as a member
     user_event = None
-    for event in Event.objects.all().order_by('date'):
+    for event in Event.objects.all().order_by('-date'):
         event_minutes = float(event.duration * 60) #Converting duration to a supported format
         if (request.user in event.members.all()) and (event.date + datetime.timedelta(minutes=event_minutes) >= current_datetime - datetime.timedelta(seconds=10)): #Is the event not expired ?
             user_event = event
@@ -155,14 +155,14 @@ def events(request):
 
     #Retrieving events that are joinable within the next hour for the user
     potential_events = []
-    for event in Event.objects.all().order_by('date'):
+    for event in Event.objects.all().order_by('-date'):
         event_minutes = float(event.duration * 60) #Converting duration to a supported format
         if (event.society == None or request.user in event.society.members.all()) and (event.date >= current_datetime >= event.date - datetime.timedelta(hours=1)): #Checks if the event is joinable within the next hour
             potential_events.append(event)
     
     #Retrieving events that are not expired and have the user as the host
     host_events = []
-    for event in Event.objects.all().order_by('date').filter(host=request.user):
+    for event in Event.objects.all().order_by('-date').filter(host=request.user):
         event_minutes = float(event.duration * 60) #Converting duration to a supported format
         if event.date + datetime.timedelta(minutes=event_minutes) >= current_datetime - datetime.timedelta(minutes=20): #Checks that the current time - 20 minutes is before the event expiry and 
             host_events.append(event)
@@ -305,3 +305,25 @@ def battle(request):
                 "sociability_position": sociability_position
                 } #Information about the user and their opponent
     return render(request, 'academic_adventure/battle.html', context)
+
+@login_required
+def leave(request, code):
+    """
+    View to remove a user from an event that they are currently
+    participating in. This forfeits the users rewards.
+
+    Keyword arguments:
+    request -- HttpRequest object 
+    """
+
+    if Event.objects.filter(code=code).exists():
+        event = Event.objects.get(code=code)
+        event_date = event.date
+        event_duration = event.duration
+        event_type = event.type
+        if request.user in event.members.all():
+            current_time = timezone.now()
+    else:
+        return redirect("academic_adventure:events")
+    
+    return redirect("academic_adventure:events")
