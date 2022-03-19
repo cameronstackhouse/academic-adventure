@@ -68,7 +68,6 @@ def events(request):
     # Main page code:
 
     current_datetime = timezone.now() # offset-awared datetime
-    current_datetime.astimezone(timezone.utc).replace(tzinfo=None) #Current time to compare with and check if events are expired
 
     #Retrieving events that are not expired and have the user as a member
     user_event = None
@@ -81,14 +80,14 @@ def events(request):
     #Retrieving events that are not expired and have the user as the host
     potential_events = []
     for event in Event.objects.all().order_by('date'):
-        event_minutes = int(((event.duration % 1) * 60) + (event.duration - (event.duration % 1) * 60)) #Converting duration to a supported format
+        event_minutes = float(event.duration * 60) #Converting duration to a supported format
         if (event.society == None or request.user in event.society.members.all()) and (event.date + datetime.timedelta(minutes=event_minutes) >= current_datetime): #Is the event not expired ?
             potential_events.append(event)
     
     #Retrieving events that are not expired and have the user as the host
     host_events = []
     for event in Event.objects.all().order_by('date').filter(host=request.user):
-        event_minutes = int(((event.duration % 1) * 60) + (event.duration - (event.duration % 1) * 60)) #Converting duration to a supported format
+        event_minutes = float(event.duration * 60) #Converting duration to a supported format
         if event.date + datetime.timedelta(minutes=event_minutes) >= current_datetime: #Is the event not expired ?
             host_events.append(event)
 
