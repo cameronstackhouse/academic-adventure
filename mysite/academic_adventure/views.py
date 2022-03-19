@@ -73,7 +73,7 @@ def events(request):
     #Retrieving events that are not expired and have the user as a member
     user_event = None
     for event in Event.objects.all().order_by('date'):
-        event_minutes = int(((event.duration % 1) * 60) + (event.duration - (event.duration % 1) * 60)) #Converting duration to a supported format
+        event_minutes = float(event.duration * 60) #Converting duration to a supported format
         if (request.user in event.members.all()) and (event.date + datetime.timedelta(minutes=event_minutes) >= current_datetime): #Is the event not expired ?
             user_event = event
             break
