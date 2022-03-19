@@ -28,18 +28,6 @@
         <script type="text/javascript" src="{% static 'academic_adventure/navbar.js' %}"> </script>
         <title>Create</title>
 
-        <style>
-          #map{
-			    	height: 50%;
-			    }
-			
-			    html, body{
-				    height: 95%;
-				    margin: 0;
-				    padding: 0;
-			    }
-        </style>
-
         <script>
             let map;
             var marker; //Global individual marker
@@ -120,7 +108,11 @@
         <h1>Create Event</h1>
         </br>
 
+        <div class="container">
+        <div class="row">
+
         <!--Displays form to create an event-->
+        <div class="col-md-6">
         <div id="left">
             <h3>Enter event details</h3>
             <form method="POST">
@@ -131,35 +123,15 @@
                 </fieldset>
             </form>
         </div>
+        </div>
         
-
-
-
         <!--Displays the map to select the location from-->
+        <div class="col-md-6">
         <h3>Select location from the map</h3>
 
-        <div id="map">
-          <script 
-                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDS7uNAAWZIIeVC3-GXZUx7hNdkLoY7I3E&callback=initMap&v=weekly"
-		        async
-		    ></script>
+        <div id="map" style="width: 100%; height: 500px;"></div>
         </div>
-
-        <!--Displays a list of events hosted by the user-->
-        <div id="events">
-            <h3>Your Events:</h3>
-
-            {% for event in allevents %}
-
-            {% if event.host == user%}
-
-            <!--Link to the QR code and more details about the event-->
-            <a href="{% url 'academic_adventure:code' event_id=event.code %}">{{event.name}}</a></br>
-
-            {% endif %}
-
-            {% endfor %}
-        
+        </div>
         </div>
 
         <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModal" aria-hidden="true">
@@ -226,5 +198,9 @@
               </div>
             </div>
           </div>
+      <script 
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDS7uNAAWZIIeVC3-GXZUx7hNdkLoY7I3E&callback=initMap&v=weekly"
+      async
+  ></script>      
     </body>
 </html>

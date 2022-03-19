@@ -330,7 +330,7 @@ def battle(request):
     if not request.session.has_key('battle_id'):
         return redirect("academic_adventure:scan") #If not set then the user is redirected to the scan view
 
-    event_id = int(request.session['battle_id']) #Gets the event id of the battle
+    event_id = (request.session['battle_id']) #Gets the event id of the battle
     
     #POST request handling for end of game
     if request.method == "POST":
@@ -344,10 +344,10 @@ def battle(request):
             return redirect('academic_adventure:home') #redirect after a battle back to home page
     
     #Checks that the event ID passed into the function has an event associated with it
-    if not Event.objects.filter(pk=event_id).exists():
+    if not Event.objects.filter(code=event_id).exists():
         return redirect("academic_adventure:scan")
         
-    current_event = Event.objects.get(pk=event_id) #Gets the event being participated in
+    current_event = Event.objects.get(code=event_id) #Gets the event being participated in
 
     #checks the user has not already played this battle (preventing refresh cheating)
     #Also checks to see if the event associated with the ID entered is a battle or not
