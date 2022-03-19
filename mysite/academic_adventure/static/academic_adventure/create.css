@@ -1,10 +1,7 @@
 /*CSS for the create page*/
 
 #map{
-    height: 100%;
     width: 100%;
-    max-width: 400px;
-    max-height: 400px;
 }
 
 html, body{
