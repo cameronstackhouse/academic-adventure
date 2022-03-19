@@ -100,7 +100,7 @@ def events(request):
                "athleticism_position": athleticism_position,
                "sociability_position": sociability_position,
                 "events":Event.objects.all(), #Gets all events in the database
-                "userevents": user_event, #Gets all the events previously filtered
+                "userevent": user_event, #Gets all the events previously filtered
                 "potentialevents": potential_events, 
                 "hostevents": host_events, #Gets all event created in the user is a gamekeeper
                 "current_time": current_datetime}
