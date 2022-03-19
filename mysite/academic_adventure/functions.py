@@ -78,7 +78,7 @@ def user_occupied(user):
     for event in Event.objects.all():  
         #If event is a battle then ignore the time constraint
         if event.type == "Battle":
-            next
+            continue
         #Else checks if user is in the event and if the event is taking place within the current time
         minutes = int(60 * event.duration)
         if user in event.members.all() and event.date - timedelta(minutes=10) <= current_time <= event.date + timedelta(minutes=minutes):
