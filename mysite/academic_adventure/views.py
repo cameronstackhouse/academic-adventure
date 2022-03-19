@@ -89,7 +89,7 @@ def events(request):
         #Checks if user location has successfully been accessed
         if lng == "" or lat == "":
             context["message"] = "Error, can't get your location."
-            return render(request, 'academic_adventure/scan.html', context) #Shows scan page
+            return render(request, 'academic_adventure/events.html', context) #Shows scan page
 
         #Converts user location to decimal from string
         lat = Decimal(lat)
@@ -246,7 +246,7 @@ def battle(request):
 
     #Checks if an event ID has been set for the battle (Set in the scan view)
     if not request.session.has_key('battle_id'):
-        return redirect("academic_adventure:scan") #If not set then the user is redirected to the scan view
+        return redirect("academic_adventure:events") #If not set then the user is redirected to the scan view
 
     event_id = (request.session['battle_id']) #Gets the event id of the battle
     
@@ -263,14 +263,14 @@ def battle(request):
     
     #Checks that the event ID passed into the function has an event associated with it
     if not Event.objects.filter(code=event_id).exists():
-        return redirect("academic_adventure:scan")
+        return redirect("academic_adventure:events")
         
     current_event = Event.objects.get(code=event_id) #Gets the event being participated in
 
     #checks the user has not already played this battle (preventing refresh cheating)
     #Also checks to see if the event associated with the ID entered is a battle or not
     if request.user in current_event.members.all() or current_event.type != "Battle":
-        return redirect("academic_adventure:scan")
+        return redirect("academic_adventure:events")
         
     current_event.members.add(request.user)
     
