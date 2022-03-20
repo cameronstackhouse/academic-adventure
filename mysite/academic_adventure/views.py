@@ -4,7 +4,6 @@ from django.contrib.auth.decorators import login_required #Used to reject user e
 from .models import Event, CustomUser #Imports user defined models in the system
 from .forms import CreateForm
 from django.utils.crypto import get_random_string #Imports a random string generator for code generation
-import string 
 import random
 import logging
 import datetime
@@ -23,6 +22,17 @@ def leaderboard(request):
     request -- HttpRequest object 
     """
 
+    current_datetime = timezone.now() # offset-awared datetime
+
+    #Code to check if user is currently in an event
+    user_event = None
+    for event in Event.objects.all().order_by('-date'):
+        event_minutes = float(event.duration * 60) #Converting duration to a supported format
+        if (request.user in event.members.all()) and (event.date + datetime.timedelta(minutes=event_minutes) >= current_datetime): #Checks if current time is before the events expiry
+            if event.type != "Battle":
+                user_event = event
+                break
+
     intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
 
     context = {"scoreusers":sorted(CustomUser.objects.all(), key=lambda u:u.score, reverse = True)[:10], #Sorts users by overall score
@@ -32,7 +42,8 @@ def leaderboard(request):
             "user":request.user,
             "intelligence_position": intelligence_position,
             "athleticism_position": athleticism_position,
-            "sociability_position": sociability_position
+            "sociability_position": sociability_position,
+            "userevent": user_event
             } #Data to be passed into the html form
     return render(request, 'academic_adventure/leaderboard.html', context) #Returns the leaderboard html page with the context passed in
 
@@ -46,13 +57,25 @@ def home(request):
     request -- HttpRequest object 
     """
    
+    current_datetime = timezone.now() # offset-awared datetime
+
     intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
+
+    #Code to determine if a user is currently in an event
+    user_event = None
+    for event in Event.objects.all().order_by('-date'):
+        event_minutes = float(event.duration * 60) #Converting duration to a supported format
+        if (request.user in event.members.all()) and (event.date + datetime.timedelta(minutes=event_minutes) >= current_datetime): #Checks if current time is before the events expiry
+            if event.type != "Battle":
+                user_event = event
+                break
 
     context = {"events":Event.objects.all(), #Gets all events in the database
                 "user":request.user,
                 "intelligence_position": intelligence_position,
                 "athleticism_position": athleticism_position,
-                "sociability_position": sociability_position} #Passes user information and event information into the HTML form
+                "sociability_position": sociability_position,
+                "userevent": user_event} #Passes user information and event information into the HTML form
     return render(request, 'academic_adventure/home.html', context) #Returns the home html page with the context passed in
 
 @login_required
@@ -122,18 +145,23 @@ def events(request):
         
                     else:
                         #If user isn't already registered for an event then apply bonus for attending in person event
+                        reward = round(scanned_event.duration) #Gets the points reward for attending the event
+                        if reward == 0: #If the reward is 0 then set it to 1 to ensure every event gives a points reward
+                            reward = 1
                         if scanned_event.type == "Sports":
-                            request.user.athleticism += 1 * round(scanned_event.duration) #If sports event then increase the users athleticism. Scaled by duration of the event
-                            context["message"] = f"Successfully added to event: {scanned_event.name}. Athleticism increased!"
+                            request.user.athleticism += reward #If sports event then increase the users athleticism. Scaled by duration of the event
+                            context["message"] = f"Successfully added to event: {scanned_event.name}. Athleticism and points increased by {reward}!"
                         elif scanned_event.type == "Academic":
-                            request.user.intelligence += 1 * round(scanned_event.duration) #If academic event then add 1 to users intelligence. Scaled by duration of the event
-                            context["message"] = f"Successfully added to event: {scanned_event.name}. Intelligence increased!"
+                            request.user.intelligence += reward #If academic event then add 1 to users intelligence. Scaled by duration of the event
+                            context["message"] = f"Successfully added to event: {scanned_event.name}. Intelligence and points increased by {reward}!"
                         elif scanned_event.type == "Social":
-                            request.user.sociability += 1 * round(scanned_event.duration) #If social event then add 1 to users sociability. Scaled by duration of the event
-                            context["message"] = f"Successfully added to event: {scanned_event.name}. Sociability increased!"
+                            request.user.sociability += reward #If social event then add 1 to users sociability. Scaled by duration of the event
+                            context["message"] = f"Successfully added to event: {scanned_event.name}. Sociability and points increased by {reward}!"
                         elif scanned_event.type == "Battle":
                             request.session['battle_id'] = request.POST.get("scancontent") #Sets the battle ID session variable to the event ID
                             return redirect('academic_adventure:battle') #If battle then redirect to the battle view
+                        
+                        request.user.points += reward #Adds points to users points total
             
                         request.user.save() #Saves changes made to the users stats
                         scanned_event.members.add(request.user) #Adds user to the event
@@ -183,6 +211,17 @@ def create(request):
     Keyword arguments:
     request -- HttpRequest object 
     """
+    current_datetime = timezone.now()
+
+    #Code to determine if a user is currently in an event
+    user_event = None
+    for event in Event.objects.all().order_by('-date'): #Iterates through events ordered by their date
+        event_minutes = float(event.duration * 60) #Converting duration to a supported format
+        if (request.user in event.members.all()) and (event.date + datetime.timedelta(minutes=event_minutes) >= current_datetime): #Checks if current time is before the events expiry
+            if event.type != "Battle": #Checks if the event is not battle, as battles do not count as an occupiable event
+                user_event = event
+                break
+
     gamekeeper = request.user.gamekeeper #Gets if the user is a gamekeeper
     intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
 
@@ -203,7 +242,8 @@ def create(request):
                "allevents": Event.objects.filter(host=request.user), #Only shows events being hosted by user
                "intelligence_position": intelligence_position,
                "athleticism_position": athleticism_position,
-               "sociability_position": sociability_position
+               "sociability_position": sociability_position,
+               "userevent": user_event
                } #Data to be passed into the html form
     return render(request, 'academic_adventure/create.html', context) #Renders the create html page with the context passed in
 
@@ -219,6 +259,17 @@ def code(request, event_id):
     request -- HttpRequest object 
     event_id -- ID of the event to display the code
     """
+    current_datetime = timezone.now()
+
+    #Code to determine if a user is currently in an event
+    user_event = None
+    for event in Event.objects.all().order_by('-date'): #Iterates through events ordered by their date
+        event_minutes = float(event.duration * 60) #Converting duration to a supported format
+        if (request.user in event.members.all()) and (event.date + datetime.timedelta(minutes=event_minutes) >= current_datetime): #Checks if current time is before the events expiry
+            if event.type != "Battle": #Checks if the event is not battle, as battles do not count as an occupiable event
+                user_event = event
+                break
+
     intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
 
     event = Event.objects.get(code=event_id) #Gets the event from the ID passed into the function
@@ -229,6 +280,7 @@ def code(request, event_id):
                 "intelligence_position": intelligence_position,
                 "athleticism_position": athleticism_position,
                 "sociability_position": sociability_position,
+                "userevent": user_event
                 } #Information about event name, participants, and if the user is a gamekeeper to be passed to HTML form
 
     return render(request, 'academic_adventure/code.html', context) #Renders the code html with the context passed in
@@ -243,6 +295,17 @@ def battle(request):
     to prevent users from entering in the event ID of a battle 
     in the URL and gaining access to a battle that is too far away.
     """
+
+    current_datetime = timezone.now()
+
+    #Code to determine if a user is currently in an event
+    user_event = None
+    for event in Event.objects.all().order_by('-date'): #Iterates through events ordered by their date
+        event_minutes = float(event.duration * 60) #Converting duration to a supported format
+        if (request.user in event.members.all()) and (event.date + datetime.timedelta(minutes=event_minutes) >= current_datetime): #Checks if current time is before the events expiry
+            if event.type != "Battle": #Checks if the event is not battle, as battles do not count as an occupiable event
+                user_event = event
+                break
 
     #Checks if an event ID has been set for the battle (Set in the scan view)
     if not request.session.has_key('battle_id'):
@@ -302,7 +365,8 @@ def battle(request):
                 "opponent": opponent,
                 "intelligence_position": intelligence_position,
                 "athleticism_position": athleticism_position,
-                "sociability_position": sociability_position
+                "sociability_position": sociability_position,
+                "userevent": user_event
                 } #Information about the user and their opponent
     return render(request, 'academic_adventure/battle.html', context)
 
@@ -326,13 +390,18 @@ def leave(request, code):
             current_time = timezone.now() #Gets the current time
             #Checks if event hasn't ended
             if event_date + datetime.timedelta(minutes=float(60 * event_duration)) >= current_time:
+                reward = round(event_duration) #Gets the reward to be taken off
+                if reward == 0: #Traps if a reward is 0
+                    reward = 1 
                 #Checks what type of event the event the user wants to leave is
                 if event_type == "Academic":
-                    request.user.intelligence = request.user.intelligence - round(event_duration) #Reverts intelligence bonus
+                    request.user.intelligence = request.user.intelligence - reward #Reverts intelligence bonus
                 elif event_type == "Social":
-                    request.user.sociability = request.user.sociability - round(event_duration) #Reverts sociability bonus
+                    request.user.sociability = request.user.sociability - reward #Reverts sociability bonus
                 elif event_type == "Sports":
-                    request.user.athleticism = request.user.athleticism - round(event_duration) #Reverts athleticism bonus
+                    request.user.athleticism = request.user.athleticism - reward #Reverts athleticism bonus
+                
+                request.user.points -= reward #Removes points given for the event
                 
                 event.members.remove(request.user) #Removes the user from the event
 
