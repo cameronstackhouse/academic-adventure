@@ -150,13 +150,13 @@ def events(request):
                             reward = 1
                         if scanned_event.type == "Sports":
                             request.user.athleticism += reward #If sports event then increase the users athleticism. Scaled by duration of the event
-                            context["message"] = f"Successfully added to event: {scanned_event.name}. Athleticism increased!"
+                            context["message"] = f"Successfully added to event: {scanned_event.name}. Athleticism and points increased by {reward}!"
                         elif scanned_event.type == "Academic":
                             request.user.intelligence += reward #If academic event then add 1 to users intelligence. Scaled by duration of the event
-                            context["message"] = f"Successfully added to event: {scanned_event.name}. Intelligence increased!"
+                            context["message"] = f"Successfully added to event: {scanned_event.name}. Intelligence and points increased by {reward}!"
                         elif scanned_event.type == "Social":
                             request.user.sociability += reward #If social event then add 1 to users sociability. Scaled by duration of the event
-                            context["message"] = f"Successfully added to event: {scanned_event.name}. Sociability increased!"
+                            context["message"] = f"Successfully added to event: {scanned_event.name}. Sociability and points increased by {reward}!"
                         elif scanned_event.type == "Battle":
                             request.session['battle_id'] = request.POST.get("scancontent") #Sets the battle ID session variable to the event ID
                             return redirect('academic_adventure:battle') #If battle then redirect to the battle view
