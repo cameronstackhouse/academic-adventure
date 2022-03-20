@@ -16,7 +16,6 @@
     text-align: center;
 }
 
-
 #printContent0{
     text-align: center;
 }
@@ -24,3 +23,9 @@
 #memberContainer{
     text-align: center;
 }
+
+/*Sets the size of the QR code*/
+svg{
+    width: 100mm;
+    height: 100mm;
+  }
