@@ -20,6 +20,14 @@
     text-align: center;
 }
 
+#logoPrint{
+    width:300px;
+    height:180px;
+    display: block;
+    margin-left: auto; /*Logo is in the centre of the topContainer*/
+    margin-right: auto;
+}
+
 #memberContainer{
     text-align: center;
 }
