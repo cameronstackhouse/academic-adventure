@@ -19,7 +19,7 @@
         <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/profile.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/home.css' %}">
         <script type="text/javascript" src="{% static 'academic_adventure/navbar.js' %}"> </script>
-	
+
 		<!--This script will create a new google maps entity within the map div-->
 		<!--Zoom 15 is used to move it to a local map display-->
 		<!--Center used to look at the middle of campus-->
@@ -312,6 +312,8 @@
             <img src="{% static 'academic_adventure/logo.png' %}"  id="logo" alt="academic adventure logo">
             <!-- Navbar Button to toggle js that allows the navbarContainer to appear and disappear -->
             <button type="button" id="navbarButton">Menu</button>
+            <!-- Profile Button that shows user's profile picture -->
+            <button type="button" id="profilePicture" data-bs-toggle="modal" data-bs-target="#profileModal"><img src="{% static 'academic_adventure/user.png' %}"></button>
         </div>
             <div class="d-flex" id="navbarContainer">
               <ul class="navbar-nav ms-auto">
@@ -319,14 +321,11 @@
               <li class="nav-item active">
                 <a class="nav-link" href="{% url 'academic_adventure:home' %}">Home</a>
               </li>
-              <!-- Button to open specified modal -->
-              <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#profileModal" style="border: none; background: none; text-align: left">
-                Profile
-                </button>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'academic_adventure:events' %}">Events</a>
                 </li>
-              {% if not userevent %}  
+              {% if not userevent %}
+              <!-- Button to open specified modal -->
               <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#shopModal" style="border: none; background: none; text-align: left">
                   Shop
               </button>
@@ -343,7 +342,7 @@
           </div>
         </div>
 			
-		  <div id="map"></div>
+		  <div id="map" style="height: 90%;"></div>
 			
           <!--This script loads the google maps API to be used as soon as the DOM is loaded-->
 		  <script
