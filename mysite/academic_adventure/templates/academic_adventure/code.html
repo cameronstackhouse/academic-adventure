@@ -28,24 +28,23 @@
 
         <!-- Script for the print button to set the print content -->
         <script>
+          /**
+           * Opens the print menu to print contents of a given div
+           * @param divName: Name of the div to print the contents of
+           */
           function printDiv(divName) {
-            var printContents = document.getElementById(divName).innerHTML;
+            var printContents = document.getElementById(divName).innerHTML; //Gets the contents to print
             var originalContents = document.body.innerHTML;
 
             document.body.innerHTML = printContents;
 
-            window.print();
+            window.print(); //Opens the print window
 
-            document.body.innerHTML = originalContents;
+            document.body.innerHTML = originalContents; //Restores HTML to original contents
+
+            window.location.reload(); //Reloads the page to restore menu bar JS
           }
         </script>
-
-        <style>
-          svg{
-            width: 100mm;
-            height: 100mm;
-          }
-        </style>
     </head>
 
     <body>
