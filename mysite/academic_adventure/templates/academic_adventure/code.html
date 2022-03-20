@@ -24,6 +24,13 @@
         <title>Code</title>
         <!--Scales the screen to the size of the viewport-->
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+
+        <style>
+          svg{
+            width: 100mm;
+            height: 100mm;
+          }
+        </style>
     </head>
 
     <body>
@@ -43,21 +50,12 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'academic_adventure:events' %}">Events</a>
             </li>
-          <li class="nav-item">
-              <a class="nav-link" href="{% url 'academic_adventure:scan' %}">Scan</a>
-          </li>
           <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#shop" style="border: none; background: none; text-align: left;">
               Shop
           </button>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'academic_adventure:leaderboard' %}">Leaderboard</a>
             </li>
-          {% if user.gamekeeper %}
-          <li class="nav-item">
-              <a class="nav-link" href="{% url 'academic_adventure:create' %}">Create</a>
-          </li>
-          {% endif %}
-
           <li class="nav-item">
               <a class="nav-link" href="{% url 'logout' %}">Logout</a>
           </li>
@@ -65,22 +63,33 @@
         </div>
       </div>
     </div>
-      <!--Loads the QR code for the event-->
-      {% load qr_code %}
-
-      <h1>Event: {{event.name}} </h1>
-
-      {% qr_from_text event.code size="L" %}
-
-      <!--Displays members registered for the event-->
-      <h3>Members of event:</h3>
-      {% for member in event_members %}
-
-      <p>{{member.username}}</p>
-
-      {% endfor %}
 
     </body>
+
+        <h1>Event: {{event.name}} </h1>  
+        <div class="container">        
+        <div class="row">
+
+        <div class="col-md-6">
+        <!--Loads the QR code for the event-->
+        {% load qr_code %}
+
+        {% qr_from_text event.code size="L" %}
+        </div>
+
+        <div class="col-md-6">
+        <!--Displays members registered for the event-->
+        <h3>Members of event:</h3>
+        {% for member in event_members %}
+
+        <p>{{member.username}}</p>
+
+        {% endfor %}
+
+        </div>
+        </div>
+        </div>
+
         <!--Profile page modal-->
         <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModal" aria-hidden="true">
           <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
