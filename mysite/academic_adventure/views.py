@@ -110,36 +110,35 @@ def events(request):
             # This only allows a user to be at one event at once
             if user_occupied(request.user): 
                 context["message"] = "You are already signed up for an event. Try again when your current event finishes." #Displays message to user
-                return render(request, 'academic_adventure/events.html', context) #Shows scan page
-
-            if request.user not in scanned_event.members.all(): #Checks if user is not already registered for event
-                #Performs a distance check to check that the user is close enough to participate in the event
-                if distance > valid_radius:
-                    context["message"] = "Too far away to participate in event" #Error message
-                    return render(request, 'academic_adventure/events.html', context) #Shows scan page
-                #Checks if the scanned event is joinable (If the current time is between 10 minutes before the start of the event and 5 minutes after the start of the event)
-                elif not scanned_event.joinable():
-                    context["message"] = "Can't join event, must be between 10 minutes before the start of the event and 5 minutes after the start."
-                    return render(request, 'academic_adventure/events.html', context) #Shows scan page
+            else:    
+                if request.user not in scanned_event.members.all(): #Checks if user is not already registered for event
+                    #Performs a distance check to check that the user is close enough to participate in the event
+                    if distance > valid_radius:
+                        context["message"] = "Too far away to participate in event" #Error message
             
-                #If user isn't already registered for an event then apply bonus for attending in person event
-                if scanned_event.type == "Sports":
-                    request.user.athleticism += 1 * round(scanned_event.duration) #If sports event then increase the users athleticism. Scaled by duration of the event
-                    context["message"] = f"Successfully added to event: {scanned_event.name}. Athleticism increased!"
-                elif scanned_event.type == "Academic":
-                    request.user.intelligence += 1 * round(scanned_event.duration) #If academic event then add 1 to users intelligence. Scaled by duration of the event
-                    context["message"] = f"Successfully added to event: {scanned_event.name}. Intelligence increased!"
-                elif scanned_event.type == "Social":
-                    request.user.sociability += 1 * round(scanned_event.duration) #If social event then add 1 to users sociability. Scaled by duration of the event
-                    context["message"] = f"Successfully added to event: {scanned_event.name}. Sociability increased!"
-                elif scanned_event.type == "Battle":
-                    request.session['battle_id'] = request.POST.get("scancontent") #Sets the battle ID session variable to the event ID
-                    return redirect('academic_adventure:battle') #If battle then redirect to the battle view
+                    #Checks if the scanned event is joinable (If the current time is between 10 minutes before the start of the event and 5 minutes after the start of the event)
+                    elif not scanned_event.joinable():
+                        context["message"] = "Can't join event, must be between 10 minutes before the start of the event and 5 minutes after the start."
+        
+                    else:
+                        #If user isn't already registered for an event then apply bonus for attending in person event
+                        if scanned_event.type == "Sports":
+                            request.user.athleticism += 1 * round(scanned_event.duration) #If sports event then increase the users athleticism. Scaled by duration of the event
+                            context["message"] = f"Successfully added to event: {scanned_event.name}. Athleticism increased!"
+                        elif scanned_event.type == "Academic":
+                            request.user.intelligence += 1 * round(scanned_event.duration) #If academic event then add 1 to users intelligence. Scaled by duration of the event
+                            context["message"] = f"Successfully added to event: {scanned_event.name}. Intelligence increased!"
+                        elif scanned_event.type == "Social":
+                            request.user.sociability += 1 * round(scanned_event.duration) #If social event then add 1 to users sociability. Scaled by duration of the event
+                            context["message"] = f"Successfully added to event: {scanned_event.name}. Sociability increased!"
+                        elif scanned_event.type == "Battle":
+                            request.session['battle_id'] = request.POST.get("scancontent") #Sets the battle ID session variable to the event ID
+                            return redirect('academic_adventure:battle') #If battle then redirect to the battle view
             
-                request.user.save() #Saves changes made to the users stats
-                scanned_event.members.add(request.user) #Adds user to the event
-            else: #Else if user is already registered for event
-                context["message"] = f"You are already registered for this event."
+                        request.user.save() #Saves changes made to the users stats
+                        scanned_event.members.add(request.user) #Adds user to the event
+                else: #Else if user is already registered for event
+                    context["message"] = f"You are already registered for this event."
         else: #If the event does not exist
             context["message"] = "Error, event does not exist."
     
@@ -149,9 +148,10 @@ def events(request):
     user_event = None
     for event in Event.objects.all().order_by('-date'):
         event_minutes = float(event.duration * 60) #Converting duration to a supported format
-        if (request.user in event.members.all()) and (event.date + datetime.timedelta(minutes=event_minutes) >= current_datetime - datetime.timedelta(seconds=10)): #Is the event not expired ?
-            user_event = event
-            break
+        if (request.user in event.members.all()) and (event.date + datetime.timedelta(minutes=event_minutes) >= current_datetime): #Checks if current time is before the events expiry
+            if event.type != "Battle":
+                user_event = event
+                break
 
     #Retrieving events that are joinable within the next hour for the user
     potential_events = []
@@ -316,14 +316,28 @@ def leave(request, code):
     request -- HttpRequest object 
     """
 
-    if Event.objects.filter(code=code).exists():
-        event = Event.objects.get(code=code)
-        event_date = event.date
+    if Event.objects.filter(code=code).exists(): #Checks if event with the given code exists
+        event = Event.objects.get(code=code) #Gets the event with the code
+        #Gets the event attributes
+        event_date = event.date 
         event_duration = event.duration
         event_type = event.type
-        if request.user in event.members.all():
-            current_time = timezone.now()
-    else:
-        return redirect("academic_adventure:events")
+        if request.user in event.members.all(): #Checks if user is in the members of the events 
+            current_time = timezone.now() #Gets the current time
+            #Checks if event hasn't ended
+            if event_date + datetime.timedelta(minutes=float(60 * event_duration)) >= current_time:
+                #Checks what type of event the event the user wants to leave is
+                if event_type == "Academic":
+                    request.user.intelligence = request.user.intelligence - round(event_duration) #Reverts intelligence bonus
+                elif event_type == "Social":
+                    request.user.sociability = request.user.sociability - round(event_duration) #Reverts sociability bonus
+                elif event_type == "Sports":
+                    request.user.athleticism = request.user.athleticism - round(event_duration) #Reverts athleticism bonus
+                
+                event.members.remove(request.user) #Removes the user from the event
+
+                event.save() #Saves the event changes
+                request.user.save() #Saves the user changes
+
     
-    return redirect("academic_adventure:events")
+    return redirect("academic_adventure:events") #Redirects back to the events page

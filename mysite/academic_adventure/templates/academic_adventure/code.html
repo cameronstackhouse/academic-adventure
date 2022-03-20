@@ -24,6 +24,13 @@
         <title>Code</title>
         <!--Scales the screen to the size of the viewport-->
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+
+        <style>
+          svg{
+            width: 100mm;
+            height: 100mm;
+          }
+        </style>
     </head>
 
     <body>
@@ -56,22 +63,33 @@
         </div>
       </div>
     </div>
-      <!--Loads the QR code for the event-->
-      {% load qr_code %}
-
-      <h1>Event: {{event.name}} </h1>
-
-      {% qr_from_text event.code size="L" %}
-
-      <!--Displays members registered for the event-->
-      <h3>Members of event:</h3>
-      {% for member in event_members %}
-
-      <p>{{member.username}}</p>
-
-      {% endfor %}
 
     </body>
+
+        <h1>Event: {{event.name}} </h1>  
+        <div class="container">        
+        <div class="row">
+
+        <div class="col-md-6">
+        <!--Loads the QR code for the event-->
+        {% load qr_code %}
+
+        {% qr_from_text event.code size="L" %}
+        </div>
+
+        <div class="col-md-6">
+        <!--Displays members registered for the event-->
+        <h3>Members of event:</h3>
+        {% for member in event_members %}
+
+        <p>{{member.username}}</p>
+
+        {% endfor %}
+
+        </div>
+        </div>
+        </div>
+
         <!--Profile page modal-->
         <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModal" aria-hidden="true">
           <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
