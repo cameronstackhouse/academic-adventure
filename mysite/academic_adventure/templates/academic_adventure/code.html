@@ -25,6 +25,7 @@
         <title>Code</title>
         <!--Scales the screen to the size of the viewport-->
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+
         <!-- Script for the print button to set the print content -->
         <script>
           function printDiv(divName) {
@@ -39,6 +40,12 @@
           }
         </script>
 
+        <style>
+          svg{
+            width: 100mm;
+            height: 100mm;
+          }
+        </style>
     </head>
 
     <body>
@@ -58,21 +65,12 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'academic_adventure:events' %}">Events</a>
             </li>
-          <li class="nav-item">
-              <a class="nav-link" href="{% url 'academic_adventure:scan' %}">Scan</a>
-          </li>
           <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#shop" style="border: none; background: none; text-align: left;">
               Shop
           </button>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'academic_adventure:leaderboard' %}">Leaderboard</a>
             </li>
-          {% if user.gamekeeper %}
-          <li class="nav-item">
-              <a class="nav-link" href="{% url 'academic_adventure:create' %}">Create</a>
-          </li>
-          {% endif %}
-
           <li class="nav-item">
               <a class="nav-link" href="{% url 'logout' %}">Logout</a>
           </li>
@@ -80,7 +78,8 @@
         </div>
       </div>
     </div>
-      <!--Loads the QR code for the event-->
+
+     <!--Loads the QR code for the event-->
       {% load qr_code %}
       <div id="printContent">
         <div id="printContent0">
@@ -90,23 +89,24 @@
         </div>
     </div>
 
-      <!--Displays Print button for the event's QR code-->
+    </body>
+
+        <!--Displays Print button for the event's QR code-->
       <div id="printContainer">
         <!-- <button type="text/css" media="print" id="printButton" onclick="printDiv('printableArea')" >Print</button> -->
         <input type="button" id="printButton" onclick="printDiv('printContent')" value="Print" />
-    </div>
+      </div>
   
       <!--Displays members registered for the event-->
-      <div id="memberContainer">
+       <div id="memberContainer">
         <h3>Members of event:</h3>
         {% for member in event_members %}
 
-        <p>{{member.username}}</p>
+         <p>{{member.username}}</p>
 
         {% endfor %}
-      </div>
+       </div>
 
-    </body>
         <!--Profile page modal-->
         <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModal" aria-hidden="true">
           <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
