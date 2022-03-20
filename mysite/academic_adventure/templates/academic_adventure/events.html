@@ -27,37 +27,40 @@
     </head>
 
     <body>
-        <!--HTML for the navbar-->
+        <!--HTML for navigation bar-->
         <div id="topContainer">
-            <img src="{% static 'academic_adventure/logo.png' %}"  id="logo" alt="academic adventure logo">
-            <button type="button" id="navbarButton">Menu</button>
-        </div>
-            <div class="d-flex" id="navbarContainer">
-              <ul class="navbar-nav ms-auto">
-              <li class="nav-item active">
-                <a class="nav-link" href="{% url 'academic_adventure:home' %}">Home</a>
+          <img src="{% static 'academic_adventure/logo.png' %}"  id="logo" alt="academic adventure logo">
+          <!-- Navbar Button to toggle js that allows the navbarContainer to appear and disappear -->
+          <button type="button" id="navbarButton">Menu</button>
+          <!-- Profile Button that shows user's profile picture -->
+          <button type="button" id="profilePicture" data-bs-toggle="modal" data-bs-target="#profileModal"><img src="{% static 'academic_adventure/user.png' %}"></button>
+      </div>
+          <div class="d-flex" id="navbarContainer">
+            <ul class="navbar-nav ms-auto">
+                <!-- Link to redirect to specified page -->
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'academic_adventure:home' %}">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'academic_adventure:events' %}">Events</a>
               </li>
-              <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#profileModal" style="border: none; background: none; text-align: left">
-                Profile
-                </button>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'academic_adventure:events' %}">Events</a>
-                </li>
-              {% if not userevent %}  
-              <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#shopModal" style="border: none; background: none; text-align: left">
-                  Shop
-              </button>
-              {% endif %}
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'academic_adventure:leaderboard' %}">Leaderboard</a>
-                </li>
-              <li class="nav-item">
-                  <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+            {% if not userevent %}
+            <!-- Button to open specified modal -->
+            <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#shopModal" style="border: none; background: none; text-align: left">
+                Shop
+            </button>
+            {% endif %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'academic_adventure:leaderboard' %}">Leaderboard</a>
               </li>
-              </ul>
-            </div>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+            </li>
+            </ul>
           </div>
         </div>
+      </div>
 
         <!--Display-->
     

@@ -7,11 +7,11 @@ html, body
 
 #navbarContainer {
     background-color: #242c44;
-    z-index: 2;
+    z-index: 1;
     float: left; /*The container is fixed to the left side of the page*/ 
     position: absolute; /*Allows navbar to overlap with the page when opened */
     padding: 10px;
-    height: 100%;
+    height: 90%;
     width: 110px;
     margin-left: -15rem; /*The container is originally out of sight from the page*/
     transition: margin 0.5s ease-out;
@@ -22,7 +22,7 @@ html, body
     background-color: #b18b4f;
     z-index: 1;
     float: top;
-    height: 70px;
+    height: 75px;
     width: 100%;
 }
 
@@ -38,7 +38,7 @@ html, body
     background-color: #242c44 !important;
     border: 2px solid black;
     border-radius: 8px; /*Rounded edges of the button*/
-    z-index: 1; /*Button is on top to the topContainer*/
+    z-index: 2; /*Button is on top to the topContainer*/
     width: 70px;
     height: 40px;
     color: white;
@@ -75,69 +75,13 @@ body.sb-sidenav-toggled #navbarContainer {
     margin-left: 0rem; /*The container becomes in view*/
 }
 
-/* Leaderboard */
-
-.row {
-    display: flex;
-    margin-left: auto;
-    margin-right: auto;
-    justify-content: center;
-}
-
-.column {
-    flex: 33%;
-    padding: 5%;
-}
-#minileaderboard {
-    border-collapse: collapse;
-    width: 100%;
-}
-#minileaderboard td, #minileaderboard th {
-    border: 3px solid #546474;
-    text-align: center;
-    padding: 8px
-}
-#minileaderboard tr:nth-child(1) {
-    background-color: #b18b4f;
-    color: white; 
-}
-#minileaderboard tr:nth-child(2) {
-    background-color: #b6b3af;
-    color: white;
-}
-#minileaderboard tr:nth-child(3) {
-    background-color: #b16142;
-    color: white;
-}
-
-#leaderboard td, #leaderboard th {
-    border: 3px solid #546474;
-    text-align: center;
-    padding: 8px
-}
-#leaderboard tr:nth-child(2) {
-    background-color: #b18b4f;
-    color: white; 
-}
-#leaderboard tr:nth-child(3) {
-    background-color: #b6b3af;
-    color: white;
-}
-#leaderboard tr:nth-child(4) {
-    background-color: #b16142;
-    color: white;
-}
-#leaderboard tr:hover {
-    background-color: #484a50;
-    color: white;
-}
-#leaderboard  th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    background-color: #74757b;
-    color: white;
-}
-.center {
-    margin-left: auto;
-    margin-right: auto;
+#profilePicture {
+    display:block;
+    position: absolute;
+    z-index: 2; /*Button is on top to the topContainer*/
+    border-radius: 50%;
+    top: 5px;
+    right: 15px;
+    height:65px;
+    width:65px;
 }
