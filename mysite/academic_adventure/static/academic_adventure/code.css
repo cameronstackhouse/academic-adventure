@@ -1,0 +1,26 @@
+/*Style for the code.html*/
+
+#printButton {
+    background-color: #242c44 !important;
+    border: 2px solid black;
+    border-radius: 8px; /*Rounded edges of the button*/
+    width: 70px;
+    height: 40px;
+    color: white;
+    text-align: center;
+    display: inline-block;
+    
+}
+
+#printContainer{
+    text-align: center;
+}
+
+
+#printContent0{
+    text-align: center;
+}
+
+#memberContainer{
+    text-align: center;
+}

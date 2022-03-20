@@ -20,10 +20,25 @@
         <!--CSS for UI and navbar-->
         <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/ui.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/profile.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/code.css' %}">
         <script type="text/javascript" src="{% static 'academic_adventure/navbar.js' %}"> </script>
         <title>Code</title>
         <!--Scales the screen to the size of the viewport-->
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+        <!-- Script for the print button to set the print content -->
+        <script>
+          function printDiv(divName) {
+            var printContents = document.getElementById(divName).innerHTML;
+            var originalContents = document.body.innerHTML;
+
+            document.body.innerHTML = printContents;
+
+            window.print();
+
+            document.body.innerHTML = originalContents;
+          }
+        </script>
+
     </head>
 
     <body>
@@ -67,18 +82,29 @@
     </div>
       <!--Loads the QR code for the event-->
       {% load qr_code %}
+      <div id="printContent">
+        <div id="printContent0">
+          <h1>Event: {{event.name}} </h1>
 
-      <h1>Event: {{event.name}} </h1>
+          {% qr_from_text event.code size="L" %}
+        </div>
+    </div>
 
-      {% qr_from_text event.code size="L" %}
-
+      <!--Displays Print button for the event's QR code-->
+      <div id="printContainer">
+        <!-- <button type="text/css" media="print" id="printButton" onclick="printDiv('printableArea')" >Print</button> -->
+        <input type="button" id="printButton" onclick="printDiv('printContent')" value="Print" />
+    </div>
+  
       <!--Displays members registered for the event-->
-      <h3>Members of event:</h3>
-      {% for member in event_members %}
+      <div id="memberContainer">
+        <h3>Members of event:</h3>
+        {% for member in event_members %}
 
-      <p>{{member.username}}</p>
+        <p>{{member.username}}</p>
 
-      {% endfor %}
+        {% endfor %}
+      </div>
 
     </body>
         <!--Profile page modal-->
