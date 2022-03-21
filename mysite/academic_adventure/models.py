@@ -1,6 +1,4 @@
 import datetime
-from datetime import timedelta
-from tkinter import TRUE
 
 from django.db import models
 from django.utils import timezone
