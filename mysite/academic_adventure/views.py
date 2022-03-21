@@ -415,3 +415,17 @@ def leave(request, code):
 
     
     return redirect("academic_adventure:events") #Redirects back to the events page
+
+@login_required
+def buy_picture(request, path, url):
+    """
+    View to buy a profile picture and add it to the list of 
+    profile pictures the user owns.
+
+    Keyword arguments:
+    request -- HttpRequest object 
+    path -- path where the image is kept
+    name -- name of the image to buy
+    """
+    #TODO
+    return redirect("academic_adventure:home")
