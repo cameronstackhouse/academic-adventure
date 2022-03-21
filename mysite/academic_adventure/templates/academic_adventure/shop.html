@@ -97,9 +97,11 @@
         </div>
 
 
-        <!--Checks if no pictures have been uploaded by system admins-->
-        {% if not pictures %}
-        <p>No pictures to sell right now. Contact your administrator to upload pictures to sell.</p>
+        {% if timeerror %}
+        <p>{{timeerror}}</p>
+        {% else %}
+        {% if message %}
+        <p>{{message}}</p>
         {% endif %}
         <!--Iterates through all the pictures a user does not own and displays them-->
         {% for picture in pictures %}
@@ -115,5 +117,6 @@
             </div>
         {% endif %}
         {% endfor %}
+        {% endif %}
     </body>
 </html>

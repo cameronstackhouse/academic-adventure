@@ -488,6 +488,42 @@ def buy_picture(request, path, url):
     url -- name of the image to buy
     """
 
+    #Gets all images available in store and ones the user does not own
+    pictures = Image.objects.filter(in_store=True)
+    user_pictures = request.user.pic_inventory.all() #Gets all of the users pictures
+    profile_pic = request.user.profile_pic #Gets the users profile pic
+
+    current_datetime = timezone.now()
+
+    #Code to determine if a user is currently in an event
+    user_event = None
+    for event in Event.objects.all().order_by('-date'): #Iterates through events ordered by their date
+        event_minutes = float(event.duration * 60) #Converting duration to a supported format
+        if (request.user in event.members.all()) and (event.date + datetime.timedelta(minutes=event_minutes) >= current_datetime): #Checks if current time is before the events expiry
+            if event.type != "Battle": #Checks if the event is not battle, as battles do not count as an occupiable event
+                user_event = event
+                break
+
+    if user_event: #Checks if user is in an event
+        context["timeerror"] = "You can not purchase anything from the shop when you are in an event. Come back later."
+        return render(request, 'academic_adventure/shop.html', context)
+
+    intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
+
+
+    context = {"user":request.user,
+               "intelligence_position": intelligence_position,
+               "athleticism_position": athleticism_position,
+               "sociability_position": sociability_position,
+               "pictures": pictures,
+               "user_pictures": user_pictures
+              }
+    
+    if profile_pic: #Checks if the user has a profile pic
+        #If so set the users icon and image
+        context["icon"] = profile_pic.icon 
+        context["pic"] = profile_pic.img
+
     #Checks if the picture to purchase exists and if the user has enough points
     if Image.objects.filter(img=f"{path}/{url}").exists():
         to_purchase = get_object_or_404(Image, img=f"{path}/{url}") #Gets the image to purchase
@@ -496,14 +532,17 @@ def buy_picture(request, path, url):
 
         #Checks that a valid image cost was returned and that the user has sufficient funds to purchase given image
         if cost == -1 or cost > request.user.points or to_purchase in request.user.pic_inventory.all():
-            return redirect("academic_adventure:home")
+            context["message"] = "Error, too few points or you already own this profile picture."
+            return render(request, 'academic_adventure/shop.html', context)
         else:
             request.user.pic_inventory.add(to_purchase) #Adds new profile pic to user inventory
             request.user.profile_pic = to_purchase #Sets their current profile pic to their new one
             request.user.points = request.user.points - cost #Takes points from the user based on the cost
 
             request.user.save() #Saves changes made
-            return redirect("academic_adventure:home")
+            context["message"] = "Profile picture successfully purchased and changed!"
+            return render(request, 'academic_adventure/shop.html', context)
     else:
         #If the image doesn't exist then redirect the user
-        return redirect("academic_adventure:home")
+        context["message"] = "Image does not exist."
+        return render(request, 'academic_adventure/shop.html', context)
