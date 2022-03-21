@@ -44,7 +44,7 @@ customizable by the end of the next sprint.
 To run the server, simply run the command 'python manage.py runserver' in the mysite folder.
 To access the site go to your host-address/academic-adventure.
 
-To make a registered user into a gamemaster:
+To make a registered user into a gamekeeper:
 
 As a superuser access /admin at the URL and do the following:
 - Go to the account you want to make a gamekeeper in Users
@@ -67,6 +67,8 @@ As a superuser access /admin at the URL and do the following:
 - Click add image
 - Give a name, rarity, PNG icon, and picture to the image
 - Click save
+
+The main images are in size 256x256 pixels and the icons are 32x32 pixels
 
 ## Testing
 
