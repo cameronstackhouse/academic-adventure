@@ -1,5 +1,5 @@
 from decimal import Decimal
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required #Used to reject user entry to web page if not logged in
 from .models import Event, CustomUser #Imports user defined models in the system
 from .forms import CreateForm
@@ -10,7 +10,7 @@ import datetime
 from django.utils import timezone
 
 from .models import Event, Image
-from .functions import get_user_positions, compare_positions, user_occupied
+from .functions import get_user_positions, compare_positions, user_occupied, image_cost
 
 @login_required
 def leaderboard(request):
@@ -22,16 +22,10 @@ def leaderboard(request):
     request -- HttpRequest object 
     """
 
-    current_datetime = timezone.now() # offset-awared datetime
-
-    #Code to check if user is currently in an event
-    user_event = None
-    for event in Event.objects.all().order_by('-date'):
-        event_minutes = float(event.duration * 60) #Converting duration to a supported format
-        if (request.user in event.members.all()) and (event.date + datetime.timedelta(minutes=event_minutes) >= current_datetime): #Checks if current time is before the events expiry
-            if event.type != "Battle":
-                user_event = event
-                break
+    #Gets all images available in store and ones the user does not own
+    pictures = Image.objects.filter(in_store=True)
+    user_pictures = request.user.pic_inventory.all() #Gets all of the users pictures
+    profile_pic = request.user.profile_pic #Gets the users profile pic
 
     intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
 
@@ -43,8 +37,14 @@ def leaderboard(request):
             "intelligence_position": intelligence_position,
             "athleticism_position": athleticism_position,
             "sociability_position": sociability_position,
-            "userevent": user_event
-            } #Data to be passed into the html form
+            "pictures": pictures,
+            "user_pictures": user_pictures} #Passes user information and event information into the HTML form
+
+    if profile_pic: #Checks if the user has a profile pic
+        #If so set the users icon and image
+        context["icon"] = profile_pic.icon 
+        context["pic"] = profile_pic.img
+
     return render(request, 'academic_adventure/leaderboard.html', context) #Returns the leaderboard html page with the context passed in
 
 @login_required
@@ -56,31 +56,28 @@ def home(request):
     Keyword arguments:
     request -- HttpRequest object 
     """
-   
-    current_datetime = timezone.now() # offset-awared datetime
 
-    pictures = Image.objects.all()
-    user_pictures = request.user.pic_inventory.all()
+    #Gets all images available in store and ones the user does not own
+    pictures = Image.objects.filter(in_store=True)
+    user_pictures = request.user.pic_inventory.all() #Gets all of the users pictures
+    profile_pic = request.user.profile_pic #Gets the users profile pic
 
     intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
 
-    #Code to determine if a user is currently in an event
-    user_event = None
-    for event in Event.objects.all().order_by('-date'):
-        event_minutes = float(event.duration * 60) #Converting duration to a supported format
-        if (request.user in event.members.all()) and (event.date + datetime.timedelta(minutes=event_minutes) >= current_datetime): #Checks if current time is before the events expiry
-            if event.type != "Battle":
-                user_event = event
-                break
 
     context = {"events":Event.objects.all(), #Gets all events in the database
                 "user":request.user,
                 "intelligence_position": intelligence_position,
                 "athleticism_position": athleticism_position,
                 "sociability_position": sociability_position,
-                "userevent": user_event,
                 "pictures": pictures,
                 "user_pictures": user_pictures} #Passes user information and event information into the HTML form
+    
+    if profile_pic: #Checks if the user has a profile pic
+        #If so set the users icon and image
+        context["icon"] = profile_pic.icon 
+        context["pic"] = profile_pic.img
+
     return render(request, 'academic_adventure/home.html', context) #Returns the home html page with the context passed in
 
 @login_required
@@ -95,6 +92,11 @@ def events(request):
 
     current_datetime = timezone.now() # offset-awared datetime
 
+    #Gets all images available in store and ones the user does not own
+    pictures = Image.objects.filter(in_store=True)
+    user_pictures = request.user.pic_inventory.all() #Gets all of the users pictures
+    profile_pic = request.user.profile_pic #Gets the users profile pic
+
     valid_radius = 0.00036 #Maximum distance a user can be away from an event and participate
     intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
 
@@ -103,7 +105,14 @@ def events(request):
                "athleticism_position": athleticism_position,
                "sociability_position": sociability_position,
                 "events":Event.objects.all(), #Gets all events in the database
-                "current_time": current_datetime}
+                "current_time": current_datetime,
+                "pictures": pictures,
+                "user_pictures": user_pictures} #Passes user information and event information into the HTML form
+    
+    if profile_pic: #Checks if the user has a profile pic
+        #If so set the users icon and image
+        context["icon"] = profile_pic.icon 
+        context["pic"] = profile_pic.img
 
     # Scanner code:
 
@@ -155,18 +164,18 @@ def events(request):
                             reward = 1
                         if scanned_event.type == "Sports":
                             request.user.athleticism += reward #If sports event then increase the users athleticism. Scaled by duration of the event
-                            context["message"] = f"Successfully added to event: {scanned_event.name}. Athleticism and points increased by {reward}!"
+                            context["message"] = f"Successfully added to event: {scanned_event.name}. Athleticism increased by {reward} and points by {round((scanned_event.duration * 60) / 5)}!"
                         elif scanned_event.type == "Academic":
                             request.user.intelligence += reward #If academic event then add 1 to users intelligence. Scaled by duration of the event
-                            context["message"] = f"Successfully added to event: {scanned_event.name}. Intelligence and points increased by {reward}!"
+                            context["message"] = f"Successfully added to event: {scanned_event.name}. Intelligence increased by {reward} and points by {round((scanned_event.duration * 60) / 5)}!"
                         elif scanned_event.type == "Social":
                             request.user.sociability += reward #If social event then add 1 to users sociability. Scaled by duration of the event
-                            context["message"] = f"Successfully added to event: {scanned_event.name}. Sociability and points increased by {reward}!"
+                            context["message"] = f"Successfully added to event: {scanned_event.name}. Sociability increased by {reward} and points by {round((scanned_event.duration * 60) / 5)}!"
                         elif scanned_event.type == "Battle":
                             request.session['battle_id'] = request.POST.get("scancontent") #Sets the battle ID session variable to the event ID
                             return redirect('academic_adventure:battle') #If battle then redirect to the battle view
                         
-                        request.user.points += reward #Adds points to users points total
+                        request.user.points += round((scanned_event.duration * 60) / 5) #Adds points to users points total
             
                         request.user.save() #Saves changes made to the users stats
                         scanned_event.members.add(request.user) #Adds user to the event
@@ -218,14 +227,10 @@ def create(request):
     """
     current_datetime = timezone.now()
 
-    #Code to determine if a user is currently in an event
-    user_event = None
-    for event in Event.objects.all().order_by('-date'): #Iterates through events ordered by their date
-        event_minutes = float(event.duration * 60) #Converting duration to a supported format
-        if (request.user in event.members.all()) and (event.date + datetime.timedelta(minutes=event_minutes) >= current_datetime): #Checks if current time is before the events expiry
-            if event.type != "Battle": #Checks if the event is not battle, as battles do not count as an occupiable event
-                user_event = event
-                break
+    #Gets all images available in store and ones the user does not own
+    pictures = Image.objects.filter(in_store=True)
+    user_pictures = request.user.pic_inventory.all() #Gets all of the users pictures
+    profile_pic = request.user.profile_pic #Gets the users profile pic
 
     gamekeeper = request.user.gamekeeper #Gets if the user is a gamekeeper
     intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
@@ -248,8 +253,15 @@ def create(request):
                "intelligence_position": intelligence_position,
                "athleticism_position": athleticism_position,
                "sociability_position": sociability_position,
-               "userevent": user_event
+               "pictures": pictures,
+               "user_pictures": user_pictures
                } #Data to be passed into the html form
+
+    if profile_pic: #Checks if the user has a profile pic
+        #If so set the users icon and image
+        context["icon"] = profile_pic.icon 
+        context["pic"] = profile_pic.img
+
     return render(request, 'academic_adventure/create.html', context) #Renders the create html page with the context passed in
 
 @login_required
@@ -264,16 +276,11 @@ def code(request, event_id):
     request -- HttpRequest object 
     event_id -- ID of the event to display the code
     """
-    current_datetime = timezone.now()
 
-    #Code to determine if a user is currently in an event
-    user_event = None
-    for event in Event.objects.all().order_by('-date'): #Iterates through events ordered by their date
-        event_minutes = float(event.duration * 60) #Converting duration to a supported format
-        if (request.user in event.members.all()) and (event.date + datetime.timedelta(minutes=event_minutes) >= current_datetime): #Checks if current time is before the events expiry
-            if event.type != "Battle": #Checks if the event is not battle, as battles do not count as an occupiable event
-                user_event = event
-                break
+    #Gets all images available in store and ones the user does not own
+    pictures = Image.objects.filter(in_store=True)
+    user_pictures = request.user.pic_inventory.all() #Gets all of the users pictures
+    profile_pic = request.user.profile_pic #Gets the users profile pic
 
     intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
 
@@ -285,8 +292,14 @@ def code(request, event_id):
                 "intelligence_position": intelligence_position,
                 "athleticism_position": athleticism_position,
                 "sociability_position": sociability_position,
-                "userevent": user_event
+                "pictures": pictures,
+                "user_pictures": user_pictures
                 } #Information about event name, participants, and if the user is a gamekeeper to be passed to HTML form
+    
+    if profile_pic: #Checks if the user has a profile pic
+        #If so set the users icon and image
+        context["icon"] = profile_pic.icon 
+        context["pic"] = profile_pic.img
 
     return render(request, 'academic_adventure/code.html', context) #Renders the code html with the context passed in
 
@@ -301,16 +314,10 @@ def battle(request):
     in the URL and gaining access to a battle that is too far away.
     """
 
-    current_datetime = timezone.now()
-
-    #Code to determine if a user is currently in an event
-    user_event = None
-    for event in Event.objects.all().order_by('-date'): #Iterates through events ordered by their date
-        event_minutes = float(event.duration * 60) #Converting duration to a supported format
-        if (request.user in event.members.all()) and (event.date + datetime.timedelta(minutes=event_minutes) >= current_datetime): #Checks if current time is before the events expiry
-            if event.type != "Battle": #Checks if the event is not battle, as battles do not count as an occupiable event
-                user_event = event
-                break
+    #Gets all images available in store and ones the user does not own
+    pictures = Image.objects.filter(in_store=True)
+    user_pictures = request.user.pic_inventory.all() #Gets all of the users pictures
+    profile_pic = request.user.profile_pic #Gets the users profile pic
 
     #Checks if an event ID has been set for the battle (Set in the scan view)
     if not request.session.has_key('battle_id'):
@@ -371,9 +378,62 @@ def battle(request):
                 "intelligence_position": intelligence_position,
                 "athleticism_position": athleticism_position,
                 "sociability_position": sociability_position,
-                "userevent": user_event
+                "pictures": pictures,
+                "user_pictures": user_pictures
                 } #Information about the user and their opponent
+    
+    if profile_pic: #Checks if the user has a profile pic
+        #If so set the users icon and image
+        context["icon"] = profile_pic.icon 
+        context["pic"] = profile_pic.img
+
     return render(request, 'academic_adventure/battle.html', context)
+
+@login_required
+def shop(request):
+    """
+    View for the shop for the user to buy profile pictures from
+
+    Keyword arguments:
+    request -- 
+    """
+    current_datetime = timezone.now()
+
+    #Code to determine if a user is currently in an event
+    user_event = None
+    for event in Event.objects.all().order_by('-date'): #Iterates through events ordered by their date
+        event_minutes = float(event.duration * 60) #Converting duration to a supported format
+        if (request.user in event.members.all()) and (event.date + datetime.timedelta(minutes=event_minutes) >= current_datetime): #Checks if current time is before the events expiry
+            if event.type != "Battle": #Checks if the event is not battle, as battles do not count as an occupiable event
+                user_event = event
+                break
+    
+    if user_event:
+        redirect('academic_adventure:home')
+
+    #Gets all images available in store and ones the user does not own
+    pictures = Image.objects.filter(in_store=True)
+    user_pictures = request.user.pic_inventory.all() #Gets all of the users pictures
+    profile_pic = request.user.profile_pic #Gets the users profile pic
+
+    intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
+
+
+    context = {"user":request.user,
+               "intelligence_position": intelligence_position,
+               "athleticism_position": athleticism_position,
+               "sociability_position": sociability_position,
+               "pictures": pictures,
+               "user_pictures": user_pictures
+               }
+    
+    if profile_pic: #Checks if the user has a profile pic
+        #If so set the users icon and image
+        context["icon"] = profile_pic.icon 
+        context["pic"] = profile_pic.img
+    
+    return render(request, 'academic_adventure/shop.html', context)
+    
 
 @login_required
 def leave(request, code):
@@ -406,7 +466,7 @@ def leave(request, code):
                 elif event_type == "Sports":
                     request.user.athleticism = request.user.athleticism - reward #Reverts athleticism bonus
                 
-                request.user.points -= reward #Removes points given for the event
+                request.user.points -= round((event.duration * 60) / 5) #Removes points given for the event
                 
                 event.members.remove(request.user) #Removes the user from the event
 
@@ -425,13 +485,25 @@ def buy_picture(request, path, url):
     Keyword arguments:
     request -- HttpRequest object 
     path -- path where the image is kept
-    name -- name of the image to buy
+    url -- name of the image to buy
     """
 
     #Checks if the picture to purchase exists and if the user has enough points
     if Image.objects.filter(img=f"{path}/{url}").exists():
-        to_purchase = Image.objects.filter(img=f"{path}/{url}") #Gets the image to purchase
-        #TODO Check costs vs points, add icon and image to users profile pics and equip to the user
+        to_purchase = get_object_or_404(Image, img=f"{path}/{url}") #Gets the image to purchase
+
+        cost = image_cost(to_purchase) #Gets the cost of the image based on rarity
+
+        #Checks that a valid image cost was returned and that the user has sufficient funds to purchase given image
+        if cost == -1 or cost > request.user.points or to_purchase in request.user.pic_inventory.all():
+            return redirect("academic_adventure:home")
+        else:
+            request.user.pic_inventory.add(to_purchase) #Adds new profile pic to user inventory
+            request.user.profile_pic = to_purchase #Sets their current profile pic to their new one
+            request.user.points = request.user.points - cost #Takes points from the user based on the cost
+
+            request.user.save() #Saves changes made
+            return redirect("academic_adventure:home")
     else:
         #If the image doesn't exist then redirect the user
         return redirect("academic_adventure:home")

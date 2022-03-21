@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+
+<!--Loads the static CSS in the project-->
+{% load static %}
+
+<html>
+    <head>
+        <!--Scales to mobile devices-->
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+        <link rel="icon" href="{% static 'academic_adventure/favicon.ico'%}">
+        <!--Includes bootstrap files-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+        <!--Includes the sytlesheets for the UI and the navbar-->
+        <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/ui.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/profile.css' %}">
+        <!--Javascript to make the navbar work-->
+        <script type="text/javascript" src="{% static 'academic_adventure/navbar.js' %}"> </script>
+        <title>Shop</title>   
+    </head>
+
+    <body>
+        <!--HTML for navigation bar-->
+        <div id="topContainer">
+            <img src="{% static 'academic_adventure/logo.png' %}"  id="logo" alt="academic adventure logo">
+            <!-- Navbar Button to toggle js that allows the navbarContainer to appear and disappear -->
+            <button type="button" id="navbarButton">Menu</button>
+            <!-- Profile Button that shows user's profile picture -->
+            {% if icon %}
+            <button type="button" id="profilePicture" data-bs-toggle="modal" data-bs-target="#profileModal"><img src="{% get_media_prefix %}{{icon}}"></button>
+            {% else %}
+            <button type="button" id="profilePicture" data-bs-toggle="modal" data-bs-target="#profileModal"><img src="{% static 'academic_adventure/user.png' %}"></button>
+            {% endif %}
+        </div>
+            <div class="d-flex" id="navbarContainer">
+              <ul class="navbar-nav ms-auto">
+              <!-- Link to redirect to specified page -->
+              <li class="nav-item active">
+                <a class="nav-link" href="{% url 'academic_adventure:home' %}">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'academic_adventure:events' %}">Events</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'academic_adventure:shop' %}">Shop</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'academic_adventure:leaderboard' %}">Leaderboard</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+              </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+
+        <!--Checks if no pictures have been uploaded by system admins-->
+        {% if not pictures %}
+        <p>No pictures to sell right now. Contact your administrator to upload pictures to sell.</p>
+        {% endif %}
+        <!--Iterates through all the pictures a user does not own and displays them-->
+        {% for picture in pictures %}
+        {% if picture not in user_pictures and picture.in_store %}
+            <div id="picture_container">
+                <img src="{% get_media_prefix %}{{picture.img}}">
+                <p>Name: {{picture.name}}</p>
+                <p>Rarity: {{picture.rarity}}</p>
+            
+                <form method="get" action="/academic-adventure/buy/{{picture.img}}">
+                    <input type="submit" value="Buy">
+                </form>
+            </div>
+        {% endif %}
+        {% endfor %}
+    </body>
+</html>
