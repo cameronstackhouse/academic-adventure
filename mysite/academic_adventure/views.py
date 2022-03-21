@@ -165,8 +165,9 @@ def events(request):
                         
                         if request.user.stat_boost: #Checks if user has the stat boost potion
                             reward = reward * 2 #Multiplies the reward by 2, in line with the stat boost
+                            request.session['used_potion'] = True
                             request.user.stat_boost = False #Removes potion from the user
-
+                    
                         if scanned_event.type == "Sports":
                             request.user.athleticism += reward #If sports event then increase the users athleticism. Scaled by duration of the event
                             context["message"] = f"Successfully added to event: {scanned_event.name}. Athleticism increased by {reward} and points by {round((scanned_event.duration * 60) / 5)}!"
@@ -461,6 +462,12 @@ def leave(request, code):
                 reward = round(event_duration) #Gets the reward to be taken off
                 if reward == 0: #Traps if a reward is 0
                     reward = 1 
+                #Checks if user used a potion at the start of the event
+                if request.session.has_key('used_potion') and request.session["used_potion"] == True:
+                    reward = reward * 2 #Removes the correct amount of points if a user used a potion
+                    request.user.stat_boost = True #Gives the user back their potion if they leave early
+                    request.session["used_potion"] = False #Resets used potion
+
                 #Checks what type of event the event the user wants to leave is
                 if event_type == "Academic":
                     request.user.intelligence = request.user.intelligence - reward #Reverts intelligence bonus
