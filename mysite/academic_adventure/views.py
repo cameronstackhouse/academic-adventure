@@ -162,6 +162,11 @@ def events(request):
                         reward = round(scanned_event.duration) #Gets the points reward for attending the event
                         if reward == 0: #If the reward is 0 then set it to 1 to ensure every event gives a points reward
                             reward = 1
+                        
+                        if request.user.stat_boost: #Checks if user has the stat boost potion
+                            reward = reward * 2 #Multiplies the reward by 2, in line with the stat boost
+                            request.user.stat_boost = False #Removes potion from the user
+
                         if scanned_event.type == "Sports":
                             request.user.athleticism += reward #If sports event then increase the users athleticism. Scaled by duration of the event
                             context["message"] = f"Successfully added to event: {scanned_event.name}. Athleticism increased by {reward} and points by {round((scanned_event.duration * 60) / 5)}!"
@@ -225,7 +230,6 @@ def create(request):
     Keyword arguments:
     request -- HttpRequest object 
     """
-    current_datetime = timezone.now()
 
     #Gets all images available in store and ones the user does not own
     pictures = Image.objects.filter(in_store=True)
@@ -407,9 +411,6 @@ def shop(request):
             if event.type != "Battle": #Checks if the event is not battle, as battles do not count as an occupiable event
                 user_event = event
                 break
-    
-    if user_event:
-        redirect('academic_adventure:home')
 
     #Gets all images available in store and ones the user does not own
     pictures = Image.objects.filter(in_store=True)
@@ -426,6 +427,10 @@ def shop(request):
                "pictures": pictures,
                "user_pictures": user_pictures
                }
+    
+    if user_event: #Checks if user is in an event
+        context["timeerror"] = "You can not purchase anything from the shop when you are in an event. Please come back later."
+        return render(request, 'academic_adventure/shop.html', context)
     
     if profile_pic: #Checks if the user has a profile pic
         #If so set the users icon and image
@@ -546,3 +551,68 @@ def buy_picture(request, path, url):
         #If the image doesn't exist then redirect the user
         context["message"] = "Image does not exist."
         return render(request, 'academic_adventure/shop.html', context)
+
+@login_required
+def buy_potion(request):
+    """
+    View to buy a double skill boost potion.
+    When the user has this potion the next event they participate in they
+    will recieve double the skill rewards.
+
+    Keyword arguments:
+    request -- HttpRequest object 
+    """
+
+    #Gets all images available in store and ones the user does not own
+    pictures = Image.objects.filter(in_store=True)
+    user_pictures = request.user.pic_inventory.all() #Gets all of the users pictures
+    profile_pic = request.user.profile_pic #Gets the users profile pic
+
+    current_datetime = timezone.now()
+
+    #Code to determine if a user is currently in an event
+    user_event = None
+    for event in Event.objects.all().order_by('-date'): #Iterates through events ordered by their date
+        event_minutes = float(event.duration * 60) #Converting duration to a supported format
+        if (request.user in event.members.all()) and (event.date + datetime.timedelta(minutes=event_minutes) >= current_datetime): #Checks if current time is before the events expiry
+            if event.type != "Battle": #Checks if the event is not battle, as battles do not count as an occupiable event
+                user_event = event
+                break
+
+    if user_event: #Checks if user is in an event
+        context["timeerror"] = "You can not purchase anything from the shop when you are in an event. Come back later."
+        return render(request, 'academic_adventure/shop.html', context)
+
+    intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
+
+    context = {"user":request.user,
+               "intelligence_position": intelligence_position,
+               "athleticism_position": athleticism_position,
+               "sociability_position": sociability_position,
+               "pictures": pictures,
+               "user_pictures": user_pictures
+              }
+    
+    if profile_pic: #Checks if the user has a profile pic
+        #If so set the users icon and image
+        context["icon"] = profile_pic.icon 
+        context["pic"] = profile_pic.img
+    
+    if request.user.stat_boost: #Checks if user already has a stat boost 
+        context["message"] = "Error, you already have a stat boost applied."
+        return render(request, 'academic_adventure/shop.html', context)
+
+    if request.user.points < 50:
+        context["message"] = "Error, insufficient points to buy a potion."
+        return render(request, 'academic_adventure/shop.html', context)
+    
+    request.user.stat_boost = True #Applies stat boost to user
+    request.user.points = request.user.points - 50 #Takes points from user
+
+    request.user.save() #Saves the changes to the user
+
+    context["message"] = "Successfully purchased potion!"
+    return render(request, 'academic_adventure/shop.html', context)
+
+
+

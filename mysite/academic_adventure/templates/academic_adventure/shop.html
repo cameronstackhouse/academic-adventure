@@ -96,13 +96,23 @@
           </div>
         </div>
 
-
+        <!--Displays error messages if they exist-->
         {% if timeerror %}
         <p>{{timeerror}}</p>
         {% else %}
         {% if message %}
         <p>{{message}}</p>
         {% endif %}
+        <h2>Your Points: {{user.points}}</h2>
+        <!--Potions to buy-->
+        <h2>Potions</h2>
+        <p>Double skill boost potion</p>
+        <img src="{% static 'academic_adventure/potion.png' %}">
+        <form method="get" action="/academic-adventure/buy-potion">
+          <input type="submit" value="Buy">
+        </form>
+
+        <h2>Avatars</h2>
         <!--Iterates through all the pictures a user does not own and displays them-->
         {% for picture in pictures %}
         {% if picture not in user_pictures and picture.in_store %}
