@@ -332,10 +332,8 @@ def battle(request):
     #POST request handling for end of game
     if request.method == "POST":
         if request.POST.get("resultcontent").isdigit():
-            if int(request.POST.get("resultcontent")) == 1: #If the player won update their attributes
-                request.user.intelligence += 1
-                request.user.sociability += 1
-                request.user.athleticism += 1
+            if int(request.POST.get("resultcontent")) == 1: #If the player won give the user their reward
+                request.user.points = request.user.points + 5 #Gives 5 points to the user
                 request.user.save()
             
             return redirect('academic_adventure:home') #redirect after a battle back to home page

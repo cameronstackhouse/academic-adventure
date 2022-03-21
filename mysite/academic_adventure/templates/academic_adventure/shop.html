@@ -106,7 +106,7 @@
         <h2>Your Points: {{user.points}}</h2>
         <!--Potions to buy-->
         <h2>Potions</h2>
-        <p>Double skill boost potion</p>
+        <p>Double skill boost potion: 50 Points</p>
         <img src="{% static 'academic_adventure/potion.png' %}">
         <form method="get" action="/academic-adventure/buy-potion">
           <input type="submit" value="Buy">
@@ -120,6 +120,19 @@
                 <img src="{% get_media_prefix %}{{picture.img}}">
                 <p>Name: {{picture.name}}</p>
                 <p>Rarity: {{picture.rarity}}</p>
+
+                <!--Shows price of the avatar based on rarity-->
+                {% if picture.rarity == "Common" %}
+                <p>Price: 15 points</p>
+                {% elif picture.rarity == "Uncommon" %}
+                <p>Price: 30 points</p>
+                {% elif picture.rarity == "Rare" %}
+                <p>Price: 60 points</p>
+                {% elif picture.rarity == "Epic" %}
+                <p>Price: 40 points</p>
+                {% elif picture.rarity == "Legendary" %}
+                <p>Price: 1200 points</p>
+                {% endif %}
             
                 <form method="get" action="/academic-adventure/buy/{{picture.img}}">
                     <input type="submit" value="Buy">
