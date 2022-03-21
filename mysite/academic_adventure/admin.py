@@ -16,7 +16,8 @@ class CustomUserAdmin(UserAdmin):
                 'fields':(
                     "gamekeeper", #Field to determine if a user is a gamekeeper
                     #Can be used to set gamekeepers in the system
-                    "pic_inventory"
+                    "pic_inventory",
+                    "profile_pic"
                 ),
             },
         ),

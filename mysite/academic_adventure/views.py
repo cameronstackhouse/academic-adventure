@@ -1,7 +1,8 @@
 from decimal import Decimal
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required #Used to reject user entry to web page if not logged in
-from .models import Event, CustomUser #Imports user defined models in the system
+from django.contrib.auth.decorators import login_required
+from numpy import logical_and #Used to reject user entry to web page if not logged in
+from .models import Event, CustomUser, Image #Imports user defined models in the system
 from .forms import CreateForm
 from django.utils.crypto import get_random_string #Imports a random string generator for code generation
 import random
@@ -43,7 +44,8 @@ def leaderboard(request):
             "intelligence_position": intelligence_position,
             "athleticism_position": athleticism_position,
             "sociability_position": sociability_position,
-            "userevent": user_event
+            "userevent": user_event,
+            "picinventory": request.user.pic_inventory.all()
             } #Data to be passed into the html form
     return render(request, 'academic_adventure/leaderboard.html', context) #Returns the leaderboard html page with the context passed in
 
@@ -72,6 +74,7 @@ def home(request):
 
     context = {"events":Event.objects.all(), #Gets all events in the database
                 "user":request.user,
+                "picinventory": request.user.pic_inventory.all(),
                 "intelligence_position": intelligence_position,
                 "athleticism_position": athleticism_position,
                 "sociability_position": sociability_position,
@@ -98,10 +101,10 @@ def events(request):
                "athleticism_position": athleticism_position,
                "sociability_position": sociability_position,
                 "events":Event.objects.all(), #Gets all events in the database
-                "current_time": current_datetime}
+                "current_time": current_datetime,
+                "picinventory": request.user.pic_inventory.all()}
 
     # Scanner code:
-
     if request.method == "POST": #If the user has scanned a QR code
         logging.info(request.POST.get("scancontent")) #Finds the event the QR code is for using stored contents of QR code
         
@@ -243,7 +246,8 @@ def create(request):
                "intelligence_position": intelligence_position,
                "athleticism_position": athleticism_position,
                "sociability_position": sociability_position,
-               "userevent": user_event
+               "userevent": user_event,
+                "picinventory": request.user.pic_inventory.all()
                } #Data to be passed into the html form
     return render(request, 'academic_adventure/create.html', context) #Renders the create html page with the context passed in
 
@@ -280,7 +284,8 @@ def code(request, event_id):
                 "intelligence_position": intelligence_position,
                 "athleticism_position": athleticism_position,
                 "sociability_position": sociability_position,
-                "userevent": user_event
+                "userevent": user_event,
+                "picinventory": request.user.pic_inventory.all()
                 } #Information about event name, participants, and if the user is a gamekeeper to be passed to HTML form
 
     return render(request, 'academic_adventure/code.html', context) #Renders the code html with the context passed in
@@ -366,7 +371,8 @@ def battle(request):
                 "intelligence_position": intelligence_position,
                 "athleticism_position": athleticism_position,
                 "sociability_position": sociability_position,
-                "userevent": user_event
+                "userevent": user_event,
+                "picinventory": request.user.pic_inventory.all()
                 } #Information about the user and their opponent
     return render(request, 'academic_adventure/battle.html', context)
 
@@ -410,3 +416,13 @@ def leave(request, code):
 
     
     return redirect("academic_adventure:events") #Redirects back to the events page
+
+@login_required
+def changePicture(request):
+    """
+    View to change the profile picture of the current user with the one selected.
+    """
+    if request.method == "POST":
+        request.user.profile_pic = Image.objects.get(id=request.POST.get("picture")) #Get the data from the POST request and sets it as the profile picture.
+        request.user.save()
+    return redirect("academic_adventure:home")         
