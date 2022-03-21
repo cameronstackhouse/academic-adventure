@@ -60,6 +60,14 @@ run 'python manage.py shell' and then enter the following commands.
 - user.gamekeeper = True
 - user.save()
 
+To add profile pictures into the game:
+
+As a superuser access /admin at the URL and do the following:
+- Go to Images
+- Click add image
+- Give a name, rarity, PNG icon, and picture to the image
+- Click save
+
 ## Testing
 
 To run tests for this project, run the following command within the mysite folder:

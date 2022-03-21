@@ -409,10 +409,14 @@
             <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="shopModalLabel">Shop</h5>
+                  <h5 class="modal-title" id="shopModalLabel">Shop. Your points: {{user.points}}</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <!--Checks if no pictures have been uploaded by system admins-->
+                    {% if not pictures %}
+                    <p>No pictures to sell right now. Contact your administrator to upload pictures to sell.</p>
+                    {% endif %}
                     <!--Iterates through all the pictures a user does not own and displays them-->
                     {% for picture in pictures %}
                     {% if picture not in user_pictures %}

@@ -427,5 +427,9 @@ def buy_picture(request, path, url):
     path -- path where the image is kept
     name -- name of the image to buy
     """
-    #TODO
-    return redirect("academic_adventure:home")
+
+    if Image.objects.filter(img=f"{path}/{url}").exists():
+        to_purchase = Image.objects.filter(img=f"{path}/{url}")
+        #TODO Check costs vs points, add icon and image to users profile pics and equip to the user
+    else:
+        return redirect("academic_adventure:home")
