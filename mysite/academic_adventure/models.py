@@ -1,13 +1,30 @@
 import datetime
-from datetime import timedelta
 
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser #Abstract user model to extend
 
 class Image(models.Model):
-    name = models.CharField(max_length=50, blank=True)
-    img = models.ImageField(default="user.png", upload_to="profilepics")
+    """
+    Defines an image and related components to represent a profile picture and avatar in 
+    the database. 
+    
+    Extends the Django model class to be stored in the built in Django database.
+    """
+
+    #Types of rarity available to be set
+    types = (
+        ("Common", "Common"), 
+        ("Uncommon", "Uncommon"),
+        ("Rare", "Rare"),
+        ("Epic", "Epic"),
+        ("Legendary", "Legendary")
+    )
+    name = models.CharField(max_length=50, blank=True) #Name of the avatar  
+    img = models.ImageField(default="user.png", upload_to="profilepics") #Image representing the avatar 
+    icon = models.ImageField(default="user.png", upload_to="profilepics") #Icon version of the avatar 
+    rarity = models.CharField(max_length=40, choices=types) #Rarity of the avatar 
+    in_store = models.BooleanField(default=False) #Value representing if the avatar is available to purchase in store 
 
 class CustomUser(AbstractUser):
     """
@@ -25,8 +42,8 @@ class CustomUser(AbstractUser):
     athleticism = models.IntegerField(default=0) #Users athleticism score
     points = models.IntegerField(default=0) #Current user points
     gamekeeper = models.BooleanField(default=False) #Boolean indicating if user is a gamekeeper or not
-    profile_pic = models.ImageField(default="user.png", upload_to="profilepics") #Current profile picture image  
-    pic_inventory = models.ManyToManyField(Image, blank=True) 
+    profile_pic = models.ForeignKey(Image, on_delete=models.CASCADE, blank=True, null=True) #Current profile picture image  
+    pic_inventory = models.ManyToManyField(Image, blank=True, related_name='%(class)s_pic_inventory_created') 
     points = models.IntegerField(default=0) #User's spendable points 
 
     @property 
