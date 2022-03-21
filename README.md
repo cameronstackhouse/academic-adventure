@@ -46,6 +46,13 @@ To access the site go to your host-address/academic-adventure.
 
 To make a registered user into a gamemaster:
 
+As a superuser access /admin at the URL and do the following:
+- Go to the account you want to make a gamekeeper in Users
+- Scroll to the bottom of the page and tick the gamekeeper option
+- Click save
+
+OR
+
 run 'python manage.py shell' and then enter the following commands.
 
 - from academic_adventure.models import CustomUser

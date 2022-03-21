@@ -414,6 +414,11 @@
                 </div>
                 <div class="modal-body">
                     Shop Here
+                    {% for picture in pictures %}
+                    {% if picture not in user_pictures %}
+                        <p>PICTURE</p>
+                    {% endif %}
+                    {% endfor %}
                 </div>
               </div>
             </div>

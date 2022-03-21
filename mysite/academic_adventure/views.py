@@ -9,7 +9,7 @@ import logging
 import datetime
 from django.utils import timezone
 
-from .models import Event
+from .models import Event, Image
 from .functions import get_user_positions, compare_positions, user_occupied
 
 @login_required
@@ -59,6 +59,9 @@ def home(request):
    
     current_datetime = timezone.now() # offset-awared datetime
 
+    pictures = Image.objects.all()
+    user_pictures = request.user.pic_inventory.all()
+
     intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
 
     #Code to determine if a user is currently in an event
@@ -75,7 +78,9 @@ def home(request):
                 "intelligence_position": intelligence_position,
                 "athleticism_position": athleticism_position,
                 "sociability_position": sociability_position,
-                "userevent": user_event} #Passes user information and event information into the HTML form
+                "userevent": user_event,
+                "pictures": pictures,
+                "user_pictures": user_pictures} #Passes user information and event information into the HTML form
     return render(request, 'academic_adventure/home.html', context) #Returns the home html page with the context passed in
 
 @login_required
