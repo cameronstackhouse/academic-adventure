@@ -428,8 +428,10 @@ def buy_picture(request, path, url):
     name -- name of the image to buy
     """
 
+    #Checks if the picture to purchase exists and if the user has enough points
     if Image.objects.filter(img=f"{path}/{url}").exists():
-        to_purchase = Image.objects.filter(img=f"{path}/{url}")
+        to_purchase = Image.objects.filter(img=f"{path}/{url}") #Gets the image to purchase
         #TODO Check costs vs points, add icon and image to users profile pics and equip to the user
     else:
+        #If the image doesn't exist then redirect the user
         return redirect("academic_adventure:home")
