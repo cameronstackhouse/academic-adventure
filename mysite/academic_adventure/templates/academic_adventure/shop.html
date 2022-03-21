@@ -55,6 +55,47 @@
           </div>
         </div>
 
+        <!--Modal for profile page-->
+        <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModal" aria-hidden="true">
+          <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="profileModal">Profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <div class="row">
+                      <div class="col-md-6" id="userProfilePic">
+                          <h2>Hello {{user.username}}!</h2>
+                          {% if pic %}
+                          <img src="{% get_media_prefix %}{{pic}}">
+                          {% else %}
+                          <img src="{% static 'academic_adventure/userbig.png' %}">                          {% endif %}
+                          <br>
+                          <button type="button" data-bs-toggle="modal" data-bs-target="#inventoryModal">Inventory</button>
+                          <br>
+                          <br>
+                          <br>
+                          <br>
+                        </div>
+
+                        <div class="col-md-6" id="userInfo">
+                            <h3>Your stats:</h3>
+                            <h2>Overall score: {{user.score|floatformat:"2"}}</h2>
+                            <p>Points: {{user.points}}</p>
+                            <p>Intelligence: {{user.intelligence}}</p>
+                            <p>Sociability: {{user.sociability}}</p>
+                            <p>Athleticism: {{user.athleticism}}</p>
+                            <p>Intelligence position: {{intelligence_position}}</p>
+                            <p>Sociability position: {{sociability_position}}</p>
+                            <p>Athleticism position: {{athleticism_position}}</p>
+                        </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
 
         <!--Checks if no pictures have been uploaded by system admins-->
         {% if not pictures %}

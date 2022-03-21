@@ -60,7 +60,7 @@
       </div>
 
           
-          <!--Leaderboard h=Html-->
+          <!--Leaderboard Html-->
           <h1 class="text-center">Leaderboard:</h1>
 
           <p style="padding: 1%;"></p>
@@ -146,7 +146,7 @@
                 </div>
             </div>
         
-            <!--Modal for profile page-->
+          <!--Modal for profile page-->
           <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModal" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
               <div class="modal-content">
@@ -161,8 +161,7 @@
                             {% if pic %}
                             <img src="{% get_media_prefix %}{{pic}}">
                             {% else %}
-
-                            {% endif %}
+                            <img src="{% static 'academic_adventure/userbig.png' %}">                            {% endif %}
                             <br>
                             <button type="button" data-bs-toggle="modal" data-bs-target="#inventoryModal">Inventory</button>
                             <br>
