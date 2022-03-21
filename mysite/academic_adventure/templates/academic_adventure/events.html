@@ -27,40 +27,40 @@
     </head>
 
     <body>
-        <!--HTML for navigation bar-->
-        <div id="topContainer">
-          <img src="{% static 'academic_adventure/logo.png' %}"  id="logo" alt="academic adventure logo">
-          <!-- Navbar Button to toggle js that allows the navbarContainer to appear and disappear -->
-          <button type="button" id="navbarButton">Menu</button>
-          <!-- Profile Button that shows user's profile picture -->
-          <button type="button" id="profilePicture" data-bs-toggle="modal" data-bs-target="#profileModal"><img src="{% static 'academic_adventure/user.png' %}"></button>
-      </div>
-          <div class="d-flex" id="navbarContainer">
-            <ul class="navbar-nav ms-auto">
-                <!-- Link to redirect to specified page -->
-            <li class="nav-item active">
-              <a class="nav-link" href="{% url 'academic_adventure:home' %}">Home</a>
+      <!--HTML for navigation bar-->
+      <div id="topContainer">
+        <img src="{% static 'academic_adventure/logo.png' %}"  id="logo" alt="academic adventure logo">
+        <!-- Navbar Button to toggle js that allows the navbarContainer to appear and disappear -->
+        <button type="button" id="navbarButton"><img id="dropdownIcon" src="{% static 'academic_adventure/DropdownIcon.png' %}"></button>
+        <!-- Profile Button that shows user's profile picture -->
+        <button type="button" id="profilePicture" data-bs-toggle="modal" data-bs-target="#profileModal"><img src="{% static 'academic_adventure/user.png' %}"></button>
+    </div>
+        <div class="d-flex d-grid" id="navbarContainer">
+          <ul class="navbar-nav ms-auto">
+              <!-- Link to redirect to specified page -->
+          <li class="nav-item active">
+            <a class="nav-link iconBase" href="{% url 'academic_adventure:home' %}"><img class="icon" src="{% static 'academic_adventure/HomeIcon.png' %}">Home</a>
+          </li>
+          <!-- Bottom Padding for shop button -->
+          <li class="nav-item">
+            <a class="nav-link iconBase" href="{% url 'academic_adventure:events' %}"><img class="icon" src="{% static 'academic_adventure/EventsIcon.png' %}">Events</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'academic_adventure:events' %}">Events</a>
-              </li>
-            {% if not userevent %}
-            <!-- Button to open specified modal -->
-            <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#shopModal" style="border: none; background: none; text-align: left">
-                Shop
-            </button>
-            {% endif %}
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'academic_adventure:leaderboard' %}">Leaderboard</a>
-              </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+          {% if not userevent %}
+          <!-- Button to open shop modal -->
+          <button class="nav-link iconBase" data-bs-toggle="modal" data-bs-target="#shopModal"> 
+            <img class="icon" src="{% static 'academic_adventure/ShopIcon.png' %}">Shop
+          </button>
+          {% endif %}
+          <li class="nav-item" style="padding-top: 5px;">
+            <a class="nav-link iconBase" href="{% url 'academic_adventure:leaderboard' %}"><img class="icon" src="{% static 'academic_adventure/LeaderboardIcon.png' %}">Rankings</a>
             </li>
-            </ul>
-          </div>
+            <li class="nav-item" id="logout">
+                <a class="nav-link iconBase" href="{% url 'logout' %}"><img class="icon" src="{% static 'academic_adventure/LogoutIcon.png' %}">Logout</a>
+            </li>
+          </ul>
         </div>
       </div>
+    </div>
 
         <!--Display-->
     

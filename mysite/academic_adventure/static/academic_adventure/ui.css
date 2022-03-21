@@ -6,7 +6,6 @@ html, body
 }
 
 #navbarContainer {
-    background-color: #242c44;
     z-index: 1;
     float: left; /*The container is fixed to the left side of the page*/ 
     position: absolute; /*Allows navbar to overlap with the page when opened */
@@ -15,6 +14,7 @@ html, body
     width: 110px;
     margin-left: -15rem; /*The container is originally out of sight from the page*/
     transition: margin 0.5s ease-out;
+    pointer-events: none
 }
 
 /*The top bar containing the logo*/
@@ -35,33 +35,39 @@ html, body
 }
 
 #navbarButton {
-    background-color: #242c44 !important;
-    border: 2px solid black;
+    background-color: white !important;
     border-radius: 8px; /*Rounded edges of the button*/
     z-index: 2; /*Button is on top to the topContainer*/
-    width: 70px;
+    width: 60px;
     height: 40px;
     color: white;
     text-align: center;
     display: inline-block;
     position: absolute; /*Button is unaffected by other containers*/
-    top: 15px;
-    left: 15px;
+    top: 20px;
+    left: 25px;
+    border-width: 3px;
+    border-style: outset;
+    border-color: #bf9550ff;
 }
 
 /*Changes navbar text colour to white*/
 .navbar-toggler-icon {
-    color: white !important;
+    color: #242c44ff !important;
 }
 
 /*Changes navbar text colour to white*/
 .navbar-nav button{
-    color: white !important;
+    color: #242c44ff !important;
 }
 
 /*Changes navbar menu options text colour to white*/
 .navbar-nav li a{
-    color: white !important;
+    color: #242c44ff !important;
+}
+
+.nav-item {
+    padding-bottom: 5px; /*Add space between options*/
 }
 
 /*Modal contents side*/
@@ -75,6 +81,13 @@ body.sb-sidenav-toggled #navbarContainer {
     margin-left: 0rem; /*The container becomes in view*/
 }
 
+
+#logout {
+    bottom: 0 ;
+    position: absolute;
+    display: inline-block;
+}
+
 #profilePicture {
     display:block;
     position: absolute;
@@ -84,4 +97,44 @@ body.sb-sidenav-toggled #navbarContainer {
     right: 15px;
     height:65px;
     width:65px;
+}
+
+.iconBase {
+    background-color: white;
+    display:block;
+    border-radius: 50%;
+    height:90px;
+    width:90px;
+    pointer-events: all;
+    border-width: 3px;
+    border-style: outset;
+    border-color: #bf9550ff;
+    text-align: center;
+    font-size: 14px;
+}
+
+.iconBase:hover {
+    background-color: #6a7285ff;
+}
+
+.icon {
+    height:50px;
+    width:50px;
+    display:block;
+    pointer-events: all;
+    margin-left: auto; /*Icon is at the centre of the button*/
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+#dropdownIcon {
+    height:20px;
+    width:35px;
+    display:block;
+    pointer-events: all;
+    margin-left: auto; /*Icon is at the centre of the button*/
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
 }
