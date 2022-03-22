@@ -218,7 +218,7 @@ def events(request):
     host_events = []
     for event in Event.objects.all().order_by('date').filter(host=request.user):
         event_minutes = float(event.duration * 60) #Converting duration to a supported format
-        if event.date + datetime.timedelta(minutes=event_minutes) >= current_datetime - datetime.timedelta(minutes=20): #Checks that the current time - 20 minutes is before the event expiry and 
+        if event.date + datetime.timedelta(minutes=event_minutes) >= current_datetime - datetime.timedelta(minutes=10): #Checks that the current time - 10 minutes is before the event expiry and 
             host_events.append(event)
     
     context["userevent"] = user_event #event user is currently in
