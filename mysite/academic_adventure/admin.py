@@ -16,8 +16,9 @@ class CustomUserAdmin(UserAdmin):
                 'fields':(
                     "gamekeeper", #Field to determine if a user is a gamekeeper
                     #Can be used to set gamekeepers in the system
-                    "pic_inventory",
-                    "profile_pic"
+                    "pic_inventory", #All the profile pics the user has
+                    "profile_pic", #Profile pic of the user
+                    "points", #Points of the user
                 ),
             },
         ),
@@ -26,4 +27,4 @@ class CustomUserAdmin(UserAdmin):
 admin.site.register(CustomUser, CustomUserAdmin) #Registers custom user with admin
 admin.site.register(Event) #Registers event with admin
 admin.site.register(Society) #Registers society with admin
-admin.site.register(Image)
+admin.site.register(Image) #Registers image with admin

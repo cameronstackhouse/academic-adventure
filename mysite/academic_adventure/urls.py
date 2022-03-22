@@ -11,6 +11,10 @@ urlpatterns = [
     path('create/', views.create, name='create'), #Create URL for creating a new event
     path('create/<str:event_id>/', views.code, name='code'), #URL for a specific event, shows the code for a given event
     path('battle/', views.battle, name='battle'), #URL for the battle, reached by scanning an event. Passes in an event id
-    path('leave/<str:code>', views.leave, name='leave'),
+    path('leave/<str:code>', views.leave, name='leave'), #URL for leaving an event
+    path('buy/<str:path>/<str:url>', views.buy_picture, name='buy'), #URL for buying a profile picture
+    path('buy-potion/', views.buy_potion, name='buy-potion'), #URL for buying a potion
+    path('shop/', views.shop, name='shop'), #Shop view
     path('changepic/', views.changePicture, name='changepic')
+
 ]

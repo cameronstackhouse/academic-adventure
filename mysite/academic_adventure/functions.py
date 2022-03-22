@@ -86,3 +86,26 @@ def user_occupied(user):
     
     return False
 
+def image_cost(image):
+    """
+    Function to return the cost of an image based on its rarity.
+
+    Keyword arguments:
+    image -- image to check the cost of
+    """
+
+    image_rarity = image.rarity #Gets the rarity of the image
+
+    #If statements to determine price based on rarity
+    if image_rarity == "Common":
+        return 15
+    elif image_rarity == "Uncommon":
+        return 30
+    elif image_rarity == "Rare":
+        return 60
+    elif image_rarity == "Epic":
+        return 400
+    elif image_rarity == "Legendary":
+        return 1200
+    else:
+        return -1 #Error catching (Should never throw)
