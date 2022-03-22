@@ -1,7 +1,8 @@
 from datetime import timedelta
 from math import sqrt
+from unicodedata import name
 from django.utils import timezone
-from .models import CustomUser, Event
+from .models import CustomUser, Event, Image
 
 def get_user_positions(user):
     """
@@ -109,3 +110,34 @@ def image_cost(image):
         return 1200
     else:
         return -1 #Error catching (Should never throw)
+
+def populate_with_images():
+    """
+    Populates the database with the pre made profile pictures.
+    """
+    if not Image.objects.exists(): #If no images in the database
+        #Populates the database with the initial profile pictures
+        Image.objects.create(name="Man", img="profilepics/1.png", icon="profilepics/icon1.png", rarity="Common", in_store=True)
+        Image.objects.create(name="Woman", img="profilepics/2.png", icon="profilepics/icon2.png", rarity="Common", in_store=True)
+        Image.objects.create(name="Man", img="profilepics/3.png", icon="profilepics/icon3.png", rarity="Common", in_store=True)
+        Image.objects.create(name="Woman", img="profilepics/4.png", icon="profilepics/icon4.png", rarity="Common", in_store=True)
+        Image.objects.create(name="Man", img="profilepics/5.png", icon="profilepics/icon5.png", rarity="Common", in_store=True)
+        Image.objects.create(name="Woman", img="profilepics/6.png", icon="profilepics/icon6.png", rarity="Common", in_store=True)
+        Image.objects.create(name="Man", img="profilepics/7.png", icon="profilepics/icon7.png", rarity="Common", in_store=True)
+        Image.objects.create(name="Woman", img="profilepics/8.png", icon="profilepics/icon8.png", rarity="Common", in_store=True)
+        Image.objects.create(name="Man", img="profilepics/9.png", icon="profilepics/icon9.png", rarity="Common", in_store=True)
+        Image.objects.create(name="Woman", img="profilepics/10.png", icon="profilepics/icon10.png", rarity="Common", in_store=True)
+        Image.objects.create(name="Man", img="profilepics/11.png", icon="profilepics/icon11.png", rarity="Common", in_store=True)
+        Image.objects.create(name="Woman", img="profilepics/12.png", icon="profilepics/icon12.png", rarity="Common", in_store=True)
+        Image.objects.create(name="Man", img="profilepics/13.png", icon="profilepics/icon13.png", rarity="Common", in_store=True)
+        Image.objects.create(name="Man", img="profilepics/14.png", icon="profilepics/icon14.png", rarity="Common", in_store=True)
+        Image.objects.create(name="Man", img="profilepics/15.png", icon="profilepics/icon15.png", rarity="Common", in_store=True)
+        Image.objects.create(name="Man", img="profilepics/16.png", icon="profilepics/icon16.png", rarity="Common", in_store=True)
+        Image.objects.create(name="Richard", img="profilepics/17.png", icon="profilepics/icon17.png", rarity="Legendary", in_store=True)
+        Image.objects.create(name="Bella", img="profilepics/18.png", icon="profilepics/icon18.png", rarity="Epic", in_store=True)
+        Image.objects.create(name="Cat", img="profilepics/19.png", icon="profilepics/icon19.png", rarity="Epic", in_store=True)
+        Image.objects.create(name="Dog", img="profilepics/20.png", icon="profilepics/icon20.png", rarity="Rare", in_store=True)
+        Image.objects.create(name="Robot", img="profilepics/21.png", icon="profilepics/icon21.png", rarity="Rare", in_store=True)
+        Image.objects.create(name="Greg", img="profilepics/22.png", icon="profilepics/icon22.png", rarity="Epic", in_store=True)
+        Image.objects.create(name="Bunny", img="profilepics/23.png", icon="profilepics/icon23.png", rarity="Rare", in_store=True)
+        Image.objects.create(name="Frog", img="profilepics/24.png", icon="profilepics/icon24.png", rarity="Rare", in_store=True)
