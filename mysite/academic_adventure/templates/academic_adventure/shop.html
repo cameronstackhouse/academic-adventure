@@ -14,6 +14,7 @@
         <!--Includes the sytlesheets for the UI and the navbar-->
         <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/ui.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/profile.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/shop.css' %}">
         <!--Javascript to make the navbar work-->
         <script type="text/javascript" src="{% static 'academic_adventure/navbar.js' %}"> </script>
         <title>Shop</title>   
@@ -98,54 +99,153 @@
           </div>
         </div>
 
+        <!-- Header-->
+        <header class="bg-dark py-5" style="padding-bottom: 10px; background-image: url({% static 'academic_adventure/shopbackground.png' %});">
+          <div class="container px-4 px-lg-5 my-5">
+              <div class="text-center text-black">
+                  <h1 class="display-4 fw-bolder">Shop:</h1>
+                  <p class="lead fw-normal mb-0">You have: {{user.points}} points</p>
+              </div>
+          </div>
+        </header>
+
         <!--Displays error messages if they exist-->
         {% if timeerror %}
-        <p>{{timeerror}}</p>
+        <div class="alert alert-danger" role="alert">
+          {{timeerror}}
+        </div>
         {% else %}
         {% if message %}
-        <p>{{message}}</p>
+        <div class="alert alert-danger" role="alert">
+          {{message}}
+        </div>
+        {% elif success %}
+        <div class="alert alert-success" role="alert">
+          {{success}}
+        </div>
         {% endif %}
-        <h2>Your Points: {{user.points}}</h2>
         <!--Potions to buy-->
-        <h2>Potions</h2>
-        <p>Double skill boost potion: 50 Points</p>
-        <img src="{% static 'academic_adventure/potion.png' %}">
-        <form method="get" action="/academic-adventure/buy-potion">
-          <input type="submit" value="Buy">
-        </form>
+        <div class="text-center text-black pt-2">
+          <h2 class="display-6 fw-bolder">Potions:</h2>
+        </div>
+        <section class="py-2">
+          <div class="container px-4 px-lg-5 mt-5">
+              <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                  <div class="col mb-5">
+                      <div class="card h-100">
+                          <!-- Product image-->
+                          <img class="card-img-top" src="{% static 'academic_adventure/potion.png' %}" alt="..." />
+                          <!-- Product details-->
+                          <div class="card-body p-4">
+                              <div class="text-center">
+                                <div class="d-flex justify-content-center small text-warning mb-2">
+                                  <span class="epic">Epic</span> 
+                                </div>
+                                  <!-- Product name-->
+                                  <h5 class="fw-bolder">Double Event Skill Boost Potion</h5>
+                              
+                                  <!-- Product price-->
+                                  50 Points
+                              </div>
+                          </div>
+                          <!-- Product actions-->
+                          <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <form method="get" action="/academic-adventure/buy-potion" class="text-center">
+                              <input type="submit" value="Buy" class="btn btn-outline-dark mt-auto">
+                            </form>
+                          </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        <h2>Avatars</h2>
+              <div class="text-center text-black pt-2">
+                <h2 class="display-6 fw-bolder">Avatars:</h2>
+              </div>
         <!--Iterates through all the pictures a user does not own and displays them-->
         {% if avatar_message %}
-        <p>{{avatar_message}}</p>
+        <div class="alert alert-danger" role="alert">
+          {{avatar_message}}
+        </div>
         {% else %}
-        {% for picture in pictures %}
-        {% if picture not in user_pictures and picture.in_store %}
-            <div id="picture_container">
-                <img src="{% get_media_prefix %}{{picture.img}}">
-                <p>Name: {{picture.name}}</p>
-                <p>Rarity: {{picture.rarity}}</p>
-
-                <!--Shows price of the avatar based on rarity-->
-                {% if picture.rarity == "Common" %}
-                <p>Price: 15 points</p>
-                {% elif picture.rarity == "Uncommon" %}
-                <p>Price: 30 points</p>
-                {% elif picture.rarity == "Rare" %}
-                <p>Price: 60 points</p>
-                {% elif picture.rarity == "Epic" %}
-                <p>Price: 40 points</p>
-                {% elif picture.rarity == "Legendary" %}
-                <p>Price: 1200 points</p>
-                {% endif %}
-            
-                <form method="get" action="/academic-adventure/buy/{{picture.img}}">
-                    <input type="submit" value="Buy">
-                </form>
-            </div>
+        <div class="container px-4 px-lg-5 mt-5">
+          <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            {% for picture in pictures %}
+            {% if picture not in user_pictures and picture.in_store %}
+            <div class="col mb-5">
+                  <div class="card h-100">
+                      <!-- Product image-->
+                      <img class="card-img-top" src="{% get_media_prefix %}{{picture.img}}" alt="..." />
+                      <!-- Product details-->
+                      <div class="card-body p-4">
+                          <div class="text-center">
+                            <!--Shows price of the avatar based on rarity-->
+                            {% if picture.rarity == "Common" %}
+                            <div class="d-flex justify-content-center small text-warning mb-2">
+                              <span class="common">{{picture.rarity}}</span> 
+                            </div>
+                              <!-- Product name-->
+                              <h5 class="fw-bolder">{{picture.name}}</h5>
+                          
+                              <!-- Product price-->
+                              15 Points
+                            {% elif picture.rarity == "Uncommon" %}
+                            <div class="d-flex justify-content-center small text-warning mb-2">
+                              <span class="uncommon">{{picture.rarity}}</span> 
+                            </div>
+                              <!-- Product name-->
+                              <h5 class="fw-bolder">{{picture.name}}</h5>
+                          
+                              <!-- Product price-->
+                              30 Points
+                            {% elif picture.rarity == "Rare" %}
+                            <div class="d-flex justify-content-center small text-warning mb-2">
+                              <span class="rare">{{picture.rarity}}</span> 
+                            </div>
+                              <!-- Product name-->
+                              <h5 class="fw-bolder">{{picture.name}}</h5>
+                          
+                              <!-- Product price-->
+                              60 Points
+                            {% elif picture.rarity == "Epic" %}
+                            <div class="d-flex justify-content-center small text-warning mb-2">
+                              <span class="epic">{{picture.rarity}}</span> 
+                            </div>
+                              <!-- Product name-->
+                              <h5 class="fw-bolder">{{picture.name}}</h5>
+                          
+                              <!-- Product price-->
+                              400 Points
+                            {% elif picture.rarity == "Legendary" %}
+                            <div class="d-flex justify-content-center small text-warning mb-2">
+                              <span class="legendary">{{picture.rarity}}</span> 
+                            </div>
+                              <!-- Product name-->
+                              <h5 class="fw-bolder">{{picture.name}}</h5>
+                          
+                              <!-- Product price-->
+                              1200 Points
+                            {% endif %}
+                                      
+                          </div>
+                      </div>
+                      <!-- Product actions-->
+                      <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                        <form method="get" action="/academic-adventure/buy/{{picture.img}}" class="text-center">
+                          <input type="submit" value="Buy" class="btn btn-outline-dark mt-auto">
+                        </form>
+                      </div>
+                  </div>
+              </div>
         {% endif %}
         {% endfor %}
         {% endif %}
+      </div>
+    </div>
+  </div>
 
           <!--Change profile picture modal-->
           <div class="modal fade" id="inventoryModal" tabindex="-1" aria-labelledby="inventoryModalLabel" aria-hidden="true">
@@ -177,5 +277,9 @@
       </body>
 
         {% endif %}
+        
     </body>
+    <footer class="py-3">
+      <div class="container"><p class="m-0 text-center text-black">Copyright &copy; Academic Adventure 2022</p></div>
+    </footer>
 </html>

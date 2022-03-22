@@ -7,10 +7,20 @@
     justify-content: center;
 }
 
-.column {
+@media all and (max-width: 512px) {
+    .column {
+        padding: 5%;
+        flex: 100%;
+    }
+  }
+
+@media all and (min-width: 512px) {
+    .column {
     flex: 33%;
     padding: 5%;
 }
+  }
+  
 #minileaderboard {
     border-collapse: collapse;
     width: 100%;

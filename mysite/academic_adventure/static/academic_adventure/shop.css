@@ -1,0 +1,20 @@
+
+.common {
+    color: rgb(127, 136, 127);
+}
+  
+.uncommon {
+    color: rgb(59, 156, 103);
+}
+  
+.rare {
+    color: rgb(49, 18, 230);
+}
+
+.epic {
+    color: rgb(169, 51, 173);
+}
+
+.legendary {
+    color: #b18b4f;
+}
