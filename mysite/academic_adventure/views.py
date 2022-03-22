@@ -37,8 +37,6 @@ def leaderboard(request):
             "intelligence_position": intelligence_position,
             "athleticism_position": athleticism_position,
             "sociability_position": sociability_position,
-            "userevent": user_event,
-            "picinventory": request.user.pic_inventory.all(),
             "pictures": pictures,
             "user_pictures": user_pictures} #Passes user information and event information into the HTML form
 
@@ -69,7 +67,6 @@ def home(request):
 
     context = {"events":Event.objects.all(), #Gets all events in the database
                 "user":request.user,
-                "picinventory": request.user.pic_inventory.all(),
                 "intelligence_position": intelligence_position,
                 "athleticism_position": athleticism_position,
                 "sociability_position": sociability_position,
@@ -109,7 +106,6 @@ def events(request):
                "sociability_position": sociability_position,
                 "events":Event.objects.all(), #Gets all events in the database
                 "current_time": current_datetime,
-                "picinventory": request.user.pic_inventory.all(),
                 "pictures": pictures,
                 "user_pictures": user_pictures} #Passes user information and event information into the HTML form
     
@@ -261,7 +257,6 @@ def create(request):
                "intelligence_position": intelligence_position,
                "athleticism_position": athleticism_position,
                "sociability_position": sociability_position,
-                "picinventory": request.user.pic_inventory.all(),
                "pictures": pictures,
                "user_pictures": user_pictures
                } #Data to be passed into the html form
@@ -301,7 +296,6 @@ def code(request, event_id):
                 "intelligence_position": intelligence_position,
                 "athleticism_position": athleticism_position,
                 "sociability_position": sociability_position,
-                "picinventory": request.user.pic_inventory.all(),
                 "pictures": pictures,
                 "user_pictures": user_pictures
                 } #Information about event name, participants, and if the user is a gamekeeper to be passed to HTML form
@@ -386,7 +380,6 @@ def battle(request):
                 "intelligence_position": intelligence_position,
                 "athleticism_position": athleticism_position,
                 "sociability_position": sociability_position,
-                "picinventory": request.user.pic_inventory.all(),
                 "pictures": pictures,
                 "user_pictures": user_pictures
                 } #Information about the user and their opponent
@@ -428,7 +421,6 @@ def shop(request):
                "intelligence_position": intelligence_position,
                "athleticism_position": athleticism_position,
                "sociability_position": sociability_position,
-               "picinventory": request.user.pic_inventory.all(),
                "pictures": pictures,
                "user_pictures": user_pictures
                }

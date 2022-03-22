@@ -131,7 +131,7 @@
                           {% else %}
                           <img src="{% static 'academic_adventure/userbig.png' %}">                          {% endif %}
                           <br>
-                          <button type="button" data-bs-toggle="modal" data-bs-target="#inventoryModal">Inventory</button>
+                          <button type="button" data-bs-toggle="modal" data-bs-target="#inventoryModal">Change Avatar</button>
                           <br>
                           <br>
                           <br>
@@ -165,7 +165,7 @@
                 </div>
                 <div class="modal-body">
             
-                  {% for pic in picinventory %}
+                  {% for pic in user_pictures %}
 
                   <h4>{{pic.name}}</h4>
                   <img src="{{ pic.img.url }}">
