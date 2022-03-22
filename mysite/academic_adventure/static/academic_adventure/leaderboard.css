@@ -1,11 +1,11 @@
 /*CSS for the leaderboard page*/
 
-.row {
-    display: flex;
-    margin-left: auto;
-    margin-right: auto;
-    justify-content: center;
-}
+@media all and (max-width: 512px) {
+    .column {
+        padding: 5%;
+        background-color: red;
+    }
+  }
 
 .column {
     flex: 33%;
