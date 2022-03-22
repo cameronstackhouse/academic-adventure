@@ -1,0 +1,32 @@
+.list-group {
+    width: 50% 
+}
+
+.list-group-item {
+    margin-top: 1em;
+    border-radius: none;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out
+}
+
+.list-group-item:hover {
+    background-color: #546474;
+    color: white;
+}
+
+.desc{
+    font-size: 14px;
+    width: 80%;
+    word-wrap: break-word
+}
+
+.about span {
+    font-size: 12px;
+    margin-right: 10px
+}
+
+.leavebutton {
+    position:absolute; 
+    top:0.15em; 
+    right:0.3em
+}

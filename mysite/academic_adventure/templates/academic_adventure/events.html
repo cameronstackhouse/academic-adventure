@@ -14,6 +14,7 @@
         <script type="text/javascript" src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"> </script>
         <!--Includes stylesheets for the UI and navbar-->
         <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/ui.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/events.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/profile.css' %}">
         <script type="text/javascript" src="{% static 'academic_adventure/navbar.js' %}"> </script>
         <title>Events</title>
@@ -65,17 +66,57 @@
     </div>
 
         <!--Display-->
+
+        <!-- Header-->
+        <header class="bg-dark py-5" style="padding-bottom: 10px; background-image: url({% static 'academic_adventure/eventsbackground.png' %});">
+          <div class="container px-4 px-lg-5 my-5">
+              <div class="text-center text-black">
+                  <h1 class="display-4 fw-bolder">Events:</h1>
+                  <p class="lead fw-normal mb-0">There are {{potentialevents|length}} upcoming events. </p>
+              </div>
+          </div>
+        </header>
+
+        <!--Displays message to user if a message is passed in-->
+        
+        {% if message %}
+        <div class="alert alert-danger" role="alert">
+          {{message}}
+        </div>
+        {% elif success %}
+        <div class="alert alert-success" role="alert">
+          {{success}}
+        </div>
+        {% endif %}
     
-        <!--List of user event-->
+        <!--Current event-->
 
         {% if userevent %}
+        <h3 class="mb-0">You are attending: </h3>
 
-        <h3>You are attending: </h3>
-        <p>{{userevent.name}} - {{userevent.date}}</p>
+        <div class="container d-flex justify-content-center">
+          <ul class="list-group mt-5">
+            <li class="list-group-item d-flex justify-content-between align-content-center" style="background-color: #b18b4f;">
+              <div class="ml-2">
+                <h6 class="mb-0 text-white">{{userevent.name}}:</h6>
+                <p class="desc my-1 text-white">{{userevent.description}}</p>
+                {% if userevent.duration == 1 %}
+                <div class="about text-white"> <span>{{userevent.duration|floatformat:"0"}} hour.</span> <span>{{userevent.date}}</span> </div>
+                {% else %}
+                <div class="about text-white"> <span>{{userevent.duration|floatformat:"1"}} hours.</span> <span>{{userevent.date}}</span> </div>
+                {% endif %}
+                <form method="get" action="/academic-adventure/leave/{{userevent.code}}">
+                  <input class="leavebutton btn btn-outline-light mt-1" type="submit" value="Leave Event">
+                </form>
+              </div>
+            </li>
+            </div>
+          </ul>
+        </div>
+
         
-        <form method="get" action="/academic-adventure/leave/{{userevent.code}}">
-          <input type="submit" value="Leave Event">
-        </form>
+        
+      
          
         {% else %}
 
@@ -84,27 +125,34 @@
         {% endif %}
 
         <!--Scan button-->
-        <button type="button" data-bs-toggle="modal" data-bs-target="#scanModal">Scan</button>
+        <button type="button" data-bs-toggle="modal" data-bs-target="#scanModal" class="btn btn-outline-dark mt-auto">Scan</button>
 
         </br>
 
-        <!--Displays message to user if a message is passed in-->
-        
-        {% if message %}
-
-          <p>{{ message }}</p>
-
-        {% endif %}
-
         <!--List of society, course or close events -->
 
+            
+
         <h3>Upcoming events (Next Hour):</h3>
+        <div class="container d-flex justify-content-center">
+          <ul class="list-group my-3">
+            {% for event in potentialevents|slice:":4" %}
+            <li class="list-group-item d-flex justify-content-between align-content-center">
+              <div class="ml-2 w-75">
+                <h6 class="mb-0">{{event.name}}</h6>
+                <p class="desc my-1">{{event.description}}</p>
+                {% if event.duration == 1 %}
+                <div class="about"> <span>{{event.duration|floatformat:"0"}} hour.</span> <span>{{event.date}}</span> </div>
+                {% else %}
+                <div class="about"> <span>{{event.duration|floatformat:"1"}} hours.</span> <span>{{event.date}}</span> </div>
+                {% endif %}
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
 
-        {% for event in potentialevents|slice:":4" %}
-
-        <p>{{event.name}} - {{event.society}}</p> 
-
-        {% endfor %}
+        
 
         <!--Modal for rest of events-->
 
