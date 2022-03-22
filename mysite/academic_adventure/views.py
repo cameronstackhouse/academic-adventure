@@ -398,7 +398,7 @@ def shop(request):
     View for the shop for the user to buy profile pictures from
 
     Keyword arguments:
-    request -- 
+    request -- HttpRequest object
     """
     current_datetime = timezone.now()
 
@@ -418,7 +418,6 @@ def shop(request):
 
     intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
 
-
     context = {"user":request.user,
                "intelligence_position": intelligence_position,
                "athleticism_position": athleticism_position,
@@ -427,14 +426,25 @@ def shop(request):
                "user_pictures": user_pictures
                }
     
-    if user_event: #Checks if user is in an event
-        context["timeerror"] = "You can not purchase anything from the shop when you are in an event. Please come back later."
-        return render(request, 'academic_adventure/shop.html', context)
-    
     if profile_pic: #Checks if the user has a profile pic
         #If so set the users icon and image
         context["icon"] = profile_pic.icon 
         context["pic"] = profile_pic.img
+    
+    #Checks if there are any avatars to display to the user
+    pictures_to_display = False
+    for picture in pictures:
+        if picture not in request.user.pic_inventory.all():
+            pictures_to_display = True
+            break
+    
+    if not pictures_to_display: #If no avatars to display
+        context["avatar_message"] = "No avatars for you to purchase at the moment. Either no avatars have been uploaded to the system or you own all of them."
+        return render(request, 'academic_adventure/shop.html', context)
+
+    if user_event: #Checks if user is in an event
+        context["timeerror"] = "You can not purchase anything from the shop when you are in an event. Please come back later."
+        return render(request, 'academic_adventure/shop.html', context)
     
     return render(request, 'academic_adventure/shop.html', context)
     
@@ -505,6 +515,8 @@ def buy_picture(request, path, url):
 
     current_datetime = timezone.now()
 
+    intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
+
     #Code to determine if a user is currently in an event
     user_event = None
     for event in Event.objects.all().order_by('-date'): #Iterates through events ordered by their date
@@ -513,14 +525,14 @@ def buy_picture(request, path, url):
             if event.type != "Battle": #Checks if the event is not battle, as battles do not count as an occupiable event
                 user_event = event
                 break
-
-    if user_event: #Checks if user is in an event
-        context["timeerror"] = "You can not purchase anything from the shop when you are in an event. Come back later."
-        return render(request, 'academic_adventure/shop.html', context)
-
-    intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
-
-
+    
+    #Checks if there are any avatars to display to the user
+    pictures_to_display = False
+    for picture in pictures:
+        if picture not in request.user.pic_inventory.all():
+            pictures_to_display = True
+            break
+    
     context = {"user":request.user,
                "intelligence_position": intelligence_position,
                "athleticism_position": athleticism_position,
@@ -533,6 +545,14 @@ def buy_picture(request, path, url):
         #If so set the users icon and image
         context["icon"] = profile_pic.icon 
         context["pic"] = profile_pic.img
+    
+    if not pictures_to_display: #If no avatars to display
+        context["avatar_message"] = "No avatars for you to purchase at the moment. Either no avatars have been uploaded to the system or you own all of them."
+        return render(request, 'academic_adventure/shop.html', context)
+
+    if user_event: #Checks if user is in an event
+        context["timeerror"] = "You can not purchase anything from the shop when you are in an event. Come back later."
+        return render(request, 'academic_adventure/shop.html', context)
 
     #Checks if the picture to purchase exists and if the user has enough points
     if Image.objects.filter(img=f"{path}/{url}").exists():
@@ -550,6 +570,11 @@ def buy_picture(request, path, url):
             request.user.points = request.user.points - cost #Takes points from the user based on the cost
 
             request.user.save() #Saves changes made
+
+            #Sets the new profile picture
+            context["icon"] = to_purchase.icon
+            context["pic"] = to_purchase.img
+
             context["message"] = "Profile picture successfully purchased and changed!"
             return render(request, 'academic_adventure/shop.html', context)
     else:
