@@ -569,8 +569,11 @@ def buy_picture(request, path, url):
         cost = image_cost(to_purchase) #Gets the cost of the image based on rarity
 
         #Checks that a valid image cost was returned and that the user has sufficient funds to purchase given image
-        if cost == -1 or cost > request.user.points or to_purchase in request.user.pic_inventory.all():
-            context["message"] = "Error, too few points or you already own this profile picture."
+        if cost == -1 or cost > request.user.points:
+            context["message"] = "You have insufficient points to buy this avatar."
+            return render(request, 'academic_adventure/shop.html', context)
+        elif cost == -1 or to_purchase in request.user.pic_inventory.all():
+            context["message"] = "You cannot purchase this item as you already own this profile picture."
             return render(request, 'academic_adventure/shop.html', context)
         else:
             request.user.pic_inventory.add(to_purchase) #Adds new profile pic to user inventory
@@ -583,7 +586,7 @@ def buy_picture(request, path, url):
             context["icon"] = to_purchase.icon
             context["pic"] = to_purchase.img
 
-            context["message"] = "Profile picture successfully purchased and changed!"
+            context["success"] = "Profile picture successfully purchased and changed!"
             return render(request, 'academic_adventure/shop.html', context)
     else:
         #If the image doesn't exist then redirect the user
@@ -637,11 +640,11 @@ def buy_potion(request):
         context["pic"] = profile_pic.img
     
     if request.user.stat_boost: #Checks if user already has a stat boost 
-        context["message"] = "Error, you already have a stat boost applied."
+        context["message"] = "You cannot purchase this potion as you already have a stat boost applied."
         return render(request, 'academic_adventure/shop.html', context)
 
     if request.user.points < 50:
-        context["message"] = "Error, insufficient points to buy a potion."
+        context["message"] = "You have insufficient points to buy a potion."
         return render(request, 'academic_adventure/shop.html', context)
     
     request.user.stat_boost = True #Applies stat boost to user
@@ -649,7 +652,7 @@ def buy_potion(request):
 
     request.user.save() #Saves the changes to the user
 
-    context["message"] = "Successfully purchased potion!"
+    context["success"] = "Successfully purchased potion!"
     return render(request, 'academic_adventure/shop.html', context)
 
 

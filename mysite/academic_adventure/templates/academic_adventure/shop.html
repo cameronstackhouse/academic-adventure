@@ -14,6 +14,7 @@
         <!--Includes the sytlesheets for the UI and the navbar-->
         <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/ui.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/profile.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/shop.css' %}">
         <!--Javascript to make the navbar work-->
         <script type="text/javascript" src="{% static 'academic_adventure/navbar.js' %}"> </script>
         <title>Shop</title>   
@@ -98,18 +99,31 @@
           </div>
         </div>
 
+        <h1>Shop</h1>
+
         <!--Displays error messages if they exist-->
         {% if timeerror %}
-        <p>{{timeerror}}</p>
+        <div class="alert alert-danger" role="alert">
+          {{timeerror}}
+        </div>
         {% else %}
         {% if message %}
-        <p>{{message}}</p>
+        <div class="alert alert-danger" role="alert">
+          {{message}}
+        </div>
+        {% elif success %}
+        <div class="alert alert-success" role="alert">
+          {{success}}
+        </div>
         {% endif %}
         <h2>Your Points: {{user.points}}</h2>
         <!--Potions to buy-->
         <h2>Potions</h2>
-        <p>Double skill boost potion: 50 Points</p>
         <img src="{% static 'academic_adventure/potion.png' %}">
+        <p>
+          <span class="epic">Epic </span> 
+          <span>- Double Skill Boost Potion: 50 Points</span>
+        </p>
         <form method="get" action="/academic-adventure/buy-potion">
           <input type="submit" value="Buy">
         </form>
@@ -117,26 +131,41 @@
         <h2>Avatars</h2>
         <!--Iterates through all the pictures a user does not own and displays them-->
         {% if avatar_message %}
-        <p>{{avatar_message}}</p>
+        <div class="alert alert-danger" role="alert">
+          {{avatar_message}}
+        </div>
         {% else %}
         {% for picture in pictures %}
         {% if picture not in user_pictures and picture.in_store %}
             <div id="picture_container">
                 <img src="{% get_media_prefix %}{{picture.img}}">
-                <p>Name: {{picture.name}}</p>
-                <p>Rarity: {{picture.rarity}}</p>
 
                 <!--Shows price of the avatar based on rarity-->
                 {% if picture.rarity == "Common" %}
-                <p>Price: 15 points</p>
+                <p>
+                  <span class="common">{{picture.rarity}} </span> 
+                  <span>- {{picture.name}}: 15 points</span>
+                </p>
                 {% elif picture.rarity == "Uncommon" %}
-                <p>Price: 30 points</p>
+                <p>
+                  <span class="uncommon">{{picture.rarity}} </span> 
+                  <span>- {{picture.name}}: 30 points</span>
+                </p>
                 {% elif picture.rarity == "Rare" %}
-                <p>Price: 60 points</p>
+                <p>
+                  <span class="rare">{{picture.rarity}} </span> 
+                  <span>- {{picture.name}}: 60 points</span>
+                </p>
                 {% elif picture.rarity == "Epic" %}
-                <p>Price: 40 points</p>
+                <p>
+                  <span class="epic">{{picture.rarity}} </span> 
+                  <span>- {{picture.name}}: 400 points</span>
+                </p>
                 {% elif picture.rarity == "Legendary" %}
-                <p>Price: 1200 points</p>
+                <p>
+                  <span class="legendary">{{picture.rarity}} </span> 
+                  <span>- {{picture.name}}: 1200 points</span>
+                </p>
                 {% endif %}
             
                 <form method="get" action="/academic-adventure/buy/{{picture.img}}">
