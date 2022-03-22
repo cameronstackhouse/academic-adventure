@@ -15,5 +15,6 @@ urlpatterns = [
     path('buy/<str:path>/<str:url>', views.buy_picture, name='buy'), #URL for buying a profile picture
     path('buy-potion/', views.buy_potion, name='buy-potion'), #URL for buying a potion
     path('shop/', views.shop, name='shop'), #Shop view
+    path('changepic/', views.changePicture, name='changepic')
 
 ]

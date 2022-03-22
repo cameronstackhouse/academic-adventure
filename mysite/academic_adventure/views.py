@@ -37,6 +37,8 @@ def leaderboard(request):
             "intelligence_position": intelligence_position,
             "athleticism_position": athleticism_position,
             "sociability_position": sociability_position,
+            "userevent": user_event,
+            "picinventory": request.user.pic_inventory.all(),
             "pictures": pictures,
             "user_pictures": user_pictures} #Passes user information and event information into the HTML form
 
@@ -67,6 +69,7 @@ def home(request):
 
     context = {"events":Event.objects.all(), #Gets all events in the database
                 "user":request.user,
+                "picinventory": request.user.pic_inventory.all(),
                 "intelligence_position": intelligence_position,
                 "athleticism_position": athleticism_position,
                 "sociability_position": sociability_position,
@@ -106,6 +109,7 @@ def events(request):
                "sociability_position": sociability_position,
                 "events":Event.objects.all(), #Gets all events in the database
                 "current_time": current_datetime,
+                "picinventory": request.user.pic_inventory.all(),
                 "pictures": pictures,
                 "user_pictures": user_pictures} #Passes user information and event information into the HTML form
     
@@ -115,7 +119,6 @@ def events(request):
         context["pic"] = profile_pic.img
 
     # Scanner code:
-
     if request.method == "POST": #If the user has scanned a QR code
         logging.info(request.POST.get("scancontent")) #Finds the event the QR code is for using stored contents of QR code
         
@@ -258,6 +261,7 @@ def create(request):
                "intelligence_position": intelligence_position,
                "athleticism_position": athleticism_position,
                "sociability_position": sociability_position,
+                "picinventory": request.user.pic_inventory.all(),
                "pictures": pictures,
                "user_pictures": user_pictures
                } #Data to be passed into the html form
@@ -297,6 +301,7 @@ def code(request, event_id):
                 "intelligence_position": intelligence_position,
                 "athleticism_position": athleticism_position,
                 "sociability_position": sociability_position,
+                "picinventory": request.user.pic_inventory.all(),
                 "pictures": pictures,
                 "user_pictures": user_pictures
                 } #Information about event name, participants, and if the user is a gamekeeper to be passed to HTML form
@@ -381,6 +386,7 @@ def battle(request):
                 "intelligence_position": intelligence_position,
                 "athleticism_position": athleticism_position,
                 "sociability_position": sociability_position,
+                "picinventory": request.user.pic_inventory.all(),
                 "pictures": pictures,
                 "user_pictures": user_pictures
                 } #Information about the user and their opponent
@@ -422,6 +428,7 @@ def shop(request):
                "intelligence_position": intelligence_position,
                "athleticism_position": athleticism_position,
                "sociability_position": sociability_position,
+               "picinventory": request.user.pic_inventory.all(),
                "pictures": pictures,
                "user_pictures": user_pictures
                }
@@ -497,6 +504,15 @@ def leave(request, code):
     return redirect("academic_adventure:events") #Redirects back to the events page
 
 @login_required
+def changePicture(request):
+    """
+    View to change the profile picture of the current user with the one selected.
+    """
+    if request.method == "POST":
+        request.user.profile_pic = Image.objects.get(id=request.POST.get("picture")) #Get the data from the POST request and sets it as the profile picture.
+        request.user.save()
+    return redirect("academic_adventure:home")         
+
 def buy_picture(request, path, url):
     """
     View to buy a profile picture and add it to the list of 

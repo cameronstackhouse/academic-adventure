@@ -155,20 +155,31 @@
           </div>
         </div>
 
-        <!--Inventory page modal-->
-        <div class="modal fade" id="inventoryModal" tabindex="-1" aria-labelledby="inventoryModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="inventoryModalLabel">Inventory</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                  Inventory
-              </div>
+          <!--Change profile picture modal-->
+          <div class="modal fade" id="inventoryModal" tabindex="-1" aria-labelledby="inventoryModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="inventoryModalLabel">Change profile picture</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+            
+                  {% for pic in picinventory %}
+
+                  <h4>{{pic.name}}</h4>
+                  <img src="{{ pic.img.url }}">
+                  <form method="post" action="/academic-adventure/changepic/">
+                    {% csrf_token %} 
+                    <button type="submit" name="picture" value="{{pic.id}}">Select</button>
+                  </form>
+                </br>
+                  {% endfor %}
+
+                </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
         
 </html>
