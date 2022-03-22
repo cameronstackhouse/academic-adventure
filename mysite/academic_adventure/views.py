@@ -368,7 +368,14 @@ def battle(request):
     
     #Get random opponent excluding the current user
     opponents = list(CustomUser.objects.all().exclude(username=request.user.username))
-    opponent = random.choice(opponents)
+    if len(opponents) == 0:#If there are no other users create a user to act as the opponent
+        opponent = CustomUser() #New user that isn't saved and only used as an opponent
+        opponent.username = "Skeleton warrior"
+        opponent.athleticism = random.randint(1,3)#Set random attributes to this enemy
+        opponent.sociability = random.randint(1,3)
+        opponent.intelligence = random.randint(1,3)
+    else:
+        opponent = random.choice(opponents)
     
     #Error trapping for cases of 0 stats
     if opponent.athleticism == 0:
