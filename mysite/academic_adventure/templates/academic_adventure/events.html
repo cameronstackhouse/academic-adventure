@@ -92,10 +92,13 @@
         <!--Current event-->
 
         {% if userevent %}
-        <h3 class="mb-0">You are attending: </h3>
+        <div class="text-center text-black pt-2">
+           <h3 class="mb-0">You are attending: </h3>
+        </div>
+       
 
         <div class="container d-flex justify-content-center">
-          <ul class="list-group mt-5">
+          <ul class="list-group mt-1">
             <li class="list-group-item d-flex justify-content-between align-content-center" style="background-color: #b18b4f;">
               <div class="ml-2">
                 <h6 class="mb-0 text-white">{{userevent.name}}:</h6>
@@ -120,20 +123,23 @@
          
         {% else %}
 
-        <h3>You are not attending any Event </h3>
+        <div class="text-center text-black pt-2">
+          <h3 class="mb-0">You are not attending any Event.</h3>
+          <p>When you are at your event venue, click the button below to scan the event's QR code.</p>
+          <!--Scan button-->
+          <button type="button" data-bs-toggle="modal" data-bs-target="#scanModal" class="btn btn-outline-dark mt-auto">Scan</button>
+
+      </br>
+       </div>
 
         {% endif %}
-
-        <!--Scan button-->
-        <button type="button" data-bs-toggle="modal" data-bs-target="#scanModal" class="btn btn-outline-dark mt-auto">Scan</button>
-
-        </br>
 
         <!--List of society, course or close events -->
 
             
-
-        <h3>Upcoming events (Next Hour):</h3>
+        <div class="text-center text-black pt-4">
+          <h2 class="display-9">Upcoming events (Next Hour):</h2>
+        </div>
         <div class="container d-flex justify-content-center">
           <ul class="list-group my-3">
             {% for event in potentialevents|slice:":4" %}
@@ -148,32 +154,54 @@
                 {% endif %}
               </div>
             </li>
-            {% endfor %}
-          </ul>
-        </div>
-
-        
+            {% endfor %} 
 
         <!--Modal for rest of events-->
 
         {% if potentialevents|length > 4%}
 
-        <a data-bs-toggle="modal" data-bs-target="#youreventModal" href="#youreventModal">...</a>
-        </br>
+        <li class="list-group-item d-flex justify-content-between align-content-center">
+          <div class="ml-2 w-75">
+            <a data-bs-toggle="modal" data-bs-target="#youreventModal" href="#youreventModal" class="moreevents">Click to see more events.</a>
+          </div>
+        </li>
 
         {% endif %}
+
+      
+      </ul>
+    </div>
 
         <!--List of created events-->
 
         {% if user.gamekeeper == True %}
 
+        <div class="text-center text-black pt-2">
+          <h2 class="display-6 fw-bolder">Gamekeeper Options:</h2>
+        </div>
+
+         <!--Create event button-->
+
+         <div class="text-center text-black pt-4">
+          <h2 class="display-9">Create Event:</h2>
+          <form method="get" action="/academic-adventure/create">
+            <input class="btn btn-outline-dark mt-auto" type="submit" value="Click Here!">
+          </form>
+        </div>
+
+
         <div id="events">
-          <h3>Your Created Unexpired Events:</h3>
-
-          {% for event in hostevents|slice:":4" %}
-
-          <a href="{% url 'academic_adventure:code' event_id=event.code %}">{{event.name}}</a> 
-          </br>
+          <div class="text-center text-black pt-4">
+            <h2 class="display-9">Your (Unexpired) Created Events:</h2>
+          </div>
+          <div class="container d-flex justify-content-center">
+            <ul class="list-group my-3">
+              {% for event in hostevents|slice:":4" %}
+              <li class="list-group-item d-flex justify-content-between align-content-center">
+                <div class="ml-2 w-75">
+                  <a href="{% url 'academic_adventure:code' event_id=event.code %}" class="moreevents">{{event.date}} - {{event.name}}</a>
+                </div>
+              </li>
 
           {% endfor %}
 
@@ -181,21 +209,15 @@
 
           {% if hostevents|length > 4%}
 
-          <a data-bs-toggle="modal" data-bs-target="#yourcreatedModal" href="#yourcreatedModal">...</a>
+          <li class="list-group-item d-flex justify-content-between align-content-center">
+            <div class="ml-2 w-75">
+              <a data-bs-toggle="modal" data-bs-target="#yourcreatedModal" href="#yourcreatedModal" class="moreevents">Click to see more events.</a>
+            </div>
+          </li>
 
           {% endif %}
-
-          {% endif %}
-
+          
         </div>
-
-        <!--Create event button-->
-
-        {% if user.gamekeeper == True %}
-
-        <form method="get" action="/academic-adventure/create">
-          <input type="submit" value="Create an event">
-        </form>
 
         {% endif %}
 
@@ -375,4 +397,7 @@
             </div>
           </div>
         </body>
+        <footer class="py-3">
+          <div class="container"><p class="m-0 text-center text-black">Copyright &copy; Academic Adventure 2022</p></div>
+        </footer>
 </html>
