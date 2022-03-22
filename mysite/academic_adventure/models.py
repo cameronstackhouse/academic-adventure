@@ -42,7 +42,7 @@ class CustomUser(AbstractUser):
     athleticism = models.IntegerField(default=0) #Users athleticism score
     points = models.IntegerField(default=0) #Current user points
     gamekeeper = models.BooleanField(default=False) #Boolean indicating if user is a gamekeeper or not
-    profile_pic = models.ForeignKey(Image, on_delete=models.CASCADE, blank=True, null=True) #Current profile picture image  
+    profile_pic = models.ForeignKey(Image, on_delete=models.SET_NULL, blank=True, null=True) #Current profile picture image  
     pic_inventory = models.ManyToManyField(Image, blank=True, related_name='%(class)s_pic_inventory_created') 
     points = models.IntegerField(default=0) #User's spendable points 
     stat_boost = models.BooleanField(default=False) #Boolean indicating if the user has a stat boost
