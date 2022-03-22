@@ -116,6 +116,9 @@
 
         <h2>Avatars</h2>
         <!--Iterates through all the pictures a user does not own and displays them-->
+        {% if avatar_message %}
+        <p>{{avatar_message}}</p>
+        {% else %}
         {% for picture in pictures %}
         {% if picture not in user_pictures and picture.in_store %}
             <div id="picture_container">
@@ -172,4 +175,7 @@
           </div>    
     
       </body>
+
+        {% endif %}
+    </body>
 </html>
