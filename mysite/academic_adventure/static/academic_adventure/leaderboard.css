@@ -20,12 +20,7 @@
     padding: 5%;
 }
   }
-
-
-.column {
-    flex: 33%;
-    padding: 5%;
-}
+  
 #minileaderboard {
     border-collapse: collapse;
     width: 100%;
