@@ -10,7 +10,7 @@ import datetime
 from django.utils import timezone
 
 from .models import Event, Image
-from .functions import get_user_positions, compare_positions, user_occupied, image_cost
+from .functions import get_user_positions, compare_positions, user_occupied, image_cost, populate_with_images
 
 @login_required
 def leaderboard(request):
@@ -21,6 +21,9 @@ def leaderboard(request):
     Keyword arguments:
     request -- HttpRequest object 
     """
+
+    populate_with_images() #Populates the database with the initial profile pictures if not already populated
+
 
     #Gets all images available in store and ones the user does not own
     pictures = Image.objects.filter(in_store=True)
@@ -57,13 +60,15 @@ def home(request):
     request -- HttpRequest object 
     """
 
+    populate_with_images() #Populates the database with the initial profile pictures if not already populated
+    
+
     #Gets all images available in store and ones the user does not own
     pictures = Image.objects.filter(in_store=True)
     user_pictures = request.user.pic_inventory.all() #Gets all of the users pictures
     profile_pic = request.user.profile_pic #Gets the users profile pic
 
     intelligence_position, athleticism_position, sociability_position = get_user_positions(request.user) #Gets users positions in each leaderboard
-
 
     context = {"events":Event.objects.all(), #Gets all events in the database
                 "user":request.user,
@@ -89,6 +94,8 @@ def events(request):
     Keyword arguments:
     request -- HttpRequest object 
     """
+    populate_with_images() #Populates the database with the initial profile pictures if not already populated
+
 
     current_datetime = timezone.now() # offset-awared datetime
 
@@ -230,6 +237,8 @@ def create(request):
     Keyword arguments:
     request -- HttpRequest object 
     """
+    populate_with_images() #Populates the database with the initial profile pictures if not already populated
+
 
     #Gets all images available in store and ones the user does not own
     pictures = Image.objects.filter(in_store=True)
@@ -280,6 +289,8 @@ def code(request, event_id):
     request -- HttpRequest object 
     event_id -- ID of the event to display the code
     """
+    populate_with_images() #Populates the database with the initial profile pictures if not already populated
+
 
     #Gets all images available in store and ones the user does not own
     pictures = Image.objects.filter(in_store=True)
@@ -317,6 +328,8 @@ def battle(request):
     to prevent users from entering in the event ID of a battle 
     in the URL and gaining access to a battle that is too far away.
     """
+    populate_with_images() #Populates the database with the initial profile pictures if not already populated
+
 
     #Gets all images available in store and ones the user does not own
     pictures = Image.objects.filter(in_store=True)
@@ -399,6 +412,8 @@ def shop(request):
     Keyword arguments:
     request -- HttpRequest object
     """
+    populate_with_images() #Populates the database with the initial profile pictures if not already populated
+
     current_datetime = timezone.now()
 
     #Code to determine if a user is currently in an event
@@ -457,6 +472,8 @@ def leave(request, code):
     Keyword arguments:
     request -- HttpRequest object 
     """
+    populate_with_images() #Populates the database with the initial profile pictures if not already populated
+
 
     if Event.objects.filter(code=code).exists(): #Checks if event with the given code exists
         event = Event.objects.get(code=code) #Gets the event with the code
@@ -500,6 +517,8 @@ def changePicture(request):
     """
     View to change the profile picture of the current user with the one selected.
     """
+    populate_with_images() #Populates the database with the initial profile pictures if not already populated
+
     if request.method == "POST":
         request.user.profile_pic = Image.objects.get(id=request.POST.get("picture")) #Get the data from the POST request and sets it as the profile picture.
         request.user.save()
@@ -515,6 +534,8 @@ def buy_picture(request, path, url):
     path -- path where the image is kept
     url -- name of the image to buy
     """
+    populate_with_images() #Populates the database with the initial profile pictures if not already populated
+
 
     #Gets all images available in store and ones the user does not own
     pictures = Image.objects.filter(in_store=True)
@@ -600,6 +621,8 @@ def buy_potion(request):
     Keyword arguments:
     request -- HttpRequest object 
     """
+    populate_with_images() #Populates the database with the initial profile pictures if not already populated
+
 
     #Gets all images available in store and ones the user does not own
     pictures = Image.objects.filter(in_store=True)
