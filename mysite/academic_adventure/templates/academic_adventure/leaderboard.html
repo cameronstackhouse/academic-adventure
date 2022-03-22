@@ -60,15 +60,24 @@
         </div>
       </div>
 
+      <!-- Header-->
+      <header class="bg-dark py-5" style="padding-bottom: 10px; background-image: url({% static 'academic_adventure/leaderboardbackground.png' %});">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-black">
+                <h1 class="display-4 fw-bolder">Rankings:</h1>
+                <p class="lead fw-normal mb-0">Current Score: {{user.score|floatformat:"2"}}</p>
+            </div>
+        </div>
+      </header>
+
           
           <!--Leaderboard Html-->
-          <h1 class="text-center">Leaderboard:</h1>
-
-          <p style="padding: 1%;"></p>
 
           <div class="text-center">
-              
-                <h3>Overall Score:</h3>
+
+            <div class="text-center text-black pt-2">
+              <h3 class="display-9 fw-bolder">Overall Score:</h3>
+            </div>
 
                     <div class="text-center">
                         <!--Leaderboard of total user scores-->
@@ -98,7 +107,9 @@
             <p style="padding: 1%;"></p>
             <div class="row">
                 <div class="column">
-                <h3 class="text-center"> <img src="{% static 'academic_adventure/academic.png' %}"  id="int" alt="Intelligence"> Intelligence:</h3>
+                  <div class="text-center text-black pt-2">
+                    <h3 class="display-9 fw-bolder"> <img src="{% static 'academic_adventure/academic.png' %}"  id="int" alt="Intelligence"> Intelligence:</h3>
+                  </div>
                 <div class="center">
                     <!--Mini leaderboard for intelligence ranking-->
                     <table id="minileaderboard" style="table-layout: fixed;">
@@ -114,7 +125,9 @@
                 </div>
                 </div>
                 <div class="column">
-                <h3 class="text-center"> <img src="{% static 'academic_adventure/social.png' %}"  id="int" alt="Sociability"> Sociability:</h3>
+                  <div class="text-center text-black pt-2">
+                    <h3 class="display-9 fw-bolder"> <img src="{% static 'academic_adventure/social.png' %}"  id="int" alt="Sociability"> Sociability:</h3>
+                  </div>
                 <div class="center">
                     <!--Mini leaderboard for sociability ranking-->
                     <table id="minileaderboard" style="table-layout: fixed;">
@@ -130,7 +143,8 @@
                 </div>
                 </div>
                 <div class="column">
-                <h3 class="text-center"> <img src="{% static 'academic_adventure/sports.png' %}"  id="int" alt="Athleticism"> Athleticism:</h3>
+                  <div class="text-center text-black pt-2">
+                    <h3 class="display-9 fw-bolder"> <img src="{% static 'academic_adventure/sports.png' %}"  id="int" alt="Athleticism"> Athleticism:</h3>
                 <div class="center">
                     <!--Mini leaderboard for athleticism ranking-->
                     <table id="minileaderboard" style="table-layout: fixed;">
@@ -146,6 +160,9 @@
                 </div>
                 </div>
             </div>
+            <footer class="py-3">
+              <div class="container"><p class="m-0 text-center text-black">Copyright &copy; Academic Adventure 2022</p></div>
+            </footer>
         
           <!--Modal for profile page-->
           <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModal" aria-hidden="true">
