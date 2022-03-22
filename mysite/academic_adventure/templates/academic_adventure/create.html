@@ -71,9 +71,14 @@
         <!-- Navbar Button to toggle js that allows the navbarContainer to appear and disappear -->
         <button type="button" id="navbarButton"><img id="dropdownIcon" src="{% static 'academic_adventure/DropdownIcon.png' %}"></button>
         <!-- Profile Button that shows user's profile picture -->
+        {% if icon %}
+        <button type="button" id="profilePicture" data-bs-toggle="modal" data-bs-target="#profileModal"><img src="{% get_media_prefix %}{{icon}}"></button>
+        {% else %}
         <button type="button" id="profilePicture" data-bs-toggle="modal" data-bs-target="#profileModal"><img src="{% static 'academic_adventure/user.png' %}"></button>
+        {% endif %}
+
     </div>
-        <div class="d-flex d-grid" id="navbarContainer">
+        <div class="d-flex" id="navbarContainer">
           <ul class="navbar-nav ms-auto">
               <!-- Link to redirect to specified page -->
           <li class="nav-item active">
@@ -83,13 +88,10 @@
           <li class="nav-item">
             <a class="nav-link iconBase" href="{% url 'academic_adventure:events' %}"><img class="icon" src="{% static 'academic_adventure/EventsIcon.png' %}">Events</a>
             </li>
-          {% if not userevent %}
-          <!-- Button to open shop modal -->
-          <button class="nav-link iconBase" data-bs-toggle="modal" data-bs-target="#shopModal"> 
-            <img class="icon" src="{% static 'academic_adventure/ShopIcon.png' %}">Shop
-          </button>
-          {% endif %}
-          <li class="nav-item" style="padding-top: 5px;">
+          <li class="nav-item">
+            <a class="nav-link iconBase" href="{% url 'academic_adventure:shop' %}"><img class="icon" src="{% static 'academic_adventure/ShopIcon.png' %}">Shop</a>
+        </li>
+          <li class="nav-item">
             <a class="nav-link iconBase" href="{% url 'academic_adventure:leaderboard' %}"><img class="icon" src="{% static 'academic_adventure/LeaderboardIcon.png' %}">Rankings</a>
             </li>
             <li class="nav-item" id="logout">
@@ -130,19 +132,23 @@
         </div>
         </div>
 
+        <!--Modal for profile page-->
         <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModal" aria-hidden="true">
-            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="profileModal">Profile</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6" id="userProfilePic">
+          <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="profileModal">Profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <div class="row">
+                      <div class="col-md-6" id="userProfilePic">
                           <h2>Hello {{user.username}}!</h2>
-                          <img src="{{ user.profile_pic.url }}">
-                          <img src="{% static 'academic_adventure/logo.png' %}"  id="logo" alt="academic adventure logo">
+                          {% if pic %}
+                          <img src="{% get_media_prefix %}{{pic}}">
+                          {% else %}
+                          <img src="{% static 'academic_adventure/userbig.png' %}">                          {% endif %}
+                          <br>
                           <button type="button" data-bs-toggle="modal" data-bs-target="#inventoryModal">Inventory</button>
                           <br>
                           <br>
@@ -161,11 +167,11 @@
                             <p>Sociability position: {{sociability_position}}</p>
                             <p>Athleticism position: {{athleticism_position}}</p>
                         </div>
-                    </div>
-                </div>
+                  </div>
               </div>
             </div>
           </div>
+        </div>
 
           <div class="modal fade" id="inventoryModal" tabindex="-1" aria-labelledby="inventoryModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
@@ -182,19 +188,6 @@
             </div>
           </div>
           
-          <div class="modal fade" id="shopModal" tabindex="-1" aria-labelledby="shopModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="shopModalLabel">Shop</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Shop Here
-                </div>
-              </div>
-            </div>
-          </div>
       <script 
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDS7uNAAWZIIeVC3-GXZUx7hNdkLoY7I3E&callback=initMap&v=weekly"
       async
