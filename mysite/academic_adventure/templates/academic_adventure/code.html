@@ -91,6 +91,7 @@
         <img src="{% static 'academic_adventure/logo.png' %}"  id="logoPrint" alt="academic adventure logo">
         <div id="printContent0">
           <h1>Event: {{event.name}} </h1>
+          <h2>{{event.date}}</h2>
 
           {% qr_from_text event.code size="L" %}
         </div>
@@ -101,17 +102,20 @@
         <!--Displays Print button for the event's QR code-->
       <div id="printContainer">
         <!-- <button type="text/css" media="print" id="printButton" onclick="printDiv('printableArea')" >Print</button> -->
-        <input type="button" id="printButton" onclick="printDiv('printContent')" value="Print" />
+        <input type="button" id="printButton" onclick="printDiv('printContent')" class="btn btn-outline-dark mt-auto" value="Print" />
       </div>
   
       <!--Displays members registered for the event-->
        <div id="memberContainer">
-        <h3>Members of event:</h3>
-        {% for member in event_members %}
-
-         <p>{{member.username}}</p>
-
-        {% endfor %}
+        <div class="text-center text-black pt-3">
+          <h3>Members of event:</h3>
+          {% if event_members|length == 0 %}
+          <p>No users have currently joined this event.</p>
+          {% else %}
+          {% for member in event_members %}
+          <p>{{member.username}}</p>
+          {% endfor %}
+          {% endif %}
        </div>
 
         <!--Modal for profile page-->
@@ -181,5 +185,7 @@
               </div>
             </div>
           </div>
-        
+          <footer class="py-3">
+            <div class="container"><p class="m-0 text-center text-black">Copyright &copy; Academic Adventure 2022</p></div>
+          </footer>
 </html>
