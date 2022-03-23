@@ -1,0 +1,12 @@
+runtime: python39
+
+env_variables:
+   APPENGINE_URL : https://academicadventure.uc.r.appspot.com
+
+handlers:
+
+- url: /static
+  static_dir: staticfiles//
+
+- url: /.*
+  script: auto
