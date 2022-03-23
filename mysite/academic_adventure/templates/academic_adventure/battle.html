@@ -13,7 +13,7 @@
         <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/profile.css' %}">
 		<link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/battle.css' %}">
         <script type="text/javascript" src="{% static 'academic_adventure/navbar.js' %}"> </script>
-        <title>Scan</title>
+        <title>Battle</title>
 		<script>
 			//global variables of the turn and what to decrease HP by for each turn
 			var turn = 0;
@@ -33,35 +33,35 @@
 				if(choice == 0 && int_diff > 0){//If the player wins intelligence
 					opp_hp -= int_diff; //Decrease the opponents HP by the difference
 					//Display the results to the user
-					document.getElementById("playthrough").innerHTML = "<p>You battled using intelligence and won.</p><p>Your opponent lost " + int_diff.toString() + " HP.";
+					document.getElementById("playthrough").innerHTML = '<div class="alert alert-success"><p>You battled using intelligence and won.</p><p>Your opponent lost ' + int_diff.toString() + ' HP.</p></div>';
 				} else if(choice == 0 && int_diff < 0){//If the opponent win in intelligence
 					user_hp += int_diff;
-					document.getElementById("playthrough").innerHTML = "<p>You battled using intelligence and lost.</p><p>You lost " + (-int_diff).toString() + " HP.";
+					document.getElementById("playthrough").innerHTML = '<div class="alert alert-danger"><p>You battled using intelligence and lost.</p><p>You lost ' + (-int_diff).toString() + ' HP.</p></div>';
 				} else if(choice == 0 && int_diff == 0){//If they draw in intelligence
-					document.getElementById("playthrough").innerHTML = "<p>You battled using intelligence and drew.</p><p>No HP was lost.";
+					document.getElementById("playthrough").innerHTML = '<div class="alert alert-warning"><p>You battled using intelligence and drew.</p><p>No HP was lost.</p></div>';
 				} else if(choice == 1 && soc_diff > 0){//If the player wins at sociability
 					opp_hp -= soc_diff;
-					document.getElementById("playthrough").innerHTML = "<p>You battled using sociability and won.</p><p>Your opponent lost " + (soc_diff).toString() + " HP.";
+					document.getElementById("playthrough").innerHTML = '<div class="alert alert-success"><p>You battled using sociability and won.<p>You battled using sociability and won.</p><p>Your opponent lost ' + (soc_diff).toString() + ' HP.</p></div>';
 				} else if(choice == 1 && soc_diff < 0){//If the player loses at sociability
 					user_hp += soc_diff;
-					document.getElementById("playthrough").innerHTML = "<p>You battled using sociability and lost.</p><p>You lost " + (-soc_diff).toString() + " HP.";
+					document.getElementById("playthrough").innerHTML = '<div class="alert alert-danger"> <p>You battled using sociability and lost.</p><p>You lost ' + (-soc_diff).toString() + ' HP.</p></div>';
 				} else if(choice == 1 && soc_diff == 0){//If they draw in sociability
-					document.getElementById("playthrough").innerHTML = "<p>You battled using sociability and drew.</p><p>No HP was lost.";
+					document.getElementById("playthrough").innerHTML = '<div class="alert alert-warning"><p>You battled using sociability and drew.</p><p>No HP was lost.</p></div>';
 				} else if(choice == 2 && atl_diff > 0){//If the player wins in athleticism
 					opp_hp -= atl_diff;
-					document.getElementById("playthrough").innerHTML = "<p>You battled using athleticism and won.</p><p>Your opponent lost " + (atl_diff).toString() + " HP.";
+					document.getElementById("playthrough").innerHTML = '<div class="alert alert-success"><p>You battled using sociability and won.<p>You battled using athleticism and won.</p><p>Your opponent lost ' + (atl_diff).toString() +  ' HP.</p></div>';
 				} else if(choice == 2 && atl_diff < 0){//If the opponent wins in athleticism
 					user_hp += atl_diff;
-					document.getElementById("playthrough").innerHTML = "<p>You battled using athleticism and lost.</p><p>You lost " + (-atl_diff).toString() + " HP.";
+					document.getElementById("playthrough").innerHTML = '<div class="alert alert-danger"><p>You battled using athleticism and lost.</p><p>You lost ' + (-atl_diff).toString() + ' HP.</p></div>';
 				} else if(choice == 2 && atl_diff == 0){//If they draw in athleticism
-					document.getElementById("playthrough").innerHTML = "<p>You battled using athleticism and drew.</p><p>No HP was lost.";
+					document.getElementById("playthrough").innerHTML = '<div class="alert alert-warning"><p>You battled using athleticism and drew.</p><p>No HP was lost.</p></div>';
 				}
 				
 				if(user_hp <= 0){
 					//End game as loss
 					user_hp = 0;
 					//Show the results to the user
-					document.getElementById("playthrough").innerHTML = "Your HP has dropped to 0 you lose.";
+					document.getElementById("playthrough").innerHTML = '<div class="alert alert-danger"><p>Your HP has dropped to 0.</p> <p>You lose.</p></div>';
 					//Change the button shown and result of form
 					document.getElementById("progress").hidden = true;
 					document.getElementById("result").hidden = false;
@@ -70,10 +70,11 @@
 					//End game as win
 					opp_hp = 0;
 					//Show result to the user
-					document.getElementById("playthrough").innerHTML = "Your opponent's HP has dropped to 0 you win.";
+					document.getElementById("playthrough").innerHTML = '<div class="alert alert-success">' + "<p>Your opponent's HP has dropped to 0.</p> <p>You win.</p></div>";
 					//Change button and result of the form
 					document.getElementById("progress").hidden = true;
 					document.getElementById("result").hidden = false;
+					document.getElementById("reward").innerHTML = "<h4>You earned: </h4> <p>5 Points</p>";
 					document.getElementById("claim").value = "Claim reward";//Change value of submit button to better represent win
 					document.getElementById("resultcontent").value = 1;
 				}
@@ -81,25 +82,27 @@
 				//Update the displayed HP to any made changes
 				document.getElementById("u_hp").innerText = user_hp.toString();
 				document.getElementById("o_hp").innerText = opp_hp.toString();
+				document.getElementById("turn").innerText=  turn.toString();
 				
 				//Results from timeout going to decison
 				if(turn == 20){
 					if(user_hp < opp_hp){
 						//End game as loss
-						document.getElementById("playthrough").innerHTML = "End of turns, you lost by decison.";//Inform the user of lost by decision
+						document.getElementById("playthrough").innerHTML = '<div class="alert alert-danger"><p>End of turns.</p> <p>You lose by decision.</p></div>';//Inform the user of lost by decision
 						document.getElementById("progress").hidden = true;
 						document.getElementById("result").hidden = false;
 						document.getElementById("resultcontent").value = 0;
 					} else if(opp_hp < user_hp){
 						//End game as win
-						document.getElementById("playthrough").innerHTML = "End of turns, you win by decision.";//Inform the user of win by decision
+						document.getElementById("playthrough").innerHTML = '<div class="alert alert-success"><p>End of turns.</p> <p>You win by decision.</p></div>';//Inform the user of win by decision
 						document.getElementById("progress").hidden = true;
 						document.getElementById("result").hidden = false;
+						document.getElementById("reward").innerHTML = "<h4>You earned: </h4> <p>5 Points</p>";
 						document.getElementById("claim").value = "Claim reward";
 						document.getElementById("resultcontent").value = 1;
 					} else {
 						//End game as draw (no reward)
-						document.getElementById("playthrough").innerHTML = "End of turns, you draw.";//Inform the user of draw by decision
+						document.getElementById("playthrough").innerHTML = '<div class="alert alert-warning"><p>End of turns.</p> <p>You draw.</p></div>';//Inform the user of draw by decision
 						document.getElementById("progress").hidden = true;
 						document.getElementById("result").hidden = false;
 						document.getElementById("resultcontent").value = 0;
@@ -147,51 +150,63 @@
       </div>
     </div>
 		
-		<h1>Battle</h1>
+		<div class="text-center text-black pt-3">
+			<h1>Battle:</h1>
+		</div>
 		<!--Table to display the users stats during battle-->
-		<table class="table">
-			<thead>
-				<tr>
-					<th scope="col">{{ user.username }}</th>
-					<th scope="col">VS</th>
-					<th scope="col">{{ opponent.username }}</th>
-				</tr>
-			</thead>
-			<tr id="hp">
-				<td id="u_hp">25</td>
-				<td>Health points</td>
-				<td id="o_hp">25</td>
-			</tr>
-			<tr id="intelligence">
-				<td>{{ user.intelligence }}</td>
-				<td>Intelligence</td>
-				<td>{{ opponent.intelligence }}</td>
-			</tr>
-			<tr id="sociability">
-				<td>{{ user.sociability }}</td>
-				<td>Sociability</td>
-				<td>{{ opponent.sociability }}</td>
-			</tr>
-			<tr id="athleticism">
-				<td>{{ user.athleticism }}</td>
-				<td>Athleticism</td>
-				<td>{{ opponent.athleticism }}</td>
-			</tr>
-		</table>
-		
-		<!--A div to display the play-by-play of each turn-->
-		<div id="playthrough">
+		<div>
+			<div class="row text-center text-black">
+				<div class="col-sm">
+					<h2 class="display-4 fw-bolder">{{ user.username }}</h2>
+						{% if pic %}
+                            <img src="{% get_media_prefix %}{{pic}}">
+                    	{% else %}
+							<img src="{% static 'academic_adventure/userbig.png' %}"> 
+						{% endif %}
+					<h2><span>HP: </span><span id="u_hp">25</span><span>/25</span></h2>
+					<p class="mb-0">Intelligence: {{ user.intelligence }}</p>
+					<p class="my-0">Sociability: {{ user.sociability }}</p>
+					<p class="mt-0">Athleticism: {{ user.athleticism }}</p>
+				</div>
+				<div class="col-sm">
+					<p class="pt-5"></p>
+					<h2 class="display-2 fw-bolder py-10">VS</h2>
+					<div class="text-center">
+						<!--A div to display the play-by-play of each turn-->
+						<h2><span>Turn: </span><span id="turn">0</span><span>/20</span></h2>
+						<!--Button to progress the game, will be hidden at end of the game-->
+						<button id="progress" onclick="takeTurn()" class="btn btn-outline-dark mt-auto">Next Turn</button>
+						<p class="pt-5"></p>
+						<div id="playthrough"></div>
+			
+					</div>
+				</div>
+				<div class="col-sm">
+					<h2 class="display-4 fw-bolder">{{ opponent.username }}</h2>
+						{% if opponent.profile_pic %}
+                            <img src="{{opponent.profile_pic.img.url}}">
+                    	{% else %}
+							<img src="{% static 'academic_adventure/userbig.png' %}"> 
+						{% endif %}
+					<h2><span>HP: </span><span id="o_hp">25</span><span>/25</span></h2>
+					<p class="mb-0">Intelligence: {{ opponent.intelligence }}</p>
+					<p class="my-0">Sociability: {{ opponent.sociability }}</p>
+					<p class="mt-0">Athleticism: {{ opponent.athleticism }}</p>
+				</div>
+			  </div>
+		</div>
+
+		<!--Form to provide the results of the battle to the server-->
+		<div class="text-center">
+			<div id="reward"></div>
+			<form method="POST" id="result" hidden>
+				{% csrf_token %} 
+				<input type="hidden" name="resultcontent" id="resultcontent" value="" class="btn btn-outline-dark mt-auto"/>
+				<input type="submit" value="Return to map" id="claim" class="btn btn-outline-dark mt-auto"/>
+			</form>
 		</div>
 		
-		<!--Button to progress the game, will be hidden at end of the game-->
-		<button id="progress" onclick="takeTurn()">Take next turn</button>
 		
-		<!--Form to provide the results of the battle to the server-->
-		<form method="POST" id="result" hidden>
-            {% csrf_token %} 
-            <input type="hidden" name="resultcontent" id="resultcontent" value="" />
-			<input type="submit" value="Return to map" id="claim" />
-        </form>
 
         <!--Modal for profile page-->
 		<div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModal" aria-hidden="true">
@@ -208,9 +223,12 @@
                             {% if pic %}
                             <img src="{% get_media_prefix %}{{pic}}">
                             {% else %}
-							<img src="{% static 'academic_adventure/userbig.png' %}">                            {% endif %}
+                            <img src="{% static 'academic_adventure/userbig.png' %}">
+                            {% endif %}
                             <br>
-                            <button type="button" data-bs-toggle="modal" data-bs-target="#inventoryModal">Change Avatar</button>
+                            {% if user_pictures|length > 1 %}
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#inventoryModal" class="btn btn-outline-dark mt-auto">Change Avatar</button>
+                            {% endif %}
                             <br>
                             <br>
                             <br>
@@ -218,15 +236,18 @@
                           </div>
   
                           <div class="col-md-6" id="userInfo">
-                              <h3>Your stats:</h3>
-                              <h2>Overall score: {{user.score|floatformat:"2"}}</h2>
-                              <p>Points: {{user.points}}</p>
-                              <p>Intelligence: {{user.intelligence}}</p>
-                              <p>Sociability: {{user.sociability}}</p>
-                              <p>Athleticism: {{user.athleticism}}</p>
-                              <p>Intelligence position: {{intelligence_position}}</p>
-                              <p>Sociability position: {{sociability_position}}</p>
-                              <p>Athleticism position: {{athleticism_position}}</p>
+                              <h2 class="display-6 fw-bolder">Your stats:</h2>
+                              <h3>Overall score: {{user.score|floatformat:"2"}}</h3>
+                              <h5 class = "px-3"><img src="{% static 'academic_adventure/academic.png' %}"></h5>
+                              <h5><span>Intelligence: </span><span class="fw-bolder">{{ user.intelligence }}</span></h5>
+                              <p><span>Position: #{{intelligence_position}}</span></p>
+					          <h5 class = "px-3"><img src="{% static 'academic_adventure/social.png' %}"></h5>
+                              <h5><span>Sociability: </span><span class="fw-bolder">{{ user.sociability }}</span></h5>
+                              <p><span>Position: #{{sociability_position}}</span></p>
+                              <h5 class = "px-3"><img src="{% static 'academic_adventure/sports.png' %}"></h5>
+                              <h5><span>Athleticism: </span><span class="fw-bolder">{{ user.athleticism }}</span></h5>
+                              <p><span>Position: #{{athleticism_position}}</span></p>
+                              <h3>Points: {{user.points}}</h3>
                           </div>
                     </div>
                 </div>
@@ -246,13 +267,17 @@
             
                   {% for pic in user_pictures %}
 
-                  <h4>{{pic.name}}</h4>
-                  <img src="{{ pic.img.url }}">
-                  <form method="post" action="/academic-adventure/changepic/">
-                    {% csrf_token %} 
-                    <button type="submit" name="picture" value="{{pic.id}}">Select</button>
-                  </form>
-                </br>
+                  <div class="text-center text-black pt-3">
+                    <h4>{{pic.name}}</h4>
+                    <img src="{{ pic.img.url }}">
+                    <form method="post" action="/academic-adventure/changepic/">
+                        {% csrf_token %} 
+                        <button type="submit" name="picture" value="{{pic.id}}" class="btn btn-outline-dark mt-auto">Select</button>
+                    </form>
+                    </br>
+                  </div>
+
+                  
                   {% endfor %}
 
                 </div>
@@ -262,4 +287,7 @@
           </div>
           
     </body>
+	<footer class="py-3">
+      <div class="container"><p class="m-0 text-center text-black">Copyright &copy; Academic Adventure 2022</p></div>
+    </footer>
 </html>
