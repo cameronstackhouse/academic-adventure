@@ -252,9 +252,12 @@
                           {% if pic %}
                           <img src="{% get_media_prefix %}{{pic}}">
                           {% else %}
-                          <img src="{% static 'academic_adventure/userbig.png' %}">                          {% endif %}
+                          <img src="{% static 'academic_adventure/userbig.png' %}">
+                          {% endif %}
                           <br>
-                          <button type="button" data-bs-toggle="modal" data-bs-target="#inventoryModal">Change Avatar</button>
+                          {% if user_pictures|length > 1 %}
+                          <button type="button" data-bs-toggle="modal" data-bs-target="#inventoryModal" class="btn btn-outline-dark mt-auto">Change Avatar</button>
+                          {% endif %}
                           <br>
                           <br>
                           <br>
@@ -262,15 +265,18 @@
                         </div>
 
                         <div class="col-md-6" id="userInfo">
-                            <h3>Your stats:</h3>
-                            <h2>Overall score: {{user.score|floatformat:"2"}}</h2>
-                            <p>Points: {{user.points}}</p>
-                            <p>Intelligence: {{user.intelligence}}</p>
-                            <p>Sociability: {{user.sociability}}</p>
-                            <p>Athleticism: {{user.athleticism}}</p>
-                            <p>Intelligence position: {{intelligence_position}}</p>
-                            <p>Sociability position: {{sociability_position}}</p>
-                            <p>Athleticism position: {{athleticism_position}}</p>
+                            <h2 class="display-6 fw-bolder">Your stats:</h2>
+                            <h3>Overall score: {{user.score|floatformat:"2"}}</h3>
+                            <h5 class = "px-3"><img src="{% static 'academic_adventure/academic.png' %}"></h5>
+                            <h5><span>Intelligence: </span><span class="fw-bolder">{{ user.intelligence }}</span></h5>
+                            <p><span>Position: #{{intelligence_position}}</span></p>
+                  <h5 class = "px-3"><img src="{% static 'academic_adventure/social.png' %}"></h5>
+                            <h5><span>Sociability: </span><span class="fw-bolder">{{ user.sociability }}</span></h5>
+                            <p><span>Position: #{{sociability_position}}</span></p>
+                            <h5 class = "px-3"><img src="{% static 'academic_adventure/sports.png' %}"></h5>
+                            <h5><span>Athleticism: </span><span class="fw-bolder">{{ user.athleticism }}</span></h5>
+                            <p><span>Position: #{{athleticism_position}}</span></p>
+                            <h3>Points: {{user.points}}</h3>
                         </div>
                   </div>
               </div>
@@ -278,32 +284,36 @@
           </div>
         </div>
 
-          <!--Change profile picture modal-->
-          <div class="modal fade" id="inventoryModal" tabindex="-1" aria-labelledby="inventoryModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="inventoryModalLabel">Change profile picture</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-            
-                  {% for pic in user_pictures%}
+        <!--Change profile picture modal-->
+        <div class="modal fade" id="inventoryModal" tabindex="-1" aria-labelledby="inventoryModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="inventoryModalLabel">Change profile picture</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+          
+                {% for pic in user_pictures %}
 
+                <div class="text-center text-black pt-3">
                   <h4>{{pic.name}}</h4>
                   <img src="{{ pic.img.url }}">
                   <form method="post" action="/academic-adventure/changepic/">
-                    {% csrf_token %} 
-                    <button type="submit" name="picture" value="{{pic.id}}">Select</button>
+                      {% csrf_token %} 
+                      <button type="submit" name="picture" value="{{pic.id}}" class="btn btn-outline-dark mt-auto">Select</button>
                   </form>
-                </br>
-                  {% endfor %}
+                  </br>
+                </div>
 
-                </div>
-                </div>
+                
+                {% endfor %}
+
+              </div>
               </div>
             </div>
           </div>
+        </div>
           
           <!--Scan modal-->
           <div class="modal fade" id="scanModal" tabindex="-1" aria-labelledby="scanModalLabel" aria-hidden="true">
