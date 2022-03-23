@@ -13,7 +13,7 @@
         <link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/profile.css' %}">
 		<link rel="stylesheet" type="text/css" href="{% static 'academic_adventure/battle.css' %}">
         <script type="text/javascript" src="{% static 'academic_adventure/navbar.js' %}"> </script>
-        <title>Scan</title>
+        <title>Battle</title>
 		<script>
 			//global variables of the turn and what to decrease HP by for each turn
 			var turn = 0;
@@ -70,10 +70,11 @@
 					//End game as win
 					opp_hp = 0;
 					//Show result to the user
-					document.getElementById("playthrough").innerHTML = '<div class="alert alert-danger">' + "<p>Your opponent's HP has dropped to 0.</p> <p>You win.</p></div>";
+					document.getElementById("playthrough").innerHTML = '<div class="alert alert-success">' + "<p>Your opponent's HP has dropped to 0.</p> <p>You win.</p></div>";
 					//Change button and result of the form
 					document.getElementById("progress").hidden = true;
 					document.getElementById("result").hidden = false;
+					document.getElementById("reward").innerHTML = "<h4>You earned: </h4> <p>5 Points</p>";
 					document.getElementById("claim").value = "Claim reward";//Change value of submit button to better represent win
 					document.getElementById("resultcontent").value = 1;
 				}
@@ -81,7 +82,7 @@
 				//Update the displayed HP to any made changes
 				document.getElementById("u_hp").innerText = user_hp.toString();
 				document.getElementById("o_hp").innerText = opp_hp.toString();
-				document.getElementById("turn").innerText= 'Turn: ' + turn.toString() +'/20.';
+				document.getElementById("turn").innerText=  turn.toString();
 				
 				//Results from timeout going to decison
 				if(turn == 20){
@@ -96,6 +97,7 @@
 						document.getElementById("playthrough").innerHTML = '<div class="alert alert-success"><p>End of turns.</p> <p>You win by decision.</p></div>';//Inform the user of win by decision
 						document.getElementById("progress").hidden = true;
 						document.getElementById("result").hidden = false;
+						document.getElementById("reward").innerHTML = "<h4>You earned: </h4> <p>5 Points</p>";
 						document.getElementById("claim").value = "Claim reward";
 						document.getElementById("resultcontent").value = 1;
 					} else {
@@ -148,51 +150,63 @@
       </div>
     </div>
 		
-		<h1>Battle</h1>
+		<div class="text-center text-black pt-3">
+			<h1>Battle:</h1>
+		</div>
 		<!--Table to display the users stats during battle-->
-		<table class="table">
-			<thead>
-				<tr>
-					<th scope="col">{{ user.username }}</th>
-					<th scope="col">VS</th>
-					<th scope="col">{{ opponent.username }}</th>
-				</tr>
-			</thead>
-			<tr id="hp">
-				<td id="u_hp">25</td>
-				<td>Health points</td>
-				<td id="o_hp">25</td>
-			</tr>
-			<tr id="intelligence">
-				<td>{{ user.intelligence }}</td>
-				<td>Intelligence</td>
-				<td>{{ opponent.intelligence }}</td>
-			</tr>
-			<tr id="sociability">
-				<td>{{ user.sociability }}</td>
-				<td>Sociability</td>
-				<td>{{ opponent.sociability }}</td>
-			</tr>
-			<tr id="athleticism">
-				<td>{{ user.athleticism }}</td>
-				<td>Athleticism</td>
-				<td>{{ opponent.athleticism }}</td>
-			</tr>
-		</table>
-		
-		<!--A div to display the play-by-play of each turn-->
-		<div id="turn"></div>
-		<div id="playthrough"></div>
-		
-		<!--Button to progress the game, will be hidden at end of the game-->
-		<button id="progress" onclick="takeTurn()">Take next turn</button>
-		
+		<div>
+			<div class="row text-center text-black">
+				<div class="col-sm">
+					<h2 class="display-4 fw-bolder">{{ user.username }}</h2>
+						{% if pic %}
+                            <img src="{% get_media_prefix %}{{pic}}">
+                    	{% else %}
+							<img src="{% static 'academic_adventure/userbig.png' %}"> 
+						{% endif %}
+					<h2><span>HP: </span><span id="u_hp">25</span><span>/25</span></h2>
+					<p class="mb-0">Intelligence: {{ user.intelligence }}</p>
+					<p class="my-0">Sociability: {{ user.sociability }}</p>
+					<p class="mt-0">Athleticism: {{ user.athleticism }}</p>
+				</div>
+				<div class="col-sm">
+					<p class="pt-5"></p>
+					<h2 class="display-2 fw-bolder py-10">VS</h2>
+					<div class="text-center">
+						<!--A div to display the play-by-play of each turn-->
+						<h2><span>Turn: </span><span id="turn">0</span><span>/20</span></h2>
+						<!--Button to progress the game, will be hidden at end of the game-->
+						<button id="progress" onclick="takeTurn()" class="btn btn-outline-dark mt-auto">Next Turn</button>
+						<p class="pt-5"></p>
+						<div id="playthrough"></div>
+			
+					</div>
+				</div>
+				<div class="col-sm">
+					<h2 class="display-4 fw-bolder">{{ opponent.username }}</h2>
+						{% if opponent.profile_pic %}
+                            <img src="{{opponent.profile_pic.img.url}}">
+                    	{% else %}
+							<img src="{% static 'academic_adventure/userbig.png' %}"> 
+						{% endif %}
+					<h2><span>HP: </span><span id="o_hp">25</span><span>/25</span></h2>
+					<p class="mb-0">Intelligence: {{ opponent.intelligence }}</p>
+					<p class="my-0">Sociability: {{ opponent.sociability }}</p>
+					<p class="mt-0">Athleticism: {{ opponent.athleticism }}</p>
+				</div>
+			  </div>
+		</div>
+
 		<!--Form to provide the results of the battle to the server-->
-		<form method="POST" id="result" hidden>
-            {% csrf_token %} 
-            <input type="hidden" name="resultcontent" id="resultcontent" value="" />
-			<input type="submit" value="Return to map" id="claim" />
-        </form>
+		<div class="text-center">
+			<div id="reward"></div>
+			<form method="POST" id="result" hidden>
+				{% csrf_token %} 
+				<input type="hidden" name="resultcontent" id="resultcontent" value="" class="btn btn-outline-dark mt-auto"/>
+				<input type="submit" value="Return to map" id="claim" class="btn btn-outline-dark mt-auto"/>
+			</form>
+		</div>
+		
+		
 
         <!--Modal for profile page-->
 		<div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModal" aria-hidden="true">
@@ -263,4 +277,7 @@
           </div>
           
     </body>
+	<footer class="py-3">
+      <div class="container"><p class="m-0 text-center text-black">Copyright &copy; Academic Adventure 2022</p></div>
+    </footer>
 </html>
