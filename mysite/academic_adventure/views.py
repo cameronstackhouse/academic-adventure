@@ -176,13 +176,13 @@ def events(request):
                     
                         if scanned_event.type == "Sports":
                             request.user.athleticism += reward #If sports event then increase the users athleticism. Scaled by duration of the event
-                            context["message"] = f"Successfully added to event: {scanned_event.name}. Athleticism increased by {reward} and points by {round((scanned_event.duration * 60) / 5)}!"
+                            context["success"] = f"Successfully added to event: {scanned_event.name}. Athleticism increased by {reward} and points by {round((scanned_event.duration * 60) / 5)}!"
                         elif scanned_event.type == "Academic":
                             request.user.intelligence += reward #If academic event then add 1 to users intelligence. Scaled by duration of the event
-                            context["message"] = f"Successfully added to event: {scanned_event.name}. Intelligence increased by {reward} and points by {round((scanned_event.duration * 60) / 5)}!"
+                            context["success"] = f"Successfully added to event: {scanned_event.name}. Intelligence increased by {reward} and points by {round((scanned_event.duration * 60) / 5)}!"
                         elif scanned_event.type == "Social":
                             request.user.sociability += reward #If social event then add 1 to users sociability. Scaled by duration of the event
-                            context["message"] = f"Successfully added to event: {scanned_event.name}. Sociability increased by {reward} and points by {round((scanned_event.duration * 60) / 5)}!"
+                            context["success"] = f"Successfully added to event: {scanned_event.name}. Sociability increased by {reward} and points by {round((scanned_event.duration * 60) / 5)}!"
                         elif scanned_event.type == "Battle":
                             request.session['battle_id'] = request.POST.get("scancontent") #Sets the battle ID session variable to the event ID
                             return redirect('academic_adventure:battle') #If battle then redirect to the battle view
@@ -209,16 +209,16 @@ def events(request):
 
     #Retrieving events that are joinable within the next hour for the user
     potential_events = []
-    for event in Event.objects.all().order_by('-date'):
+    for event in Event.objects.all().order_by('date'):
         event_minutes = float(event.duration * 60) #Converting duration to a supported format
         if (event.society == None or request.user in event.society.members.all()) and (event.date >= current_datetime >= event.date - datetime.timedelta(hours=1)): #Checks if the event is joinable within the next hour
             potential_events.append(event)
     
     #Retrieving events that are not expired and have the user as the host
     host_events = []
-    for event in Event.objects.all().order_by('-date').filter(host=request.user):
+    for event in Event.objects.all().order_by('date').filter(host=request.user):
         event_minutes = float(event.duration * 60) #Converting duration to a supported format
-        if event.date + datetime.timedelta(minutes=event_minutes) >= current_datetime - datetime.timedelta(minutes=20): #Checks that the current time - 20 minutes is before the event expiry and 
+        if event.date + datetime.timedelta(minutes=event_minutes) >= current_datetime - datetime.timedelta(minutes=10): #Checks that the current time - 10 minutes is before the event expiry and 
             host_events.append(event)
     
     context["userevent"] = user_event #event user is currently in
