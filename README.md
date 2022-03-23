@@ -14,6 +14,9 @@ The group members are:
 - Mattis Nowell
 - Andrew Yau
 
+This is a submission for Sprint 2. 
+There are three types of document that you will find the following places.
+
 ## Introduction
 
 Academic Adventure is a location-based RPG style browser game that allows students to meet 
@@ -25,6 +28,32 @@ By accessing a web app, users can confirm their attendance at events hosted by g
 (lecturers or societies at the university). These events can be viewed via a map which also 
 tracks the user’s location.
 
+## PROCESS DOCUMENTS
+Our process documents are managed on Trello. The link to our project page is below. 
+We have added both mattcollison2 and nr3391 to the board so it is visible for you to view.
+
+Trello Page: [https://trello.com/b/LhVN7c3f/kanban]
+
+We have also taken regular snapshots of our Kanban board to archive our progress. 
+These are held in the repository below alongside meeting notes, agenda and minutes. 
+These will be found in the repository below.
+
+[./process-documents/](./process-documents/)
+
+## TECHNICAL DOCUMENTS
+Our technical documents are primarily managed on GitHub.
+
+Github Repo: [https://github.com/cameronstackhouse/group-software-engineering]
+
+We have also include the versioned source code for archiving.
+
+[./technical-documents/](./technical-documents/)
+
+## PRODUCT DOCUMENTS
+
+Our product documents are available in the folder below.
+
+[./product-documents/UI/](./product-documents/UI/)
 
 ## Prerequisites, Installation, and Requirements
 
@@ -41,9 +70,13 @@ pip install -r requirements.txt
 Currently Academic Adventure is designed to only work in Exeter. 
 
 To run the server, simply run the command 'python manage.py runserver' in the mysite folder.
-To access the site go to your host-address/academic-adventure.
+To access the site go to your host-address/academic-adventure. 
 
-To make a registered user into a gamekeeper:
+### To create a superuser:
+
+python manage.py createsuperuser
+
+### To make a registered user into a gamekeeper:
 
 As a superuser access /admin at the URL and do the following:
 - Go to the account you want to make a gamekeeper in Users
@@ -59,11 +92,18 @@ run 'python manage.py shell' and then enter the following commands.
 - user.gamekeeper = True
 - user.save()
 
+### Hosting:
+
+We have hosted the project at the following link:
+https://academic-adventure-1.nw.r.appspot.com/academic-adventure/login/
+
+Click register to create an account.
+
 ## Testing
 
 To run tests for this project, run the following command within the mysite folder:
 
-'python manage.py test academic_adventure'
+'python manage.py test'
 
 ## License
 
