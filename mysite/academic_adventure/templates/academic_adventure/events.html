@@ -72,7 +72,11 @@
           <div class="container px-4 px-lg-5 my-5">
               <div class="text-center text-black">
                   <h1 class="display-4 fw-bolder">Events:</h1>
+                  {% if potentialevents|length == 1 %}
+                  <p class="lead fw-normal mb-0">There is {{potentialevents|length}} upcoming event. </p>
+                  {% else %}
                   <p class="lead fw-normal mb-0">There are {{potentialevents|length}} upcoming events. </p>
+                  {% endif %}
               </div>
           </div>
         </header>
