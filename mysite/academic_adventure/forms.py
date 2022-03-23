@@ -13,7 +13,7 @@ class CreateForm(forms.ModelForm):
         """
         model = Event #Selects model to use 
         #Input fields needed to create an event
-        fields = ["longitude", "latitude", "name", "description", "date", "duration", "type", "society"]
+        fields = ["name", "description", "date", "duration", "type", "longitude", "latitude"]
         #Labels for each input field
         labels = {"date": "Date and Time", #Date of the event
                   "duration": "Duration (Hours)", #Duration of the event
@@ -21,10 +21,10 @@ class CreateForm(forms.ModelForm):
                   "latitude": "Latitude (Select from map)",
                   "name": "Name of event", #Name of the event
                   "type": "Type of event", #Type of event (Academic, Battle, Social, Sports)
-                  "society": "Society running the event", #Society running the event
                   "description": "Description of event"} #Description of the event
         
         #Widgets for the input boxes
         widgets = {
             "date": forms.DateTimeInput(attrs={"type":"datetime-local"}), #Adds a datetime picker to the date and time box
+            "description": forms.Textarea(attrs={'rows': 3}),
         }
