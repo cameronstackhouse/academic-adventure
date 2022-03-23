@@ -7,14 +7,14 @@
     justify-content: center;
 }
 
-@media all and (max-width: 512px) {
+@media all and (max-width: 600px) {
     .column {
         padding: 5%;
         flex: 100%;
     }
   }
 
-@media all and (min-width: 512px) {
+@media all and (min-width: 600px) {
     .column {
     flex: 33%;
     padding: 5%;
