@@ -53,7 +53,7 @@ We have also include the versioned source code for archiving.
 
 Our product documents are available in the folder below.
 
-[./product-documents/UI/](./product-documents/)
+[./product-documents/](./product-documents/)
 
 ## Prerequisites, Installation, and Requirements
 
