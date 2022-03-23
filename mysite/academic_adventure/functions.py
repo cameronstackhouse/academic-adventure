@@ -114,6 +114,7 @@ def populate_with_images():
     """
     Populates the database with the pre made profile pictures.
     """
+    
     if not Image.objects.exists(): #If no images in the database
         #Populates the database with the initial profile pictures
         Image.objects.create(name="Ronald", img="profilepics/1.png", icon="profilepics/icon1.png", rarity="Common", in_store=True)
@@ -140,3 +141,15 @@ def populate_with_images():
         Image.objects.create(name="Greg", img="profilepics/22.png", icon="profilepics/icon22.png", rarity="Epic", in_store=True)
         Image.objects.create(name="Bunny", img="profilepics/23.png", icon="profilepics/icon23.png", rarity="Rare", in_store=True)
         Image.objects.create(name="Frog", img="profilepics/24.png", icon="profilepics/icon24.png", rarity="Epic", in_store=True)
+
+
+def populate_unique_images():
+    Image.objects.create(name="Laison", img="profilepics/laison.png", icon="profilepics/iconlaison.png", rarity="Legendary", in_store=False)
+    Image.objects.create(name="Cameron", img="profilepics/cameron.png", icon="profilepics/iconcameron.png", rarity="Legendary", in_store=False)
+    Image.objects.create(name="Simon", img="profilepics/simon.png", icon="profilepics/iconsimon.png", rarity="Legendary", in_store=False)
+    Image.objects.create(name="Leo", img="profilepics/leo.png", icon="profilepics/iconleo.png", rarity="Legendary", in_store=False)
+    Image.objects.create(name="Andrew", img="profilepics/andrew.png", icon="profilepics/iconandrew.png", rarity="Legendary", in_store=False)
+    Image.objects.create(name="Mattis", img="profilepics/mattis.png", icon="profilepics/iconmattis.png", rarity="Legendary", in_store=False)
+
+
+

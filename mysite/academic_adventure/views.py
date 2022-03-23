@@ -10,7 +10,7 @@ import datetime
 from django.utils import timezone
 
 from .models import Event, Image
-from .functions import get_user_positions, compare_positions, user_occupied, image_cost, populate_with_images
+from .functions import get_user_positions, compare_positions, user_occupied, image_cost, populate_with_images, populate_unique_images
 
 @login_required
 def leaderboard(request):
@@ -61,7 +61,6 @@ def home(request):
     """
 
     populate_with_images() #Populates the database with the initial profile pictures if not already populated
-    
 
     #Gets all images available in store and ones the user does not own
     pictures = Image.objects.filter(in_store=True)
