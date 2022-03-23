@@ -1,2 +1,0 @@
-Django==4.0.1
-django-qr-code>=3.0.0
