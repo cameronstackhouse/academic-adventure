@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-pi3h29f^fg(j-hpw(&=bxsl%b9g_*d0j@o_z%q0^u^_sicx5x-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["academicadventure.nw.r.appspot.com"]
+ALLOWED_HOSTS = ["academicadventure.nw.r.appspot.com", "127.0.0.1"]
 
 
 # Application definition
@@ -80,17 +80,14 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DB_PATH = os.path.join(BASE_DIR, 'db.sqlite3')
-try:
-    from shutil import copyfile
-    DB_PATH = "/tmp/db.sqlite3"
-    copyfile(os.path.join(BASE_DIR, 'db.sqlite3'), DB_PATH)
-except:
-    pass
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'academicadventuredb',
+        'USER': 'test',
+        'PASSWORD': '9^9mdh4Z%+',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
