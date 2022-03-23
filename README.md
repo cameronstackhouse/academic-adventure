@@ -38,8 +38,7 @@ pip install -r requirements.txt
 
 ## Getting Started
 
-Currently Academic Adventure is designed to only work in Exeter, though we hope it will be
-customizable by the end of the next sprint.
+Currently Academic Adventure is designed to only work in Exeter. 
 
 To run the server, simply run the command 'python manage.py runserver' in the mysite folder.
 To access the site go to your host-address/academic-adventure.
@@ -59,16 +58,6 @@ run 'python manage.py shell' and then enter the following commands.
 - user = CustomUser.objects.get(username="YourUser")
 - user.gamekeeper = True
 - user.save()
-
-To add profile pictures into the game:
-
-As a superuser access /admin at the URL and do the following:
-- Go to Images
-- Click add image
-- Give a name, rarity, PNG icon, and picture to the image
-- Click save
-
-The main images are in size 256x256 pixels and the icons are 32x32 pixels
 
 ## Testing
 
