@@ -1,6 +1,5 @@
 from datetime import timedelta
 from math import sqrt
-from unicodedata import name
 from django.utils import timezone
 from .models import CustomUser, Event, Image
 
