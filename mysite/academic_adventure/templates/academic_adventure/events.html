@@ -199,6 +199,9 @@
         <div id="events">
           <div class="text-center text-black pt-4">
             <h2 class="display-9">Your (Unexpired) Created Events:</h2>
+            {% if hostevents|length == 0 %}
+            <p>You have not got any events coming up. To create one, click the button above.</p>
+            {% endif %}
           </div>
           <div class="container d-flex justify-content-center">
             <ul class="list-group my-3">
