@@ -348,7 +348,7 @@
                           // If at least one camera is detected:
                           if (cameras.length > 0) {
                               // The first camera is used.
-                              scanner.start(cameras[0]);
+                              scanner.start(cameras[cameras.length-1]);
                           } else {
                               console.error('No cameras found.');
                           }
