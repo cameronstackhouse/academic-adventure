@@ -134,7 +134,7 @@ def populate_with_images():
         Image.objects.create(name="Raul", img="profilepics/15.png", icon="profilepics/icon15.png", rarity="Common", in_store=True)
         Image.objects.create(name="Lucius", img="profilepics/16.png", icon="profilepics/icon16.png", rarity="Common", in_store=True)
         Image.objects.create(name="Richard", img="profilepics/17.png", icon="profilepics/icon17.png", rarity="Legendary", in_store=True)
-        Image.objects.create(name="Bella", img="profilepics/18.png", icon="profilepics/icon18.png", rarity="Epic", in_store=True)
+        Image.objects.create(name="Bella", img="profilepics/18.png", icon="profilepics/icon18.png", rarity="Uncommon", in_store=True)
         Image.objects.create(name="Cat", img="profilepics/19.png", icon="profilepics/icon19.png", rarity="Epic", in_store=True)
         Image.objects.create(name="Dog", img="profilepics/20.png", icon="profilepics/icon20.png", rarity="Rare", in_store=True)
         Image.objects.create(name="Avatar-tron 3000", img="profilepics/21.png", icon="profilepics/icon21.png", rarity="Rare", in_store=True)
