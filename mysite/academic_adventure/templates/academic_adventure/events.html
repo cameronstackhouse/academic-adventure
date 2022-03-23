@@ -23,6 +23,9 @@
           width: 100%;
           height: 500px;
           margin: 0px auto;
+          transform: rotateY(180deg);
+          -webkit-transform:rotateY(180deg); /* Safari and Chrome /
+           -moz-transform:rotateY(180deg); / Firefox */
         }
         </style>
     </head>
@@ -311,7 +314,9 @@
                 </div>
                 <div class="modal-body">
                   
-                  <video id="preview">
+                  <video id="preview" preload="metadata" autoplay playsinline loop>
+                    Your browser dows not support the video tag.
+                  </video>
 
                   <form method="POST" id="scanned">
                       {% csrf_token %} 
@@ -332,7 +337,7 @@
           
                   <script type="text/javascript">
                       //Creating a scanner object using the video HMTL tag created previously as "preview".
-                      let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+                      let scanner = new Instascan.Scanner({ video: document.getElementById('preview'), mirror:false, scanPeriod:5 });
                           //Adding a listener to the scanner object with a function to execute when triggered with the
                           //content of the scan as argument and the following instructions:
                           scanner.addListener('scan', function (content) {
